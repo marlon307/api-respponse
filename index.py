@@ -10,7 +10,7 @@ def index():
         "message": "Todos os serviços estão ativos no meomento.",
         "date": datetime.now(),
         "status": 200,
-    }
+    }, 200
 
 
 if __name__ == "__main__":
