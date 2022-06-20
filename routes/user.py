@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 
 
 user_blueprint = Blueprint("routes", __name__)
@@ -6,4 +6,9 @@ user_blueprint = Blueprint("routes", __name__)
 
 @user_blueprint.route("/createuser", methods=["POST"])
 def createuser():
-    return {"username": "ok"}, 200
+    return jsonify(username="ok"), 200
+
+
+@user_blueprint.route("/login_user", methods=["POST"])
+def login_user():
+    return jsonify(username="ok"), 200
