@@ -1,7 +1,13 @@
 from flask import Flask
 from datetime import datetime
 
+from routes.user import user_blueprint
+
 app = Flask(__name__)
+
+# import declared routes
+
+app.register_blueprint(user_blueprint)
 
 
 @app.route("/")
