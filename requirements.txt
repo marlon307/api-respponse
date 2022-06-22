@@ -1,4 +1,5 @@
 flask
-venv
-sqlalchemy
-pymysql
+mysql-connector-python
+venv venv
+# sqlalchemy
+# pymysql

@@ -1,13 +1,20 @@
-from flask import Blueprint, jsonify
-from models.model_user import User
+from flask import Blueprint, jsonify, request
+from models.database import cursor, cnn
+from datetime import datetime
 
 user_blueprint = Blueprint("routes", __name__)
 
 
-@user_blueprint.route("/createuser", methods=["GET"])
+@user_blueprint.route("/createuser", methods=["POST"])
 def createuser():
-    result = User.query.first()
-    return jsonify(user=User.to_json(result)), 200
+    dump_json = request.get_json()
+
+    query = "INSERT INTO user (name, email, password) VALUES (%(name)s, %(email)s, %(password)s)"
+    cursor.execute(query, dump_json)
+    cnn.commit()
+    cursor.close()
+
+    return jsonify(user="resultQuery"), 200
 
 
 @user_blueprint.route("/login_user", methods=["POST"])
