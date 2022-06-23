@@ -1,7 +1,7 @@
 from flask import Blueprint
 from controller.contoller_user import cUser
 
-user_blueprint = Blueprint("routes", __name__)
+user_blueprint = Blueprint("routes_user", __name__)
 
 
 @user_blueprint.route("/createuser", methods=["POST"])
