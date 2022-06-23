@@ -12,6 +12,3 @@ config_connection = {
 cnn = connection.MySQLConnection(**config_connection)
 
 cursor = cnn.cursor(dictionary=True)
-
-
-# cnn.close()
