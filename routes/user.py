@@ -1,16 +1,14 @@
-from flask import Blueprint, jsonify, request
-from models.model_user import User
+from flask import Blueprint
+from controller.contoller_user import cUser
 
 user_blueprint = Blueprint("routes", __name__)
 
 
 @user_blueprint.route("/createuser", methods=["POST"])
 def createuser():
-    json = request.get_json()
-    User.register_user(json)
-    return jsonify(user="Usuario Cadastrado com sucesso! ; )"), 200
+    return cUser.c_user_register()
 
 
 @user_blueprint.route("/login_user", methods=["POST"])
 def login_user():
-    return jsonify(username="ok"), 200
+    return cUser.c_user_login()

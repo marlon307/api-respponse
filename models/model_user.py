@@ -1,10 +1,6 @@
-from models.database import cursor, cnn
+class qUser:
+    def q_register_user():
+        return "INSERT INTO user (name, email, password) VALUES (%(name)s, %(email)s, %(password)s)"
 
-
-class User:
-    def register_user(json):
-        query = "INSERT INTO user (name, email, password) VALUES (%(name)s, %(email)s, %(password)s)"
-        cursor.execute(query, json)
-        cnn.commit()
-        cursor.close()
-        cnn.close()
+    def q_login_user():
+        return "SELECT name, email FROM user WHERE (email, password) = (%(email)s, %(password)s)"
