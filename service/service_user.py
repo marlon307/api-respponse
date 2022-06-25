@@ -8,7 +8,7 @@ from utility.generat_id import generate_id
 
 
 class sUser:
-    def register_user(json):
+    def s_register_user(json):
         try:
             json["id_user"] = generate_id()
             json["password"] = encrypt(json["password"])
@@ -24,7 +24,7 @@ class sUser:
             print(err)
             return jsonify(msg="Falha nossa. :(", status=500), 500
 
-    def login_user(json):
+    def s_login_user(json):
         try:
             info_login = execut_query.selectOne(qUser.q_login_user(), json)
             if info_login:
@@ -56,3 +56,13 @@ class sUser:
                 return jsonify(msg="Falha nossa.", status=403), 403
             print(err)
             return jsonify(msg="Falha nossa.", status=500), 500
+
+    def s_user_resetpsw(email, token):
+        print(email, token)
+        return {
+            "email": email,
+            "token": token,
+        }, 200
+        # return {
+        #     "msg": "ok",
+        # }, 200
