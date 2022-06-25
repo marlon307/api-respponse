@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from datetime import datetime
+from auth.auth_jwt import valid_auth
 from routes.user import user_blueprint
 from middleware.m_user import m_user
 
