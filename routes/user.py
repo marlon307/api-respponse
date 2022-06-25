@@ -12,3 +12,8 @@ def createuser():
 @user_blueprint.route("/login_user", methods=["POST"])
 def login_user():
     return cUser.c_user_login()
+
+
+@user_blueprint.route("/reset_psw_user/<string:email>$<string:token>", methods=["POST"])
+def reset_psw_user(email, token):
+    return cUser.c_user_resetpsw(email, token)

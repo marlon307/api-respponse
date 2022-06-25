@@ -10,9 +10,8 @@ msg = {
 
 
 def generate_token(data):
-    data["exp"] = datetime.now() + timedelta(hours=6)
     return jwt.encode(
-        payload=data,
+        payload={**data, "exp": datetime.now() + timedelta(hours=6)},
         key=os.getenv("JWT_KEY"),
         algorithm=os.getenv("ALGORITHM"),
     )
