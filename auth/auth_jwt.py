@@ -9,9 +9,9 @@ msg = {
 }, 401
 
 
-def generate_token(data):
+def generate_token(data, hours, min):
     return jwt.encode(
-        payload={**data, "exp": datetime.now() + timedelta(hours=6)},
+        payload={**data, "exp": datetime.now() + timedelta(hours=hours, minutes=min)},
         key=os.getenv("JWT_KEY"),
         algorithm=os.getenv("ALGORITHM"),
     )

@@ -17,7 +17,7 @@ class cUser:
             if err.errno == 1062:
                 return jsonify(msg="Este usuário já possui cadastro.", status=403), 403
             print(err)
-            return jsonify(msg="Falha nossa. :(", status=500), 500
+            return jsonify(msg="Falha nossa.", status=500), 500
 
     def c_user_login():
         try:

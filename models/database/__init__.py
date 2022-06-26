@@ -32,6 +32,13 @@ class execut_query:
         cnn.commit()
         cnn.closeConnection()
 
+    def update(query, data):
+        cnn = execut_query()
+        cnn.execute(query, data)
+        cnn.closeCursor()
+        cnn.commit()
+        cnn.closeConnection()
+
     def select(query, data):
         cnn = execut_query()
         cnn.execute(query, data)

@@ -4,3 +4,15 @@ class qUser:
 
     def q_login_user():
         return "SELECT id_user, name, email, password FROM user WHERE (email) = (%(email)s)"
+
+    def q_request_rest_psw():
+        return "UPDATE user SET key_resetpsw = %(key)s WHERE (email) = %(email)s"
+
+    def q_select_emailuser():
+        return "SELECT email FROM user WHERE email = %(email)s"
+
+    def q_select_k_userpsw():
+        return "SELECT key_resetpsw FROM user WHERE email = %(email)s"
+
+    def q_update_psw_user():
+        return "UPDATE user SET password = %(password)s, key_resetpsw='' WHERE (id_user) = %(id_user)s AND (email) = %(email)s"
