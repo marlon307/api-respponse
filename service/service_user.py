@@ -51,9 +51,9 @@ class sUser:
         # hashlib.sha1((token).encode("utf-8")).hexdigest()
 
         result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
-        execut_query.selectOne(
+        execut_query.update(
             qUser.q_request_rest_psw(),
-            {"email": result["email"], "key": "str(teste2)"},
+            {"email": result["email"], "key": key},
         )
 
         # print(datetime.now() + timedelta(minutes=15) > datetime.now())
