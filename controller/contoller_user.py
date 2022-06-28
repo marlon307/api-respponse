@@ -39,7 +39,7 @@ class cUser:
             print(err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
-    def c_user_resetpsw(email, token):
+    def c_user_resetpsw(email):
         # json = request.get_json()
-        result = sUser.s_user_resetpsw(email, token)
+        result = sUser.s_user_resetpsw(email)
         return result

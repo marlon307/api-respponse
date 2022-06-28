@@ -9,7 +9,7 @@ class qUser:
         return "UPDATE user SET key_resetpsw = %(key)s WHERE (email) = %(email)s"
 
     def q_select_emailuser():
-        return "SELECT email FROM user WHERE email = %(email)s"
+        return "SELECT email, id_user FROM user WHERE email = %(email)s"
 
     def q_select_k_userpsw():
         return "SELECT key_resetpsw FROM user WHERE email = %(email)s"
