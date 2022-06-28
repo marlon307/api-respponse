@@ -3,7 +3,6 @@ from models.database import execut_query
 from models.model_user import qUser
 from utility.encrypt import encrypt, checkcrypt
 from utility.generat_id import generate_id
-import hashlib
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 
@@ -35,20 +34,9 @@ class sUser:
         else:
             return False
 
-    def s_user_resetpsw(email, token):
-        # byte_key = bytes(token, "UTF-8")
-        # value = hmac.new(byte_key, b"Teste", hashlib.sha256).hexdigest()
-        # # hmac.digest(value)
-        # print(email, value, b"Teste")
-        # teste2 = str(datetime.now()).encode("utf-8")
-
+    def s_user_resetpsw(email):
         key = Fernet.generate_key()
         cyper = Fernet(key)
-        teste2 = cyper.encrypt(b"Teste")
-        # # teste3 = cyper.decrypt(teste2)
-
-        # print(teste2)
-        # hashlib.sha1((token).encode("utf-8")).hexdigest()
 
         result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
         execut_query.update(
@@ -56,13 +44,16 @@ class sUser:
             {"email": result["email"], "key": key},
         )
 
-        # print(datetime.now() + timedelta(minutes=15) > datetime.now())
+        info_for_crypt = {
+            "exp": str(datetime.now() + timedelta(minutes=15)),
+            "uuid": result["id_user"],
+        }
 
-        # teste7 = {"rtx": str(teste2)}
-        # token = generate_token(teste7, 0, 1)
+        encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
+        info_token = {"rtx": str(encrypt), "email": result["email"]}
+        token = generate_token(info_token, 0, 15)
+
         return {
-            "token": email,
+            "msg": "Email enviado com sucesso.",
+            "status": 200,
         }, 200
-        # return {
-        #     "msg": "ok",
-        # }, 200
