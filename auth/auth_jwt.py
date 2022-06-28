@@ -20,14 +20,21 @@ def generate_token(data, hours, min):
 def valid_auth():
     try:
         auth = request.headers["Authorization"]
-        if "Bearer" in auth:
 
-            jwt.decode(
+        if "Bearer " in auth:
+            data = jwt.decode(
                 jwt=auth.split(" ")[1],
                 key=os.getenv("JWT_KEY"),
                 algorithms=[os.getenv("ALGORITHM")],
             )
+            request.headers = {"data": data}
+            print(request.headers)
+
         else:
             return msg
-    except:
-        return msg
+    except Exception as err:
+        print(err)
+        return {
+            "msg": "Token is invalid",
+            "status": 401,
+        }

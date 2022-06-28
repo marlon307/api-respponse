@@ -1,16 +1,19 @@
 from flask import Flask, jsonify
 from datetime import datetime
-from routes.user import user_blueprint
+from routes.user import user_auth_blueprint, user_blueprint
 from middleware.m_user import m_user
+from auth.auth_jwt import valid_auth
 
 
 app = Flask(__name__)
 
 
 app.register_blueprint(user_blueprint)
+app.register_blueprint(user_auth_blueprint)
 
 app.before_request_funcs = {
     "routes_user": [m_user],
+    "routes_user_auth": [valid_auth],
 }
 
 

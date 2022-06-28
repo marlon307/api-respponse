@@ -1,5 +1,5 @@
 from flask import request
-from utility.m_credentials import valid_email, valid_psw
+from utility.credentials import valid_email, valid_psw
 
 msgErr = {
     "msg": "Credenciais Inválidas.",
