@@ -2,6 +2,7 @@ from flask import Blueprint
 from controller.contoller_user import cUser
 
 user_blueprint = Blueprint("routes_user", __name__)
+user_auth_blueprint = Blueprint("routes_user_auth", __name__)
 
 
 @user_blueprint.route("/createuser", methods=["POST"])
@@ -14,6 +15,11 @@ def login_user():
     return cUser.c_user_login()
 
 
-@user_blueprint.route("/solicitation_reset_psw_user/<string:email>", methods=["POST"])
-def reset_psw_user(email):
-    return cUser.c_user_resetpsw(email)
+@user_blueprint.route("/solicitation_reset_psw_user", methods=["POST"])
+def solicitation_reset_psw_user():
+    return cUser.c_solicitation_user_resetpsw()
+
+
+@user_auth_blueprint.route("/reset_psw_user/<string:token>", methods=["POST"])
+def reset_psw_user(token):
+    return cUser.c_user_resetpsw(token)

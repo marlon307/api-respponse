@@ -34,7 +34,7 @@ class sUser:
         else:
             return False
 
-    def s_user_resetpsw(email):
+    def s_solicitation_user_resetpsw(email):
         key = Fernet.generate_key()
         cyper = Fernet(key)
 
@@ -52,8 +52,29 @@ class sUser:
         encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
         info_token = {"rtx": str(encrypt), "email": result["email"]}
         token = generate_token(info_token, 0, 15)
+        return True
 
-        return {
-            "msg": "Email enviado com sucesso.",
-            "status": 200,
-        }, 200
+    def s_solicitation_user_resetpsw(email):
+        key = Fernet.generate_key()
+        cyper = Fernet(key)
+
+        result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+        execut_query.update(
+            qUser.q_request_rest_psw(),
+            {"email": result["email"], "key": key},
+        )
+
+        info_for_crypt = {
+            "exp": str(datetime.now() + timedelta(minutes=15)),
+            "uuid": result["id_user"],
+        }
+
+        encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
+        info_token = {"rtx": str(encrypt), "email": result["email"]}
+        token = generate_token(info_token, 0, 15)
+        print(token)
+        return True
+
+    def s_user_resetpsw(teste):
+
+        return True
