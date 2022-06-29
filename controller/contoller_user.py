@@ -54,5 +54,11 @@ class cUser:
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
     def c_user_resetpsw():
-        result = sUser.s_user_resetpsw(request.headers)
-        return {"ok": result}
+        try:
+            result = sUser.s_user_resetpsw(request.headers)
+            if result:
+                return {"msg": "Senha alterada com sucesso.", "status": 200}, 200
+            return {"msg": "Senha já alterada com esse token.", "status": 400}, 400
+        except Exception as err:
+            print(err)
+            return {"msg": "Dados Inválidos.", "status": 400}, 400
