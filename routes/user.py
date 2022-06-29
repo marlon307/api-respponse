@@ -20,6 +20,6 @@ def solicitation_reset_psw_user():
     return cUser.c_solicitation_user_resetpsw()
 
 
-@user_auth_blueprint.route("/reset_psw_user/<string:token>", methods=["POST"])
-def reset_psw_user(token):
-    return cUser.c_user_resetpsw(token)
+@user_auth_blueprint.route("/reset_psw_user", methods=["POST"])
+def reset_psw_user():
+    return cUser.c_user_resetpsw()
