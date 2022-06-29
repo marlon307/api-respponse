@@ -27,14 +27,10 @@ def valid_auth():
                 key=os.getenv("JWT_KEY"),
                 algorithms=[os.getenv("ALGORITHM")],
             )
-            request.headers = {"data": data}
-            print(request.headers)
+            request.headers = data
 
         else:
             return msg
     except Exception as err:
         print(err)
-        return {
-            "msg": "Token is invalid",
-            "status": 401,
-        }
+        return msg

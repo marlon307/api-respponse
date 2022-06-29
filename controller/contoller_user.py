@@ -53,6 +53,6 @@ class cUser:
             print(err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
-    def c_user_resetpsw(rtx):
-        result = sUser.s_user_resetpsw(rtx)
+    def c_user_resetpsw():
+        result = sUser.s_user_resetpsw(request.headers)
         return {"ok": result}

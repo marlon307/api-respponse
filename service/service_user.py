@@ -65,16 +65,16 @@ class sUser:
         )
 
         info_for_crypt = {
-            "exp": str(datetime.now() + timedelta(minutes=15)),
+            "exp": str(datetime.now() + timedelta(minutes=30)),
             "uuid": result["id_user"],
         }
 
         encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
         info_token = {"rtx": str(encrypt), "email": result["email"]}
-        token = generate_token(info_token, 0, 15)
+        token = generate_token(info_token, 5, 0)
         print(token)
         return True
 
-    def s_user_resetpsw(teste):
-
+    def s_user_resetpsw(data):
+        print(data)
         return True
