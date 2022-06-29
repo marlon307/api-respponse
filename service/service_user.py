@@ -60,7 +60,7 @@ class sUser:
         result = execut_query.selectOne(
             qUser.q_select_k_userpsw(), {"email": data["email"]}
         )
-        print(result["key_resetpsw"], data["rtx"])
+
         if result["key_resetpsw"] != data["rtx"]:
             cyper = Fernet(str(result["key_resetpsw"]).encode("utf-8"))
             decrypt = cyper.decrypt(str(data["rtx"]).encode("utf-8"))
