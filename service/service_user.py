@@ -41,18 +41,17 @@ class sUser:
 
         result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
         execut_query.update(
-            qUser.q_request_rest_psw(),
-            {"email": result["email"], "key": key},
+            qUser.q_request_rest_psw(), {"email": result["email"], "key": key}
         )
 
         info_for_crypt = {
-            "exp": str(datetime.now() + timedelta(minutes=30)),
+            "exp": str(datetime.now() + timedelta(minutes=15)),
             "uuid": result["id_user"],
         }
 
         encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
         info_token = {"rtx": encrypt.decode("utf-8"), "email": result["email"]}
-        token = generate_token(info_token, 5, 0)
+        token = generate_token(info_token, 0, 15)
         print(token)
         return True
 
