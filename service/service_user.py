@@ -55,27 +55,32 @@ class sUser:
         print(token)
         return True
 
-    def s_user_resetpsw(data):
+    def s_user_resetpsw(data, json):
         result = execut_query.selectOne(
             qUser.q_select_k_userpsw(), {"email": data["email"]}
         )
-
         if result["key_resetpsw"] != data["rtx"]:
             cyper = Fernet(str(result["key_resetpsw"]).encode("utf-8"))
             decrypt = cyper.decrypt(str(data["rtx"]).encode("utf-8"))
             object_decrypt = decrypt.decode("utf-8")
+            # Transforma minha string em objeto
+            new_object = ast.literal_eval(object_decrypt)
+            if datetime.fromisoformat(
+                new_object["exp"]
+            ) >= datetime.now() and datetime.now() <= datetime.fromisoformat(
+                new_object["exp"]
+            ):
+                new_psw = encrypt(json["password"])
 
-            new_psw = encrypt("123A3dq?")
-
-            execut_query.update(
-                qUser.q_update_psw_user(),
-                {
-                    "password": new_psw,
-                    "key_resetpsw": data["rtx"],
-                    "id_user": ast.literal_eval(object_decrypt)["uuid"],
-                    "email": data["email"],
-                },
-            )
-
-            return True
+                execut_query.update(
+                    qUser.q_update_psw_user(),
+                    {
+                        "password": new_psw,
+                        "key_resetpsw": data["rtx"],
+                        "id_user": new_object["uuid"],
+                        "email": data["email"],
+                    },
+                )
+                return True
+            return False
         return False

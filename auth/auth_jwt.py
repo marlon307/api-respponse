@@ -31,7 +31,7 @@ def valid_auth():
                 key=os.getenv("JWT_KEY"),
                 algorithms=[os.getenv("ALGORITHM")],
             )
-            request.headers = data
+            request.headers = {**request.headers, **data}
 
         else:
             return msg
