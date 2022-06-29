@@ -10,8 +10,12 @@ msg = {
 
 
 def generate_token(data, hours, min):
+
     return jwt.encode(
-        payload={**data, "exp": datetime.now() + timedelta(hours=hours, minutes=min)},
+        payload={
+            **data,
+            "exp": datetime.now() + timedelta(hours=hours + 3, minutes=min),
+        },
         key=os.getenv("JWT_KEY"),
         algorithm=os.getenv("ALGORITHM"),
     )
@@ -27,7 +31,7 @@ def valid_auth():
                 key=os.getenv("JWT_KEY"),
                 algorithms=[os.getenv("ALGORITHM")],
             )
-            request.headers = data
+            request.headers = {**request.headers, **data}
 
         else:
             return msg
