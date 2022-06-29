@@ -54,5 +54,5 @@ class cUser:
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
     def c_user_resetpsw():
-        result = sUser.s_user_resetpsw(request.headers)
-        return {"ok": result}
+        sUser.s_user_resetpsw(request.headers)
+        return {"msg": "Senha alterada com sucesso.", "status": 200}, 200

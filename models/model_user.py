@@ -15,4 +15,8 @@ class qUser:
         return "SELECT key_resetpsw FROM user WHERE email = %(email)s"
 
     def q_update_psw_user():
-        return "UPDATE user SET password = %(password)s, key_resetpsw='' WHERE (id_user) = %(id_user)s AND (email) = %(email)s"
+        return (
+            "UPDATE user SET "
+            "password=%(password)s, key_resetpsw=%(key_resetpsw)s "
+            " WHERE id_user=%(id_user)s AND email=%(email)s"
+        )
