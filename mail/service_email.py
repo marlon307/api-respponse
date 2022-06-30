@@ -14,11 +14,16 @@ def send_mail():
     msg["From"] = from_addr
     msg["To"] = to_addr
     # Email Subject
-    msg["subject"] = "Subject"
+    msg["subject"] = "Título"
 
     # Email Body
-    body = "Email Body"
-    msg.attach(MIMEText(body, "plain"))
+
+    with open(
+        os.path.dirname(__file__) + "/templates/reset_psw.html", "r", encoding="utf-8"
+    ) as f:
+        body = f.read()
+
+    msg.attach(MIMEText(body, "html"))
 
     # Email Address using to send
     email = from_addr

@@ -1,8 +1,18 @@
+from functools import wraps
 from flask import Blueprint
 from controller.contoller_user import cUser
 
 user_blueprint = Blueprint("routes_user", __name__)
 user_auth_blueprint = Blueprint("routes_user_auth", __name__)
+
+
+def teste(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        print(args, kwargs)
+        return f(*args, **kwargs)
+
+    return decorated
 
 
 @user_blueprint.route("/createuser", methods=["POST"])
@@ -11,6 +21,7 @@ def createuser():
 
 
 @user_blueprint.route("/login_user", methods=["POST"])
+@teste
 def login_user():
     return cUser.c_user_login()
 
