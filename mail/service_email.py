@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 import os
 
 
-def send_mail():
+def send_mail(template_name):
     # Email Address using to send from
     from_addr = os.getenv("EMAIL_TESTE")
     # Email Address to send to
@@ -19,7 +19,9 @@ def send_mail():
     # Email Body
 
     with open(
-        os.path.dirname(__file__) + "/templates/reset_psw.html", "r", encoding="utf-8"
+        os.path.dirname(__file__) + "/templates/%s" % template_name,
+        "r",
+        encoding="utf-8",
     ) as f:
         body = f.read()
 

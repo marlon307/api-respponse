@@ -17,7 +17,7 @@ class sUser:
         return True
 
     def s_login_user(json):
-        send_mail()
+        send_mail("reset_psw.html")
         info_login = execut_query.selectOne(qUser.q_login_user(), json)
         if info_login:
 
