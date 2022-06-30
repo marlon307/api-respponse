@@ -7,6 +7,33 @@ msgErr = {
 }, 400
 
 
+class mUser:
+    def __init__(self):
+        self.data = request.get_json()
+        self.err = {
+            "msg": "Credenciais Inválidas.",
+            "status": 400,
+        }, 400
+
+    def login():
+        m = mUser()
+        # Falta válidar domino de email
+        if m.data["email"] is None or valid_email(m.data["email"]) is not True:
+            return m.err
+        if m.data["password"] is None or valid_psw(m.data["password"]) is not True:
+            return m.err
+
+    def register(self):
+        m = mUser()
+        if m.data["name"] is None or len(m.data["name"]) < 4:
+            return m.err
+        # Falta válidar domino de email
+        if m.data["email"] is None or valid_email(m.data["email"]) is not True:
+            return m.err
+        if m.data["password"] is None or valid_psw(m.data["password"]) is not True:
+            return m.err
+
+
 def m_user():
     try:
         data = request.get_json()

@@ -6,6 +6,7 @@ from utility.generat_id import generate_id
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 import ast
+from mail.service_email import send_mail
 
 
 class sUser:
@@ -16,6 +17,7 @@ class sUser:
         return True
 
     def s_login_user(json):
+        send_mail()
         info_login = execut_query.selectOne(qUser.q_login_user(), json)
         if info_login:
 
