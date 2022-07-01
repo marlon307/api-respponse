@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 import os
 
 
-def send_mail(template_name):
+def send_mail(template_name, url):
     # Email Address using to send from
     from_addr = os.getenv("EMAIL_TESTE")
     # Email Address to send to
@@ -23,7 +23,7 @@ def send_mail(template_name):
         "r",
         encoding="utf-8",
     ) as f:
-        body = f.read()
+        body = f.read().format(url_reset_psw=url)
 
     msg.attach(MIMEText(body, "html"))
 

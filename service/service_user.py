@@ -17,7 +17,6 @@ class sUser:
         return True
 
     def s_login_user(json):
-        send_mail("reset_psw.html")
         info_login = execut_query.selectOne(qUser.q_login_user(), json)
         if info_login:
 
@@ -28,6 +27,10 @@ class sUser:
                 # Token valido por 6 horas
                 token = generate_token(info_login, 6, 0)
 
+                send_mail(
+                    "reset_psw.html",
+                    "http://127.0.0.1:5000/reset_psw_user/token=%s" % token,
+                )
                 return {
                     "info_login": info_login,
                     "token": token,
