@@ -18,5 +18,5 @@ class qUser:
         return (
             "UPDATE user SET "
             "password=%(password)s, key_resetpsw=%(key_resetpsw)s "
-            " WHERE id_user=%(id_user)s AND email=%(email)s"
+            "WHERE id_user=%(id_user)s AND email=%(email)s"
         )
