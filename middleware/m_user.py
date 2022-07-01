@@ -15,7 +15,7 @@ class mUser:
             "status": 400,
         }, 400
 
-    def login():
+    def login() -> None | object:
         m = mUser()
         # Falta válidar domino de email
         if m.data["email"] is None or valid_email(m.data["email"]) is not True:
@@ -23,7 +23,7 @@ class mUser:
         if m.data["password"] is None or valid_psw(m.data["password"]) is not True:
             return m.err
 
-    def register(self):
+    def register(self) -> None | object:
         m = mUser()
         if m.data["name"] is None or len(m.data["name"]) < 4:
             return m.err
@@ -34,7 +34,7 @@ class mUser:
             return m.err
 
 
-def m_user():
+def m_user() -> None | object:
     try:
         data = request.get_json()
         if request.path == "/createuser" and (

@@ -9,7 +9,7 @@ msg = {
 }, 401
 
 
-def generate_token(data, hours, min):
+def generate_token(data: object, hours: int, min: int) -> str:
 
     return jwt.encode(
         payload={
@@ -21,7 +21,7 @@ def generate_token(data, hours, min):
     )
 
 
-def valid_auth():
+def valid_auth() -> None | object:
     try:
         auth = request.headers["Authorization"]
 
