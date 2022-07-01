@@ -6,6 +6,7 @@ from utility.generat_id import generate_id
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 import ast
+import os
 from mail.service_email import send_mail
 
 
@@ -55,7 +56,8 @@ class sUser:
         token = generate_token(info_token, 0, 15)
 
         params = {
-            "url_reset_psw": "http://127.0.0.1:5000/reset_psw_user/token=%s" % token,
+            "url_reset_psw": "%sreset_psw_user/token=%s"
+            % (os.getenv("WEB_APPLICATION_URL"), token),
         }
         send_mail(
             "[respponse.com] Solicitção para trocar senha.",
