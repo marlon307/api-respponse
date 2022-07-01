@@ -10,7 +10,7 @@ class cUser:
             sUser.s_register_user(json)
 
             return (
-                jsonify(msg="Usuário cadastrado com sucesso!", status=201),
+                jsonify(msg="Confime sua conta.", status=201),
                 201,
             )
         except Exception as err:
@@ -18,6 +18,10 @@ class cUser:
                 return jsonify(msg="Este usuário já possui cadastro.", status=403), 403
             print(err)
             return jsonify(msg="Falha nossa.", status=500), 500
+
+    def c_user_confirmacc():
+        sUser.c_user_confirmacc()
+        pass
 
     def c_user_login():
         try:
