@@ -27,10 +27,6 @@ class sUser:
                 # Token valido por 6 horas
                 token = generate_token(info_login, 6, 0)
 
-                send_mail(
-                    "reset_psw.html",
-                    "http://127.0.0.1:5000/reset_psw_user/token=%s" % token,
-                )
                 return {
                     "info_login": info_login,
                     "token": token,
@@ -57,7 +53,16 @@ class sUser:
         encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
         info_token = {"rtx": encrypt.decode("utf-8"), "email": result["email"]}
         token = generate_token(info_token, 0, 15)
-        print(token)
+
+        params = {
+            "url_reset_psw": "http://127.0.0.1:5000/reset_psw_user/token=%s" % token,
+        }
+        send_mail(
+            "[respponse.com] Solicitção para trocar senha.",
+            result["email"],
+            "reset_psw.html",
+            params,
+        )
         return True
 
     def s_user_resetpsw(data, json):

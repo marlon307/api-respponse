@@ -4,26 +4,30 @@ from email.mime.text import MIMEText
 import os
 
 
-def send_mail(template_name, url):
+def send_mail(
+    title: str,
+    destinatary: str | list[str],
+    template_name: str,
+    params: object,
+) -> None:
     # Email Address using to send from
     from_addr = os.getenv("EMAIL_TESTE")
     # Email Address to send to
-    to_addr = os.getenv("EMAIL")
+    to_addr = destinatary
 
     msg = MIMEMultipart()
     msg["From"] = from_addr
     msg["To"] = to_addr
     # Email Subject
-    msg["subject"] = "Título"
+    msg["subject"] = title
 
     # Email Body
-
     with open(
         os.path.dirname(__file__) + "/templates/%s" % template_name,
         "r",
         encoding="utf-8",
     ) as f:
-        body = f.read().format(url_reset_psw=url)
+        body = f.read().format(**params)
 
     msg.attach(MIMEText(body, "html"))
 
