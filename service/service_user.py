@@ -3,6 +3,7 @@ from models.database import execut_query
 from models.model_user import qUser
 from utility.encrypt import encrypt, checkcrypt
 from utility.generat_id import generate_id
+from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
 import ast
@@ -27,7 +28,7 @@ class sUser:
         cyper = Fernet(key)
         genertate_hash = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
         info_token = {"rtx": genertate_hash.decode("utf-8"), "email": json["email"]}
-        token = generate_token(info_token, 0, 15)
+        token = generate_token(info_token, 2, 0)
 
         params = {
             "name_user": json["name"],
@@ -112,11 +113,12 @@ class sUser:
             object_decrypt = decrypt.decode("utf-8")
             # Transforma minha string em objeto
             new_object = ast.literal_eval(object_decrypt)
-            if datetime.fromisoformat(
-                new_object["exp"]
-            ) >= datetime.now() and datetime.now() <= datetime.fromisoformat(
-                new_object["exp"]
-            ):
+            # if datetime.fromisoformat(
+            #     new_object["exp"]
+            # ) >= datetime.now() and datetime.now() <= datetime.fromisoformat(
+            #     new_object["exp"]
+            # ):
+            if conpare_date(new_object["exp"], new_object["exp"]):
                 new_psw = encrypt(json["password"])
 
                 execut_query.update(
