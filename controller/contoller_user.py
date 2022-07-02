@@ -20,7 +20,7 @@ class cUser:
             reult = sUser.s_user_confirmacc(request.headers["user"])
             if reult:
                 return {"msg": "Conta confimarda.", "status": 200}, 200
-            return {"msg": "Conta não existe.", "status": 400}, 400
+            return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print(err)
             return {"msg": "Falha nossa.", "status": 500}, 500
@@ -34,7 +34,7 @@ class cUser:
                     "msg": "Novo email enviado para confirmar conta.",
                     "status": 200,
                 }, 200
-            return {"msg": "Conta não existe.", "status": 400}, 400
+            return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print(err)
             return {"msg": "Falha nossa.", "status": 500}, 500
