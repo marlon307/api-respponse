@@ -1,5 +1,5 @@
 from flask import request
-from utility.credentials import valid_email, valid_psw
+from utility.credentials import valid_email, valid_psw, valid_name
 
 msgErr = {
     "msg": "Credenciais Inválidas.",
@@ -25,7 +25,11 @@ class mUser:
 
     def register(self) -> None | object:
         m = mUser()
-        if m.data["name"] is None or len(m.data["name"]) < 4:
+        if (
+            m.data["name"] is None
+            or len(m.data["name"]) < 4
+            or valid_name(m.data["name"]) is not True
+        ):
             return m.err
         # Falta válidar domino de email
         if m.data["email"] is None or valid_email(m.data["email"]) is not True:
@@ -38,7 +42,9 @@ def m_user() -> None | object:
     try:
         data = request.get_json()
         if request.path == "/createuser" and (
-            data["name"] is None or len(data["name"]) < 4
+            data["name"] is None
+            or len(data["name"]) < 4
+            or valid_name(data["name"]) is not True
         ):
             return msgErr
         # Falta válidar domino de email
