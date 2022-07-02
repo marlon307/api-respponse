@@ -20,7 +20,7 @@ def createuser():
     return cUser.c_user_register()
 
 
-@user_blueprint.route("/confirm_acc", methods=["POST"])
+@user_auth_blueprint.route("/confirm_acc", methods=["POST"])
 def confirm_acc():
     return cUser.c_user_confirmacc()
 
