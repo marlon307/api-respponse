@@ -25,31 +25,36 @@ class sUser:
 
     def s_user_confirmacc(json):
         result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": json["email"]}
+            qUser.q_select_user_token(), {"email": json["email"], "confirm_acc": False}
         )
-        if result["user_token"] != json["rtx"]:
-            object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
-            new_object = ast.literal_eval(object_decrypt)
 
-            if conpare_date(new_object["exp"], new_object["exp"]):
-                execut_query.update(
-                    qUser.q_update_active_acc(),
-                    {
-                        "id_user": new_object["uuid"],
-                        "email": json["email"],
-                        "date": datetime.now(),
-                    },
-                )
-                return True
+        if result is not None and result["user_token"] != json["rtx"]:
+            object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
+
+            if object_decrypt is not False:
+                new_object = ast.literal_eval(object_decrypt)
+
+                if conpare_date(new_object["exp"], new_object["exp"]):
+                    execut_query.update(
+                        qUser.q_update_active_acc(),
+                        {
+                            "id_user": new_object["uuid"],
+                            "email": json["email"],
+                            "date": datetime.now(),
+                            "user_token": json["rtx"],
+                        },
+                    )
+                    return True
+                return False
             return False
         return False
 
     def s_request_new_confirm_acc(json):
-        key = Fernet.generate_key()
         result = execut_query.selectOne(
             qUser.q_select_emailuser(), {"email": json["email"], "confirm_acc": False}
         )
-        if result:
+        if result is not None:
+            key = Fernet.generate_key()
             execut_query.update(
                 qUser.q_request_update_token(), {"email": result["email"], "key": key}
             )
@@ -109,7 +114,7 @@ class sUser:
 
     def s_user_resetpsw(data, json):
         result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": data["email"]}
+            qUser.q_select_user_token(), {"email": data["email"], "confirm_acc": True}
         )
         if result["user_token"] != data["rtx"]:
             object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
