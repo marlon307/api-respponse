@@ -31,7 +31,7 @@ def valid_auth() -> None | object:
                 key=os.getenv("JWT_KEY"),
                 algorithms=[os.getenv("ALGORITHM")],
             )
-            request.headers = {**request.headers, **data}
+            request.headers = {**request.headers, "user": data}
 
         else:
             return msg
