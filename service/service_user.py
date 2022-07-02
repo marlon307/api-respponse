@@ -116,7 +116,7 @@ class sUser:
         result = execut_query.selectOne(
             qUser.q_select_user_token(), {"email": data["email"], "confirm_acc": True}
         )
-        if result["user_token"] != data["rtx"]:
+        if result is not None and result["user_token"] != data["rtx"]:
             object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
             new_object = ast.literal_eval(object_decrypt)
 
