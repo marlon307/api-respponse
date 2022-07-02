@@ -1,14 +1,15 @@
+import ast
+import os
 from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models.model_user import qUser
-from utility.encrypt import encrypt, checkcrypt
+from utility.encrypt import encrypt, checkcrypt, fernetEncrypt, fernetDecrypt
 from utility.generat_id import generate_id
 from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
-import ast
-import os
 from mail.service_email import send_mail
+from utility.u_user import send_mail_confirm_user
 
 
 class sUser:
@@ -19,40 +20,15 @@ class sUser:
         json["password"] = encrypt(json["password"])
         json["user_token"] = key
         execut_query.insert(qUser.q_register_user(), json)
-
-        info_for_crypt = {
-            "exp": str(datetime.now() + timedelta(hours=2)),
-            "uuid": json["id_user"],
-        }
-
-        cyper = Fernet(key)
-        genertate_hash = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
-
-        info_token = {"rtx": genertate_hash.decode("utf-8"), "email": json["email"]}
-        token = generate_token(info_token, 2, 0)
-
-        params = {
-            "name_user": json["name"],
-            "url_confirm_acc": "%sconfirm_acc/token=%s"
-            % (os.getenv("WEB_APPLICATION_URL"), token),
-        }
-
-        send_mail(
-            "[respponse.com] Confime sua conta.",
-            json["email"],
-            "confirm_acc.html",
-            params,
-        )
+        send_mail_confirm_user(key, json)
         return True
 
-    def c_user_confirmacc(json):
+    def s_user_confirmacc(json):
         result = execut_query.selectOne(
-            qUser.q_select_k_userpsw(), {"email": json["email"]}
+            qUser.q_select_user_token(), {"email": json["email"]}
         )
         if result["user_token"] != json["rtx"]:
-            cyper = Fernet(str(result["user_token"]).encode("utf-8"))
-            decrypt = cyper.decrypt(str(json["rtx"]).encode("utf-8"))
-            object_decrypt = decrypt.decode("utf-8")
+            object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
             new_object = ast.literal_eval(object_decrypt)
 
             if conpare_date(new_object["exp"], new_object["exp"]):
@@ -66,6 +42,20 @@ class sUser:
                 )
                 return True
             return False
+        return False
+
+    def s_request_new_confirm_acc(json):
+        key = Fernet.generate_key()
+        result = execut_query.selectOne(
+            qUser.q_select_emailuser(), {"email": json["email"], "confirm_acc": False}
+        )
+        if result:
+            execut_query.update(
+                qUser.q_request_update_token(), {"email": result["email"], "key": key}
+            )
+            json["id_user"] = result["id_user"]
+            send_mail_confirm_user(key, json)
+            return True
         return False
 
     def s_login_user(json):
@@ -83,18 +73,17 @@ class sUser:
                     "info_login": info_login,
                     "token": token,
                 }
-            else:
-                return False
-        else:
             return False
+        return False
 
     def s_solicitation_user_resetpsw(email):
         key = Fernet.generate_key()
-        cyper = Fernet(key)
 
-        result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+        result = execut_query.selectOne(
+            qUser.q_select_emailuser(), {"email": email, "confirm_acc": True}
+        )
         execut_query.update(
-            qUser.q_request_rest_psw(), {"email": result["email"], "key": key}
+            qUser.q_request_update_token(), {"email": result["email"], "key": key}
         )
 
         info_for_crypt = {
@@ -102,8 +91,8 @@ class sUser:
             "uuid": result["id_user"],
         }
 
-        encrypt = cyper.encrypt(str(info_for_crypt).encode("utf-8"))
-        info_token = {"rtx": encrypt.decode("utf-8"), "email": result["email"]}
+        fernet_token = fernetEncrypt(key, info_for_crypt)
+        info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
         token = generate_token(info_token, 0, 15)
 
         params = {
@@ -120,13 +109,10 @@ class sUser:
 
     def s_user_resetpsw(data, json):
         result = execut_query.selectOne(
-            qUser.q_select_k_userpsw(), {"email": data["email"]}
+            qUser.q_select_user_token(), {"email": data["email"]}
         )
         if result["user_token"] != data["rtx"]:
-            cyper = Fernet(str(result["user_token"]).encode("utf-8"))
-            decrypt = cyper.decrypt(str(data["rtx"]).encode("utf-8"))
-            object_decrypt = decrypt.decode("utf-8")
-            # Transforma minha string em objeto
+            object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
             new_object = ast.literal_eval(object_decrypt)
 
             if conpare_date(new_object["exp"], new_object["exp"]):

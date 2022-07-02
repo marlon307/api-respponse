@@ -25,6 +25,11 @@ def confirm_acc():
     return cUser.c_user_confirmacc()
 
 
+@user_blueprint.route("/request_new_confirm_acc", methods=["POST"])
+def request_new_confirm_acc():
+    return cUser.c_request_new_confirm_acc()
+
+
 @user_blueprint.route("/login_user", methods=["POST"])
 @teste
 def login_user():
