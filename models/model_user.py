@@ -5,13 +5,13 @@ class qUser:
     def q_login_user():
         return "SELECT id_user, name, email, password FROM user WHERE (email) = (%(email)s)"
 
-    def q_request_rest_psw():
+    def q_request_update_token():
         return "UPDATE user SET user_token = %(key)s WHERE (email) = %(email)s"
 
     def q_select_emailuser():
-        return "SELECT email, id_user FROM user WHERE email = %(email)s"
+        return "SELECT email, id_user FROM user WHERE email = %(email)s AND confirm_acc = %(confirm_acc)s"
 
-    def q_select_k_userpsw():
+    def q_select_user_token():
         return "SELECT user_token FROM user WHERE email = %(email)s"
 
     def q_update_active_acc():

@@ -17,10 +17,24 @@ class cUser:
 
     def c_user_confirmacc():
         try:
-            reult = sUser.c_user_confirmacc(request.headers["user"])
+            reult = sUser.s_user_confirmacc(request.headers["user"])
             if reult:
                 return {"msg": "Conta confimarda.", "status": 200}, 200
-            return {"msg": "Conta confimarda.", "status": 400}, 400
+            return {"msg": "Conta não existe.", "status": 400}, 400
+        except Exception as err:
+            print(err)
+            return {"msg": "Falha nossa.", "status": 500}, 500
+
+    def c_request_new_confirm_acc():
+        try:
+            json = request.get_json()
+            reult = sUser.s_request_new_confirm_acc(json)
+            if reult:
+                return {
+                    "msg": "Novo email enviado para confirmar conta.",
+                    "status": 200,
+                }, 200
+            return {"msg": "Conta não existe.", "status": 400}, 400
         except Exception as err:
             print(err)
             return {"msg": "Falha nossa.", "status": 500}, 500
