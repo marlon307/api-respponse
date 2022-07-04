@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
 from datetime import datetime
 from routes.user import user_blueprint
+from middleware.m_valid_cnn_front import request_front
 
 
 app = Flask(__name__)
 
+app.before_request(request_front)
 app.register_blueprint(user_blueprint)
 
 

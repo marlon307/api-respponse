@@ -82,35 +82,37 @@ class sUser:
         return False
 
     def s_solicitation_user_resetpsw(email):
-        key = Fernet.generate_key()
-
         result = execut_query.selectOne(
             qUser.q_select_emailuser(), {"email": email, "confirm_acc": True}
         )
-        execut_query.update(
-            qUser.q_request_update_token(), {"email": result["email"], "key": key}
-        )
 
-        info_for_crypt = {
-            "exp": str(datetime.now() + timedelta(minutes=15)),
-            "uuid": result["id_user"],
-        }
+        if result is not None:
+            key = Fernet.generate_key()
+            execut_query.update(
+                qUser.q_request_update_token(), {"email": result["email"], "key": key}
+            )
 
-        fernet_token = fernetEncrypt(key, info_for_crypt)
-        info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
-        token = generate_token(info_token, 0, 15)
+            info_for_crypt = {
+                "exp": str(datetime.now() + timedelta(minutes=15)),
+                "uuid": result["id_user"],
+            }
 
-        params = {
-            "url_reset_psw": "%sreset_psw_user/token=%s"
-            % (os.getenv("WEB_APPLICATION_URL"), token),
-        }
-        send_mail(
-            "[respponse.com] Solicitção para trocar senha.",
-            result["email"],
-            "reset_psw.html",
-            params,
-        )
-        return True
+            fernet_token = fernetEncrypt(key, info_for_crypt)
+            info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
+            token = generate_token(info_token, 0, 15)
+
+            params = {
+                "url_reset_psw": "%sreset_psw_user/token=%s"
+                % (os.getenv("WEB_APPLICATION_URL"), token),
+            }
+            send_mail(
+                "[respponse.com] Solicitção para trocar senha.",
+                result["email"],
+                "reset_psw.html",
+                params,
+            )
+            return True
+        return False
 
     def s_user_resetpsw(data, json):
         result = execut_query.selectOne(
@@ -118,20 +120,22 @@ class sUser:
         )
         if result is not None and result["user_token"] != data["rtx"]:
             object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
-            new_object = ast.literal_eval(object_decrypt)
 
-            if conpare_date(new_object["exp"], new_object["exp"]):
-                new_psw = encrypt(json["password"])
+            if object_decrypt is not False:
+                new_object = ast.literal_eval(object_decrypt or "{'exp': 0}")
 
-                execut_query.update(
-                    qUser.q_update_psw_user(),
-                    {
-                        "password": new_psw,
-                        "user_token": data["rtx"],
-                        "id_user": new_object["uuid"],
-                        "email": data["email"],
-                    },
-                )
-                return True
+                if conpare_date(new_object["exp"], new_object["exp"]):
+                    new_psw = encrypt(json["password"])
+                    execut_query.update(
+                        qUser.q_update_psw_user(),
+                        {
+                            "password": new_psw,
+                            "user_token": data["rtx"],
+                            "id_user": new_object["uuid"],
+                            "email": data["email"],
+                        },
+                    )
+                    return True
+                return False
             return False
         return False
