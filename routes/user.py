@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from middleware.m_user import m_login, m_register, m_auth, m_email, m_psw
 from controller.contoller_user import cUser
 
