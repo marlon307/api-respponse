@@ -1,10 +1,10 @@
 from flask import request
-import os
 
 
 def request_front():
     header = request.headers
-    if header["host"] != os.getenv("API_HOST"):
+
+    if header["host"] != "localhost:5000":
         return {
             "msg": "Requisição incorreta.",
             "status": 500,
