@@ -12,7 +12,7 @@ def createuser():
 
 
 # Need Authorization
-@user_blueprint.route("/confirm_acc", methods=["POST"])
+@user_blueprint.route("/confirm_acc", methods=["PATCH"])
 @m_auth
 def confirm_acc():
     return cUser.c_user_confirmacc()
@@ -37,7 +37,7 @@ def solicitation_reset_psw_user():
 
 
 # Need Authorization
-@user_blueprint.route("/reset_psw_user", methods=["POST"])
+@user_blueprint.route("/reset_psw_user", methods=["PATCH"])
 @m_auth
 @m_psw
 def reset_psw_user():
