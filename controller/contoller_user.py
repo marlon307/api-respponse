@@ -1,3 +1,4 @@
+from base64 import encode
 from datetime import datetime, timedelta
 from flask import request, jsonify
 from service.service_user import sUser
@@ -52,10 +53,11 @@ class cUser:
                     status=200,
                 )
                 date_time = datetime.now() + timedelta(hours=6 + 3)
+                exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
                 new_json.set_cookie(
-                    "_token",
+                    "u_token",
                     result["token"],
-                    expires=date_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+                    expires=exp,
                 )
                 return new_json, 200
             else:

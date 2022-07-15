@@ -102,7 +102,7 @@ class sUser:
             token = generate_token(info_token, 0, 15)
 
             params = {
-                "url_reset_psw": "%sreset_psw_user/token=%s"
+                "url_reset_psw": "%sreset_psw/token=%s"
                 % (os.getenv("WEB_APPLICATION_URL"), token),
             }
             send_mail(
