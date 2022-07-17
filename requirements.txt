@@ -1,5 +1,5 @@
 flask
 mysql-connector-python
-venv
 bcrypt
 flask-cors
+-e .

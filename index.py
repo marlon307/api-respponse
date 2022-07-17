@@ -26,7 +26,5 @@ def index():
     return res, 200
 
 
-in_development = os.getenv("DEVELOPMENT")
 if __name__ == "__main__":
-    print(in_development)
-    app.run(debug=in_development)
+    app.run(debug=False)
