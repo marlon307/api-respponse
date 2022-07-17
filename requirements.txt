@@ -1,7 +1,5 @@
 flask
 mysql-connector-python
-venv venv
+venv
 bcrypt
 flask-cors
-# sqlalchemy
-# pymysql
