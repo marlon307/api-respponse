@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 
 msg = {
     "msg": "Acesso não autorizado!",
-    "status": 401,
-}, 401
+    "status": 403,
+}, 403
 
 
 def generate_token(data: object, hours: int, min: int) -> str:
