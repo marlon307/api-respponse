@@ -6,7 +6,10 @@ from middleware.m_valid_cnn_front import request_front
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(
+    app,
+    resources={r"/": {"origins": "https://project-respponse-marlon307.vercel.app/"}},
+)
 
 # app.before_request(request_front)
 app.register_blueprint(user_blueprint)

@@ -62,7 +62,7 @@ class cUser:
                     samesite="None",
                     httponly=True,
                 )
-                new_json.headers.add("Access-Control-Allow-Origin", "*")
+
                 return new_json, 200
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
