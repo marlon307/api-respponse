@@ -60,7 +60,6 @@ class cUser:
                     expires=exp,
                     secure=True,
                     samesite="None",
-                    httponly=True,
                 )
 
                 return new_json, 200
