@@ -58,6 +58,8 @@ class cUser:
                     "u_token",
                     result["token"],
                     expires=exp,
+                    secure=True,
+                    samesite="None",
                 )
                 return new_json, 200
             else:
