@@ -3,7 +3,6 @@ from flask_cors import CORS
 from datetime import datetime
 from routes.user import user_blueprint
 from middleware.m_valid_cnn_front import request_front
-import os
 
 
 app = Flask(__name__)
