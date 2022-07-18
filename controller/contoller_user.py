@@ -58,7 +58,6 @@ class cUser:
                     key="u_token",
                     value=result["token"],
                     expires=exp,
-                    domain="https://project-respponse-marlon307.vercel.app/",
                     secure=True,
                     samesite="None",
                     httponly=True,
