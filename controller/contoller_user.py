@@ -59,7 +59,7 @@ class cUser:
                     result["token"],
                     expires=exp,
                     secure=True,
-                    samesite="None",
+                    samesite="stric",
                     httponly=True,
                     max_age=60 * 60 * 6,
                 )
