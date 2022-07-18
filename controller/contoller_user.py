@@ -55,11 +55,12 @@ class cUser:
                 date_time = datetime.now() + timedelta(hours=6 + 3)
                 exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
                 new_json.set_cookie(
-                    "u_token",
-                    result["token"],
+                    key="u_token",
+                    value=result["token"],
                     expires=exp,
+                    domain="https://project-respponse-marlon307.vercel.app/",
                     secure=True,
-                    samesite="Strict",
+                    samesite="None",
                     httponly=True,
                 )
                 return new_json, 200
