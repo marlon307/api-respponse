@@ -61,6 +61,7 @@ class cUser:
                     secure=True,
                     samesite="None",
                     httponly=True,
+                    max_age=60 * 60 * 6,
                 )
                 return new_json, 200
             else:
