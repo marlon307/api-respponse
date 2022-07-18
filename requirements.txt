@@ -4,3 +4,4 @@ bcrypt
 flask-cors
 gunicorn
 pyjwt
+cryptography
