@@ -60,7 +60,6 @@ class cUser:
                     expires=exp,
                     secure=True,
                     samesite="None",
-                    domain="https://project-respponse-marlon307.vercel.app/",
                 )
 
                 return new_json, 200
