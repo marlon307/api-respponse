@@ -61,6 +61,7 @@ class cUser:
                     secure=True,
                     httponly=True,
                     samesite="None",
+                    path="/",
                 )
 
                 return new_json, 200
