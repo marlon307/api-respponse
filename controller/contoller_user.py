@@ -59,6 +59,7 @@ class cUser:
                     value=result["token"],
                     expires=exp,
                     secure=True,
+                    httponly=True,
                     samesite="None",
                 )
 
