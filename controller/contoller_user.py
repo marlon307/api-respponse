@@ -60,7 +60,6 @@ class cUser:
                     expires=exp,
                     secure=True,
                     samesite="None",
-                    domain="https://api-respponse-json.herokuapp.com/",
                 )
 
                 return new_json, 200
