@@ -21,7 +21,6 @@ msg = {
 @app.route("/")
 def index():
     res = jsonify(**msg)
-    res.set_cookie("user", "user")
     return res, 200
 
 
