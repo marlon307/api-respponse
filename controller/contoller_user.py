@@ -59,10 +59,10 @@ class cUser:
                     value=result["token"],
                     expires=exp,
                     secure=True,
-                    httponly=True,
                     samesite="None",
                     path="/",
-                    domain=".howlingdawn.com.br",
+                    # httponly=True,
+                    # domain=".howlingdawn.com.br",
                 )
 
                 return new_json, 200
