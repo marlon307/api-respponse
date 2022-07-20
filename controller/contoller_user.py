@@ -60,7 +60,7 @@ class cUser:
                     expires=exp,
                     secure=True,
                     httponly=True,
-                    samesite="None",
+                    samesite="Lax",
                     path="/",
                 )
 
