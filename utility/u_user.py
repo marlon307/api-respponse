@@ -17,7 +17,7 @@ def send_mail_confirm_user(key, json):
 
     params = {
         "name_user": json["name"],
-        "url_confirm_acc": "%sconfirm_acc/token=%s"
+        "url_confirm_acc": "%sconfirm_acc/%s"
         % (os.getenv("WEB_APPLICATION_URL"), token),
     }
 
