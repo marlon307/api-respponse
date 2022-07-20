@@ -6,7 +6,8 @@ from middleware.m_valid_cnn_front import request_front
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
+# CORS(app, supports_credentials=True) Acept cookie
 
 # app.before_request(request_front)
 app.register_blueprint(user_blueprint)
