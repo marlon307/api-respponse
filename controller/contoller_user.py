@@ -62,7 +62,7 @@ class cUser:
                     httponly=True,
                     samesite="None",
                     path="/",
-                    domain=".project-respponse-marlon307.vercel.app",
+                    domain=".howlingdawn.com.br",
                 )
 
                 return new_json, 200
