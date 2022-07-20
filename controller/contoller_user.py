@@ -54,6 +54,19 @@ class cUser:
                     exp=date_time,
                     status=200,
                 )
+<<<<<<< HEAD
+                date_time = datetime.now() + timedelta(hours=6 + 3)
+                exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+                new_json.set_cookie(
+                    "u_token",
+                    result["token"],
+                    expires=exp,
+                    secure=True,
+                    samesite="stric",
+                    httponly=True,
+                    max_age=60 * 60 * 6,
+                )
+=======
                 # exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
                 # new_json.set_cookie(
                 #     key="u_token",
@@ -66,6 +79,7 @@ class cUser:
                 #     # httponly=True, Com essa opção não é possive acessar com JavaScript
                 # )
 
+>>>>>>> 1d90b177e80f6a75a220ec129c1dccda567afbc0
                 return new_json, 200
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
