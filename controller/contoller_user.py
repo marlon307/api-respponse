@@ -1,6 +1,6 @@
 from base64 import encode
 from datetime import datetime, timedelta
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from service.service_user import sUser
 
 
@@ -46,15 +46,17 @@ class cUser:
             json = request.get_json()
             result = sUser.s_login_user(json)
             if result:
-                new_json = jsonify(
-                    user=result["info_login"],
-                    msg="Usuário logado com sucesso.",
-                    token=result["token"],
-                    status=200,
-                )
+                # new_json = jsonify(
+                #     user=result["info_login"],
+                #     msg="Usuário logado com sucesso.",
+                #     token=result["token"],
+                #     status=200,
+                # )
                 date_time = datetime.now() + timedelta(hours=6 + 3)
                 exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
-                new_json.set_cookie(
+                res = make_response()
+                # res.data = new_json
+                res.set_cookie(
                     key="u_token",
                     value=result["token"],
                     expires=exp,
@@ -63,8 +65,17 @@ class cUser:
                     samesite="None",
                     path="/",
                 )
+                # new_json.set_cookie(
+                #     key="u_token",
+                #     value=result["token"],
+                #     expires=exp,
+                #     secure=True,
+                #     httponly=True,
+                #     samesite="None",
+                #     path="/",
+                # )
 
-                return new_json, 200
+                return res, 200
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
