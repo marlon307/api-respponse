@@ -61,7 +61,7 @@ class cUser:
                     secure=True,
                     httponly=True,
                     samesite="None",
-                    path="/",
+                    domain="project-respponse-marlon307.vercel.app",
                 )
 
                 return new_json, 200
