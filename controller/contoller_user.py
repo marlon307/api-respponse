@@ -61,7 +61,7 @@ class cUser:
                     secure=True,
                     httponly=True,
                     samesite="None",
-                    path="/"
+                    path="/",
                     domain="marlon307.vercel.app",
                 )
 
