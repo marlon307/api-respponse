@@ -1,7 +1,7 @@
 from base64 import encode
 from datetime import datetime, timedelta
 from flask import request, jsonify
-from service.service_user import sUser
+from service.user.service_user import sUser
 
 
 class cUser:
@@ -14,7 +14,7 @@ class cUser:
         except Exception as err:
             if err.errno == 1062:
                 return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
-            print("c_user_register ->", err)
+            print("user -> c_user_register ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
 
     def c_user_confirmacc():
@@ -24,7 +24,7 @@ class cUser:
                 return {"msg": "Conta confimarda.", "status": 200}, 200
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
-            print("c_user_confirmacc ->", err)
+            print("user -> c_user_confirmacc ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
 
     def c_request_new_confirm_acc():
@@ -38,7 +38,7 @@ class cUser:
                 }, 200
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
-            print("c_request_new_confirm_acc ->", err)
+            print("user -> c_request_new_confirm_acc ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
 
     def c_user_login():
@@ -70,7 +70,7 @@ class cUser:
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
-            print("c_user_login ->", err)
+            print("user -> c_user_login ->", err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
     def c_solicitation_user_resetpsw():
@@ -85,7 +85,7 @@ class cUser:
                 }, 200
             return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
-            print("c_solicitation_user_resetpsw ->", err)
+            print("user -> c_solicitation_user_resetpsw ->", err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
 
     def c_user_resetpsw():
@@ -97,5 +97,5 @@ class cUser:
             return {"msg": "Senha já alterada com este token.", "status": 400}, 400
 
         except Exception as err:
-            print("c_user_resetpsw ->", err)
+            print("user -> c_user_resetpsw ->", err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
