@@ -1,7 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from datetime import datetime
-from routes.user import user_blueprint
+from routes.user.user import user_blueprint
+from routes.cms.color import product_blueprint
 from middleware.m_valid_cnn_front import request_front
 
 
@@ -10,6 +11,7 @@ CORS(app)
 # CORS(app, supports_credentials=True) Acept cookie
 
 # app.before_request(request_front)
+app.register_blueprint(product_blueprint)
 app.register_blueprint(user_blueprint)
 
 msg = {
