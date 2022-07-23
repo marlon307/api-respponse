@@ -1,6 +1,5 @@
 from functools import wraps
 from flask import request
-from auth.auth_jwt import valid_auth
 
 msgErr = {
     "msg": "Não foi possivel inserir essa cor.",

@@ -3,7 +3,7 @@ class qUser:
         return "INSERT INTO user (id_user, name, email, password, user_token) VALUES (%(id_user)s, %(name)s, %(email)s, %(password)s,%(user_token)s)"
 
     def q_login_user():
-        return "SELECT id_user, name, email, password FROM user WHERE (email) = (%(email)s)"
+        return "SELECT id_user, name, email, password, admin FROM user WHERE (email) = (%(email)s)"
 
     def q_request_update_token():
         return "UPDATE user SET user_token = %(key)s WHERE (email) = %(email)s"

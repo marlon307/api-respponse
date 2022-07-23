@@ -1,7 +1,6 @@
 from functools import wraps
 from flask import request
 from utility.credentials import valid_email, valid_psw, valid_name
-from auth.auth_jwt import valid_auth
 
 msgErr = {
     "msg": "Credenciais Inválidas.",
@@ -55,23 +54,6 @@ def m_register(f):
             print(
                 f"[Middleware Register User] A requisição enviou %s, mas houve um problema [%s]"
                 % (data, err)
-            )
-            return msgErr
-
-    return decorated
-
-
-def m_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            valid_auth()
-            return f(*args, **kwargs)
-
-        except Exception as err:
-            print(
-                f"[Middleware Login] A requisição enviou %s, mas houve um problema"
-                % (err)
             )
             return msgErr
 
