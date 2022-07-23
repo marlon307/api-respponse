@@ -2,16 +2,21 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from datetime import datetime
 from routes.user.user import user_blueprint
-from routes.cms.color import product_blueprint
+from routes.cms.color import product_color_blueprint
+from routes.cms.size import product_size_blueprint
 from middleware.m_valid_cnn_front import request_front
 
 
 app = Flask(__name__)
 CORS(app)
 # CORS(app, supports_credentials=True) Acept cookie
-
 # app.before_request(request_front)
-app.register_blueprint(product_blueprint)
+
+# ROTAS CMS
+app.register_blueprint(product_color_blueprint)
+app.register_blueprint(product_size_blueprint)
+
+# ROTAS USERS
 app.register_blueprint(user_blueprint)
 
 msg = {
