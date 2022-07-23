@@ -1,4 +1,3 @@
-from base64 import encode
 from datetime import datetime, timedelta
 from flask import request, jsonify
 from service.user.service_user import sUser
@@ -54,18 +53,6 @@ class cUser:
                     exp=date_time,
                     status=200,
                 )
-                # exp = date_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
-                # new_json.set_cookie(
-                #     key="u_token",
-                #     value=result["token"],
-                #     expires=exp,
-                #     secure=True,
-                #     samesite="None",
-                #     path="/",
-                #     # domain=".localhost",
-                #     # httponly=True, Com essa opção não é possive acessar com JavaScript
-                # )
-
                 return new_json, 200
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
