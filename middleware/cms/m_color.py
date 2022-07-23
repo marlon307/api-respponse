@@ -17,10 +17,7 @@ def m_add_color(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware add color] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware add color] ( %s )" % (err))
             return msgErr
 
     return decorated

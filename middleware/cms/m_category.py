@@ -23,10 +23,7 @@ def m_add_category(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware add category] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware add category] ( %s )" % (err))
             return msgErr
 
     return decorated

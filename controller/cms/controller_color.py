@@ -11,5 +11,5 @@ class cColor:
         except Exception as err:
             if err.errno == 1062:
                 return {"msg": "Esta cor já existe.", "status": 409}, 409
-            print("cms -> c_color_register ->", err)
+            print("cms -> c_color ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500

@@ -2,7 +2,7 @@ from functools import wraps
 from flask import request
 
 msgErr = {
-    "msg": "Não foi possivel cirar esse género.",
+    "msg": "Não foi possivel cirar este género.",
     "status": 400,
 }, 400
 
@@ -17,10 +17,7 @@ def m_add_gender(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware add gender] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware add gender] ( %s )" % (err))
             return msgErr
 
     return decorated

@@ -17,10 +17,7 @@ def m_add_size(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware add size] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware add size] ( %s )" % (err))
             return msgErr
 
     return decorated
