@@ -18,7 +18,7 @@ def m_add_size(f):
 
         except Exception as err:
             print(
-                f"[Middleware add size] A requisição enviou %s, mas houve um problema"
+                f"[Middleware add size] A requisição enviou ( %s ), mas houve um problema"
                 % (err)
             )
             return msgErr

@@ -87,7 +87,9 @@ class sUser:
                 # (del) proibido ficar abixo do (token = generate_token(info_login,6, 0))
 
                 token = generate_token(info_login, 6, 0)
-                del info_login["mix"]
+
+                if "mix" in info_login:
+                    del info_login["mix"]
 
                 return {
                     "info_login": info_login,
