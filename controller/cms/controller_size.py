@@ -11,5 +11,5 @@ class cSize:
         except Exception as err:
             if err.errno == 1062:
                 return {"msg": "Este tamnho já existe.", "status": 409}, 409
-            print("cms -> c_size_register ->", err)
+            print("cms -> c_size ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500

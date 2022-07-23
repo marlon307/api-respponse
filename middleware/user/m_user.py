@@ -23,7 +23,7 @@ def m_login(f):
 
         except Exception as err:
             print(
-                f"[Middleware Login] A requisição enviou %s, mas houve um problema [%s]"
+                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema [%s]"
                 % (data, err)
             )
             return msgErr
@@ -52,7 +52,7 @@ def m_register(f):
 
         except Exception as err:
             print(
-                f"[Middleware Register User] A requisição enviou %s, mas houve um problema [%s]"
+                f"[Middleware Register User] A requisição enviou ( %s ), mas houve um problema [%s]"
                 % (data, err)
             )
             return msgErr
@@ -71,7 +71,7 @@ def m_email(f):
 
         except Exception as err:
             print(
-                f"[Middleware Login] A requisição enviou %s, mas houve um problema"
+                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema"
                 % (err)
             )
             return msgErr
@@ -90,7 +90,7 @@ def m_psw(f):
 
         except Exception as err:
             print(
-                f"[Middleware Login] A requisição enviou %s, mas houve um problema"
+                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema"
                 % (err)
             )
             return msgErr

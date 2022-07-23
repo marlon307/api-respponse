@@ -18,7 +18,7 @@ def m_add_color(f):
 
         except Exception as err:
             print(
-                f"[Middleware add color] A requisição enviou %s, mas houve um problema"
+                f"[Middleware add color] A requisição enviou ( %s ), mas houve um problema"
                 % (err)
             )
             return msgErr
