@@ -22,10 +22,7 @@ def m_login(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema [%s]"
-                % (data, err)
-            )
+            print(f"[Middleware Login] ( %s ) [%s]" % (data, err))
             return msgErr
 
     return decorated
@@ -51,10 +48,7 @@ def m_register(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware Register User] A requisição enviou ( %s ), mas houve um problema [%s]"
-                % (data, err)
-            )
+            print(f"[Middleware Register User] ( %s ) [%s]" % (data, err))
             return msgErr
 
     return decorated
@@ -70,10 +64,7 @@ def m_email(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware Login] ( %s )" % (err))
             return msgErr
 
     return decorated
@@ -89,10 +80,7 @@ def m_psw(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(
-                f"[Middleware Login] A requisição enviou ( %s ), mas houve um problema"
-                % (err)
-            )
+            print(f"[Middleware Login] ( %s )" % (err))
             return msgErr
 
     return decorated
