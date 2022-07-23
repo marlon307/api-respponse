@@ -65,14 +65,29 @@ class sUser:
 
     def s_login_user(json):
         info_login = execut_query.selectOne(qUser.q_login_user(), json)
-        if info_login:
 
+        if info_login:
             valid_psw = checkcrypt(json["password"], info_login["password"])
-            del info_login["password"]
 
             if valid_psw:
                 # Token valido por 6 horas
+                if info_login["admin"] == True:
+                    info_for_crypt = {
+                        "exp": str(datetime.now() + timedelta(hours=6)),
+                        "admin": info_login["admin"],
+                    }
+                    fernet_token = fernetEncrypt(
+                        os.getenv("ADMIN_KEY").encode("utf8"), info_for_crypt
+                    )
+                    info_login["mix"] = fernet_token["crypt_hash"]
+
+                # Nunca passe esse (del) abaixo do (token = generate_token(info_login, 6, 0))
+                del info_login["admin"]
+                del info_login["password"]
+                # (del) proibido ficar abixo do (token = generate_token(info_login,6, 0))
+
                 token = generate_token(info_login, 6, 0)
+                del info_login["mix"]
 
                 return {
                     "info_login": info_login,
