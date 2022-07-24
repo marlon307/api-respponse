@@ -6,6 +6,7 @@ from routes.cms.color import color_cms_blueprint
 from routes.cms.size import size_cms_blueprint
 from routes.cms.category import category_cms_blueprint
 from routes.cms.gender import gender_cms_blueprint
+from routes.cms.status import status_cms_blueprint
 from middleware.m_valid_cnn_front import request_front
 
 
@@ -19,6 +20,7 @@ app.register_blueprint(color_cms_blueprint)
 app.register_blueprint(size_cms_blueprint)
 app.register_blueprint(category_cms_blueprint)
 app.register_blueprint(gender_cms_blueprint)
+app.register_blueprint(status_cms_blueprint)
 
 # ROTAS USERS
 app.register_blueprint(user_blueprint)
