@@ -17,6 +17,7 @@ class execut_query:
             self.connection = connection.MySQLConnection(**config_connection)
             self.cursor = self.connection.cursor(dictionary=True)
             self.execute = self.cursor.execute
+            self.executemany = self.cursor.executemany
             self.commit = self.connection.commit
             self.closeCursor = self.cursor.close
             self.closeConnection = self.connection.close
@@ -28,6 +29,13 @@ class execut_query:
     def insert(query, data):
         cnn = execut_query()
         cnn.execute(query, data)
+        cnn.closeCursor()
+        cnn.commit()
+        cnn.closeConnection()
+
+    def insertMany(query, data):
+        cnn = execut_query()
+        cnn.executemany(query, data)
         cnn.closeCursor()
         cnn.commit()
         cnn.closeConnection()
