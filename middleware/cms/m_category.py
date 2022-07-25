@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import abort, request
+from flask import request
 
 msgErr = {
     "msg": "Não foi possivel cirar essa categoria.",
@@ -19,11 +19,11 @@ def m_add_category(f):
                 or "c_path" not in data
                 or "c_color" not in data
             ):
-                abort(400, msgErr)
+                return msgErr
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add category] ( %s )" % (err))
-            abort(400, msgErr)
+            return msgErr
 
     return decorated

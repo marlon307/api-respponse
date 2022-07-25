@@ -1,10 +1,10 @@
 from functools import wraps
-from flask import request, abort
+from flask import request
 
 msgErr = {
     "msg": "Dados enviados inválidos.",
     "status": 400,
-}
+}, 400
 
 
 def m_address(f):
@@ -21,11 +21,11 @@ def m_address(f):
                 or "road" not in data
                 or "number_home" not in data
             ):
-                abort(400, msgErr)
+                return msgErr
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware address] ( %s ) [%s]" % (data, err))
-            abort(400, msgErr)
+            return msgErr
 
     return decorated
