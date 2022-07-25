@@ -4,7 +4,7 @@ from flask import request
 msgErr = {
     "msg": "Não foi possivel inserir este tamanho.",
     "status": 400,
-}, 400
+}
 
 
 def m_add_size(f):
@@ -12,7 +12,7 @@ def m_add_size(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["value_size"] is None:
+            if "value_size" not in data:
                 return msgErr
             return f(*args, **kwargs)
 

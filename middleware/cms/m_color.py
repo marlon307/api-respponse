@@ -4,7 +4,7 @@ from flask import request
 msgErr = {
     "msg": "Não foi possivel inserir essa cor.",
     "status": 400,
-}, 400
+}
 
 
 def m_add_color(f):
@@ -12,7 +12,7 @@ def m_add_color(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["color_name"] is None and data["color"] is None:
+            if "color_name" not in data or "color" not in data:
                 return msgErr
             return f(*args, **kwargs)
 

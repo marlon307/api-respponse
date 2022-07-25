@@ -13,10 +13,19 @@ def m_login(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["email"] is None or valid_email(data["email"]) is not True:
+
+            if (
+                "email" not in data
+                or data["email"] is None
+                or valid_email(data["email"]) is not True
+            ):
                 return msgErr
 
-            if data["password"] is None or valid_psw(data["password"]) is not True:
+            if (
+                "password" not in data
+                or data["password"] is None
+                or valid_psw(data["password"]) is not True
+            ):
                 return msgErr
 
             return f(*args, **kwargs)
@@ -34,15 +43,24 @@ def m_register(f):
         try:
             data = request.get_json()
             if (
-                data["name"] is None
+                "name" not in data
+                or data["name"] is None
                 or len(data["name"]) < 4
                 or valid_name(data["name"]) is not True
             ):
                 return msgErr
-            if data["email"] is None or valid_email(data["email"]) is not True:
+            if (
+                "email" not in data
+                or data["email"] is None
+                or valid_email(data["email"]) is not True
+            ):
                 return msgErr
 
-            if data["password"] is None or valid_psw(data["password"]) is not True:
+            if (
+                "password" not in data
+                or data["password"] is None
+                or valid_psw(data["password"]) is not True
+            ):
                 return msgErr
 
             return f(*args, **kwargs)
@@ -59,7 +77,11 @@ def m_email(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["email"] is None or valid_email(data["email"]) is not True:
+            if (
+                "email" not in data
+                or data["email"] is None
+                or valid_email(data["email"]) is not True
+            ):
                 return msgErr
             return f(*args, **kwargs)
 
@@ -75,7 +97,11 @@ def m_psw(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["password"] is None or valid_psw(data["password"]) is not True:
+            if (
+                "password" not in data
+                or data["password"] is None
+                or valid_psw(data["password"]) is not True
+            ):
                 return msgErr
             return f(*args, **kwargs)
 

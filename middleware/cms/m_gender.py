@@ -12,7 +12,7 @@ def m_add_gender(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["g_initials"] is None and data["g_name"] is None:
+            if "g_initials" not in data or "g_name" not in data:
                 return msgErr
             return f(*args, **kwargs)
 

@@ -12,7 +12,7 @@ def m_add_status(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["s_name"] is None:
+            if "s_name" not in data:
                 return msgErr
             return f(*args, **kwargs)
 
