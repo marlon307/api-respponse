@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request
+from flask import request, abort
 
 msgErr = {
     "msg": "Não foi possivel cirar este género.",
@@ -12,12 +12,12 @@ def m_add_gender(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["g_initials"] is None and data["g_name"] is None:
-                return msgErr
+            if "g_initials" not in data or "g_name" not in data:
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add gender] ( %s )" % (err))
-            return msgErr
+            abort(400, msgErr)
 
     return decorated

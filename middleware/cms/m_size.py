@@ -1,10 +1,10 @@
 from functools import wraps
-from flask import request
+from flask import request, abort
 
 msgErr = {
     "msg": "Não foi possivel inserir este tamanho.",
     "status": 400,
-}, 400
+}
 
 
 def m_add_size(f):
@@ -12,12 +12,12 @@ def m_add_size(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["value_size"] is None:
-                return msgErr
+            if "value_size" not in data:
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add size] ( %s )" % (err))
-            return msgErr
+            abort(400, msgErr)
 
     return decorated

@@ -1,10 +1,10 @@
 from functools import wraps
-from flask import request
+from flask import abort, request
 
 msgErr = {
     "msg": "Não foi possivel cirar essa categoria.",
     "status": 400,
-}, 400
+}
 
 
 def m_add_category(f):
@@ -13,17 +13,17 @@ def m_add_category(f):
         try:
             data = request.get_json()
             if (
-                data["c_image"] is None
-                and data["c_name"] is None
-                and data["c_title"] is None
-                and data["c_path"] is None
-                and data["c_color"] is None
+                "c_image" not in data
+                or data["c_name"] is None
+                or "c_title" not in data
+                or "c_path" not in data
+                or "c_color" not in data
             ):
-                return msgErr
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add category] ( %s )" % (err))
-            return msgErr
+            abort(400, msgErr)
 
     return decorated

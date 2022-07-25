@@ -1,10 +1,10 @@
 from functools import wraps
-from flask import request
+from flask import abort, request
 
 msgErr = {
     "msg": "Não foi possivel inserir essa cor.",
     "status": 400,
-}, 400
+}
 
 
 def m_add_color(f):
@@ -12,12 +12,12 @@ def m_add_color(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["color_name"] is None and data["color"] is None:
-                return msgErr
+            if "color_name" not in data or "color" not in data:
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add color] ( %s )" % (err))
-            return msgErr
+            abort(400, msgErr)
 
     return decorated

@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import request
+from flask import request, abort
 
 msgErr = {
     "msg": "Não foi possivel inserir este status.",
@@ -12,12 +12,12 @@ def m_add_status(f):
     def decorated(*args, **kwargs):
         try:
             data = request.get_json()
-            if data["s_name"] is None:
-                return msgErr
+            if "s_name" not in data:
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
             print(f"[Middleware add status] ( %s )" % (err))
-            return msgErr
+            return abort(400, msgErr)
 
     return decorated

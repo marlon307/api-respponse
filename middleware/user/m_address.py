@@ -1,11 +1,10 @@
 from functools import wraps
-from flask import request
-from utility.credentials import valid_email, valid_psw
+from flask import request, abort
 
 msgErr = {
-    "msg": "Credenciais Inválidas.",
+    "msg": "Dados enviados inválidos.",
     "status": 400,
-}, 400
+}
 
 
 def m_address(f):
@@ -14,20 +13,19 @@ def m_address(f):
         try:
             data = request.get_json()
             if (
-                data["name_delivery"] is None
-                and data["city"] is None
-                and data["district"] is None
-                and data["uf"] is None
-                and data["cep"] is None
-                and data["road"] is None
-                and data["number_home"] is None
+                "name_delivery" not in data
+                or "city" not in data
+                or "district" not in data
+                or "uf" not in data
+                or "cep" not in data
+                or "road" not in data
+                or "number_home" not in data
             ):
-                return msgErr
-
+                abort(400, msgErr)
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(f"[Middleware address] ( %s ) [%s]" % ("data", err))
-            return msgErr
+            print(f"[Middleware address] ( %s ) [%s]" % (data, err))
+            abort(400, msgErr)
 
     return decorated
