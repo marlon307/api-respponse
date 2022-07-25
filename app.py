@@ -8,6 +8,7 @@ from routes.cms.category import category_cms_blueprint
 from routes.cms.gender import gender_cms_blueprint
 from routes.cms.status import status_cms_blueprint
 from routes.user.address import address_blueprint
+from routes.user.telephone import telephone_blueprint
 from middleware.m_valid_cnn_front import request_front
 
 
@@ -26,6 +27,7 @@ app.register_blueprint(status_cms_blueprint)
 # ROTAS USERS
 app.register_blueprint(user_blueprint)
 app.register_blueprint(address_blueprint)
+app.register_blueprint(telephone_blueprint)
 
 msg = {
     "message": "Todos os serviços estão ativos no meomento.",
