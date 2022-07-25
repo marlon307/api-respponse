@@ -12,12 +12,17 @@ def m_address(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         try:
-            # data = request.get_json()
-            # if data["email"] is None or valid_email(data["email"]) is not True:
-            #     return msgErr
-
-            # if data["password"] is None or valid_psw(data["password"]) is not True:
-            #     return msgErr
+            data = request.get_json()
+            if (
+                data["name_delivery"] is None
+                and data["city"] is None
+                and data["district"] is None
+                and data["uf"] is None
+                and data["cep"] is None
+                and data["road"] is None
+                and data["number_home"] is None
+            ):
+                return msgErr
 
             return f(*args, **kwargs)
 
