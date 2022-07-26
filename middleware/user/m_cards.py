@@ -1,4 +1,3 @@
-from ast import Num
 from functools import wraps
 from flask import request
 
@@ -29,7 +28,7 @@ def m_cards(f):
             return f(*args, **kwargs)
 
         except Exception as err:
-            print(f"[Middleware telephone] ( %s ) [%s]" % (data, err))
+            print(f"[Middleware cards] ( %s ) [%s]" % (data, err))
             return msgErr
 
     return decorated
