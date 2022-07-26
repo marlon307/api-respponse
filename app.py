@@ -1,9 +1,12 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+import os, time
 from datetime import datetime
 from routes.init_route import routes
 from middleware.m_valid_cnn_front import request_front
 
+os.environ["TZ"] = "America/Sao_Paulo"
+time.tzset()
 
 app = Flask(__name__)
 CORS(app)
