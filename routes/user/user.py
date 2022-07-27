@@ -47,6 +47,5 @@ def reset_psw_user():
 
 @user_blueprint.route("/get_user_info", methods=["GET"])
 @m_auth
-# @m_psw
 def get_info_user():
     return cUser.c_get_info_user()

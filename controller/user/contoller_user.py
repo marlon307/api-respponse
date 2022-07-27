@@ -89,7 +89,9 @@ class cUser:
 
     def c_get_info_user():
         try:
-            data = sUser.s_get_info_user()
+            id_user = request.headers["user"]["id_user"]
+            data = sUser.s_get_info_user(id_user)
+
             if data:
                 return {
                     "msg": "User info.",
