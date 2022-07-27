@@ -160,11 +160,9 @@ class sUser:
             return False
         return False
 
-    def s_get_info_user():
+    def s_get_info_user(id_user):
         result = execut_query.selectOne(
-            qUser.q_select_info_user(),
-            {"user_id": "a900e08c-82be-4dc3-b75a-7e61e2d2066c"},
+            qUser.q_select_info_user(), {"user_id": id_user}
         )
-        print(result)
         result["telephones"] = json.loads(result["telephones"])
         return result

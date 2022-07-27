@@ -40,11 +40,3 @@ class qUser:
             "WHERE u.id_user = %(user_id)s "
             "GROUP BY u.id"
         )
-
-
-# SELECT CONCAT(
-#     '[',
-#     GROUP_CONCAT(JSON_OBJECT('name', name, 'phone', phone)),
-#     ']'
-# )
-# FROM person;
