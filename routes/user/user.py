@@ -43,3 +43,10 @@ def solicitation_reset_psw_user():
 @m_psw
 def reset_psw_user():
     return cUser.c_user_resetpsw()
+
+
+@user_blueprint.route("/get_user_info", methods=["GET"])
+@m_auth
+# @m_psw
+def get_info_user():
+    return cUser.c_get_info_user()

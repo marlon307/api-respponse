@@ -1,5 +1,8 @@
 import ast
+import json
 import os
+
+from flask import jsonify
 from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models.model_user import qUser
@@ -156,3 +159,12 @@ class sUser:
                 return False
             return False
         return False
+
+    def s_get_info_user():
+        result = execut_query.selectOne(
+            qUser.q_select_info_user(),
+            {"user_id": "a900e08c-82be-4dc3-b75a-7e61e2d2066c"},
+        )
+        print(result)
+        result["telephones"] = json.loads(result["telephones"])
+        return result
