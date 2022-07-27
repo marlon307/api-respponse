@@ -86,3 +86,18 @@ class cUser:
         except Exception as err:
             print("user -> c_user_resetpsw ->", err)
             return {"msg": "Dados Inválidos.", "status": 400}, 400
+
+    def c_get_info_user():
+        try:
+            data = sUser.s_get_info_user()
+            if data:
+                return {
+                    "msg": "User info.",
+                    "status": 200,
+                    "response": data,
+                }, 200
+            return {"msg": "Usuario inexistente!", "status": 400}, 400
+
+        except Exception as err:
+            print("user -> c_get_info_user ->", err)
+            return {"msg": "Dados Inválidos.", "status": 400}, 400

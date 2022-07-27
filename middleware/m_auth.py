@@ -5,7 +5,7 @@ from flask import abort, request
 msgErr = {
     "msg": "Unauthorized.",
     "status": 401,
-}
+}, 401
 
 
 def m_auth(f):
@@ -17,7 +17,7 @@ def m_auth(f):
 
         except Exception as err:
             print(f"[AUTH] %s" % (err))
-            abort(401, msgErr)
+            return msgErr
 
         return f(*args, **kwargs)
 
@@ -32,7 +32,7 @@ def m_auth_adm(f):
                 abort(401)
         except Exception as err:
             print(f"[AUTH] %s" % (err))
-            abort(401, msgErr)
+            return msgErr
 
         return f(*args, **kwargs)
 
