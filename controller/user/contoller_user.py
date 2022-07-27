@@ -102,4 +102,4 @@ class cUser:
 
         except Exception as err:
             print("user -> c_get_info_user ->", err)
-            return {"msg": "Dados Inválidos.", "status": 400}, 400
+            return {"msg": "Dados Inválidos.", "status": 500}, 500
