@@ -2,11 +2,11 @@ import ast
 import json
 import os
 
-from flask import jsonify
 from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models.model_user import qUser
 from utility.encrypt import encrypt, checkcrypt, fernetEncrypt, fernetDecrypt
+from utility.format_doc import format_doc, format_email
 from utility.generat_id import generate_id
 from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
@@ -164,5 +164,6 @@ class sUser:
         result = execut_query.selectOne(
             qUser.q_select_info_user(), {"user_id": id_user}
         )
+
         result["telephones"] = json.loads(result["telephones"])
         return result

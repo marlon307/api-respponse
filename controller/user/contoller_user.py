@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from flask import request, jsonify
 from service.user.service_user import sUser
 
+msgErr500 = {"msg": "Server error.", "status": 500}, 500
+
 
 class cUser:
     def c_user_register():
@@ -14,7 +16,7 @@ class cUser:
             if err.errno == 1062:
                 return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
             print("user -> c_user_register ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            return msgErr500
 
     def c_user_confirmacc():
         try:
@@ -24,7 +26,7 @@ class cUser:
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print("user -> c_user_confirmacc ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            return msgErr500
 
     def c_request_new_confirm_acc():
         try:
@@ -38,7 +40,7 @@ class cUser:
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print("user -> c_request_new_confirm_acc ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            return msgErr500
 
     def c_user_login():
         try:
@@ -58,7 +60,7 @@ class cUser:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
             print("user -> c_user_login ->", err)
-            return {"msg": "Dados Inválidos.", "status": 400}, 400
+            return msgErr500
 
     def c_solicitation_user_resetpsw():
         try:
@@ -73,7 +75,7 @@ class cUser:
             return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
             print("user -> c_solicitation_user_resetpsw ->", err)
-            return {"msg": "Dados Inválidos.", "status": 400}, 400
+            return msgErr500
 
     def c_user_resetpsw():
         try:
@@ -85,7 +87,7 @@ class cUser:
 
         except Exception as err:
             print("user -> c_user_resetpsw ->", err)
-            return {"msg": "Dados Inválidos.", "status": 400}, 400
+            return msgErr500
 
     def c_get_info_user():
         try:
@@ -102,4 +104,4 @@ class cUser:
 
         except Exception as err:
             print("user -> c_get_info_user ->", err)
-            return {"msg": "Dados Inválidos.", "status": 500}, 500
+            return msgErr500
