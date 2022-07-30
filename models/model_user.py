@@ -29,14 +29,4 @@ class qUser:
         )
 
     def q_select_info_user():
-        return (
-            "SELECT u.name, u.email, u.birthday, u.cpf_cnpj, u.gender_id, "
-            "JSON_ARRAYAGG(JSON_OBJECT("
-            "'id', tel.id,"
-            "'phone', tel.number_phone"
-            ") ) AS telephones FROM user AS u "
-            "LEFT JOIN telephones AS tel "
-            "ON tel.user_id = u.id "
-            "WHERE u.id_user = %(user_id)s "
-            "GROUP BY u.id"
-        )
+        return "SELECT name, email, birthday, cpf_cnpj, gender_id, tel, cel FROM respponse_db.user WHERE id_user = %(user_id)s"

@@ -6,7 +6,6 @@ from routes.cms.category import category_cms_blueprint
 from routes.cms.gender import gender_cms_blueprint
 from routes.cms.status import status_cms_blueprint
 from routes.user.address import address_blueprint
-from routes.user.telephone import telephone_blueprint
 from routes.user.cards import cards_blueprint
 
 
@@ -21,5 +20,4 @@ def routes(app: Flask) -> None:
     # ROTAS USERS
     app.register_blueprint(user_blueprint)
     app.register_blueprint(address_blueprint)
-    app.register_blueprint(telephone_blueprint)
     app.register_blueprint(cards_blueprint)

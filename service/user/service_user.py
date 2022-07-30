@@ -1,5 +1,4 @@
 import ast
-import json
 import os
 
 from auth.auth_jwt import generate_token
@@ -163,6 +162,4 @@ class sUser:
         result = execut_query.selectOne(
             qUser.q_select_info_user(), {"user_id": id_user}
         )
-
-        result["telephones"] = json.loads(result["telephones"])
         return result
