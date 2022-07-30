@@ -29,4 +29,7 @@ class qUser:
         )
 
     def q_select_info_user():
-        return "SELECT name, email, birthday, cpf_cnpj, gender_id, tel, cel FROM respponse_db.user WHERE id_user = %(user_id)s"
+        return "SELECT name, email, birthday, cpf_cnpj, gender_id, tel, cel FROM user WHERE id_user = %(user_id)s"
+
+    def q_update_user():
+        return "UPDATE user SET name=%(name)s, birthday=%(date)s, cpf_cnpj=%(doc)s, gender_id=%(gender)s, tel=%(tel)s, cel=%(cel)s WHERE id_user=%(u_id)s"

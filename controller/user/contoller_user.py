@@ -105,3 +105,21 @@ class cUser:
         except Exception as err:
             print("user -> c_get_info_user ->", err)
             return msgErr500
+
+    def c_update_info_user():
+        try:
+            json = request.get_json()
+            json["u_id"] = request.headers["user"]["id_user"]
+            data = sUser.s_update_info_user(json)
+
+            if data:
+                return {
+                    "msg": "Usuário atualizado.",
+                    "status": 200,
+                    "response": data,
+                }, 200
+            return {"msg": "Usuario inexistente!", "status": 400}, 400
+
+        except Exception as err:
+            print("user -> c_update_info_user ->", err)
+            return msgErr500

@@ -1,5 +1,5 @@
 from flask import Blueprint
-from middleware.user.m_user import m_login, m_register, m_email, m_psw
+from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import m_auth
 from controller.user.contoller_user import cUser
 
@@ -49,3 +49,10 @@ def reset_psw_user():
 @m_auth
 def get_info_user():
     return cUser.c_get_info_user()
+
+
+@user_blueprint.route("/update_user", methods=["PATCH"])
+@m_auth
+@m_update_user
+def update_info_user():
+    return cUser.c_update_info_user()
