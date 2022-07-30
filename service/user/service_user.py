@@ -163,3 +163,7 @@ class sUser:
             qUser.q_select_info_user(), {"user_id": id_user}
         )
         return result
+
+    def s_update_info_user(json):
+        execut_query.update(qUser.q_update_user(), json)
+        return True
