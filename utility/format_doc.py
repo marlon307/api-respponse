@@ -8,8 +8,10 @@ def format_cpf(doc):
 
 def format_cel(cel):
     try:
+        cel = cel.replace(" ", "")
         gp = re.search(r"^([\d]{2})\.*([\d]{5})-*([\d]{4})", cel)
         return f"%s%s%s" % (gp.group(1), gp.group(2), gp.group(3))
+
     except:
         return None
 

@@ -116,7 +116,6 @@ class cUser:
                 return {
                     "msg": "Usuário atualizado.",
                     "status": 200,
-                    "response": data,
                 }, 200
             return {"msg": "Usuario inexistente!", "status": 400}, 400
 
