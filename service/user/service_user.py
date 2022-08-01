@@ -5,6 +5,7 @@ from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models.model_user import qUser
 from utility.encrypt import encrypt, checkcrypt, fernetEncrypt, fernetDecrypt
+from utility.format_doc import format_cel, format_cpf
 from utility.generat_id import generate_id
 from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
@@ -165,5 +166,7 @@ class sUser:
         return result
 
     def s_update_info_user(json):
+        json["doc"] = format_cpf(json["doc"])
+        json["cel"] = format_cel(json["cel"])
         execut_query.update(qUser.q_update_user(), json)
         return True

@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import request
 from utility.credentials import valid_email, valid_psw, valid_name
+from utility.format_doc import format_cpf
 from utility.valid_cpf import cpf_validate
 
 msgErr = {
@@ -119,6 +120,7 @@ def m_update_user(f):
         try:
             list_key_onj = ["cel", "date", "doc", "gender", "name", "tel"]
             data = request.get_json()
+
             for key in data:
                 if key not in list_key_onj:
                     return msgErr

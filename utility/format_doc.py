@@ -1,14 +1,17 @@
-from cmath import log
 import re
 
 
-def format_doc(doc, rplc):
-    gp = re.search(
-        r"^[\d]{3}([\d]{3})([\d]{3})[\d]{2}",
-        doc,
-    )
-    new_doc = doc.replace(f"%s%s" % (gp.group(1), gp.group(2)), rplc)
-    return new_doc
+def format_cpf(doc):
+    gp = re.search(r"^([\d]{3})\.*([\d]{3})\.*([\d]{3})-*([\d]{2})", doc)
+    return f"%s%s%s%s" % (gp.group(1), gp.group(2), gp.group(3), gp.group(4))
+
+
+def format_cel(cel):
+    try:
+        gp = re.search(r"^([\d]{2})\.*([\d]{5})-*([\d]{4})", cel)
+        return f"%s%s%s" % (gp.group(1), gp.group(2), gp.group(3))
+    except:
+        return None
 
 
 def format_email(mail):
