@@ -168,5 +168,7 @@ class sUser:
     def s_update_info_user(json):
         json["doc"] = format_cpf(json["doc"])
         json["cel"] = format_cel(json["cel"])
+        json["tel"] = format_cel(json["tel"])
+        print(json)
         execut_query.update(qUser.q_update_user(), json)
         return True
