@@ -124,7 +124,6 @@ def m_update_user(f):
             for key in data:
                 if key not in list_key_onj:
                     return msgErr
-
             if (
                 valid_name(data["name"]) is not True
                 or cpf_validate(data["doc"]) is False

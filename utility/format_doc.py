@@ -2,8 +2,11 @@ import re
 
 
 def format_cpf(doc):
-    gp = re.search(r"^([\d]{3})\.*([\d]{3})\.*([\d]{3})-*([\d]{2})", doc)
-    return f"%s%s%s%s" % (gp.group(1), gp.group(2), gp.group(3), gp.group(4))
+    try:
+        gp = re.search(r"^([\d]{3})\.*([\d]{3})\.*([\d]{3})-*([\d]{2})", doc)
+        return f"%s%s%s%s" % (gp.group(1), gp.group(2), gp.group(3), gp.group(4))
+    except:
+        return None
 
 
 def format_cel(cel):
