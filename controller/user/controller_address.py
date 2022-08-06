@@ -13,3 +13,15 @@ class cAddress:
         except Exception as err:
             print("address -> c_add_address ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
+
+    def c_get_address():
+        try:
+            list_address = sAddress.s_get_address(request.headers["user"]["id_user"])
+            return {
+                "msg": "Lista de endereço.",
+                "address": list_address,
+                "status": 200,
+            }, 200
+        except Exception as err:
+            print("address -> c_add_address ->", err)
+            return {"msg": "Falha nossa.", "status": 500}, 500

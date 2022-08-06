@@ -11,3 +11,9 @@ address_blueprint = Blueprint("routes_address", __name__)
 @m_address
 def addaddress():
     return cAddress.c_add_address()
+
+
+@address_blueprint.route("/get_address_user", methods=["GET"])
+@m_auth
+def getaddress():
+    return cAddress.c_get_address()
