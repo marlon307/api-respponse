@@ -7,3 +7,9 @@ class sAddress:
         json["cep"] = json["cep"].replace("-", "")
         execut_query.insert(qAddress.q_insert_address(), json)
         return True
+
+    def s_get_address(user_id):
+        list_address = execut_query.select(
+            qAddress.q_get_address(), {"user_id": user_id}
+        )
+        return list_address
