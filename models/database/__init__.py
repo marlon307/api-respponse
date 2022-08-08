@@ -33,6 +33,13 @@ class execut_query:
         cnn.commit()
         cnn.closeConnection()
 
+    def delete(query, data):
+        cnn = execut_query()
+        cnn.execute(query, data)
+        cnn.closeCursor()
+        cnn.commit()
+        cnn.closeConnection()
+
     def insertMany(query, data):
         cnn = execut_query()
         cnn.executemany(query, data)

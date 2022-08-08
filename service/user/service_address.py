@@ -13,3 +13,13 @@ class sAddress:
             qAddress.q_get_address(), {"user_id": user_id}
         )
         return list_address
+
+    def s_delete_address(user_id, id_address):
+        execut_query.delete(
+            qAddress.q_delete_address(),
+            {
+                "user_id": user_id,
+                "address_id": id_address,
+            },
+        )
+        return True

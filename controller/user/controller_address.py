@@ -23,5 +23,19 @@ class cAddress:
                 "status": 200,
             }, 200
         except Exception as err:
-            print("address -> c_add_address ->", err)
+            print("address -> c_get_address ->", err)
+            return {"msg": "Falha nossa.", "status": 500}, 500
+
+    def c_delete_address():
+        try:
+            id_user = request.headers["user"]["id_user"]
+            json = request.get_json()
+
+            sAddress.s_delete_address(id_user, json["address"])
+            return {
+                "msg": "Endereço excluído.",
+                "status": 200,
+            }, 200
+        except Exception as err:
+            print("address -> c_delete_address ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500

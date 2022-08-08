@@ -17,3 +17,9 @@ def addaddress():
 @m_auth
 def getaddress():
     return cAddress.c_get_address()
+
+
+@address_blueprint.route("/delete_address_user", methods=["DELETE"])
+@m_auth
+def deleteaddress():
+    return cAddress.c_delete_address()
