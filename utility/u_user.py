@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import datetime, timedelta
 from auth.auth_jwt import generate_token
@@ -5,7 +6,7 @@ from mail.service_email import send_mail
 from utility.encrypt import fernetEncrypt
 
 
-def send_mail_confirm_user(key, json):
+def send_mail_confirm_user(key: bytes, json: json) -> None:
     info_for_crypt = {
         "exp": str(datetime.now() + timedelta(hours=2)),
         "uuid": json["id_user"],
