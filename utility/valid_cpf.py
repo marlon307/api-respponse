@@ -1,7 +1,7 @@
 # https://www.vivaolinux.com.br/script/Validador-e-gerador-de-CPF-em-Python
 
 
-def cpf_validate(numbers):
+def cpf_validate(numbers: str) -> bool:
     #  Obtém os números do CPF e ignora outros caracteres
     cpf = [int(char) for char in numbers if char.isdigit()]
 

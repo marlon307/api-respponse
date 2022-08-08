@@ -1,7 +1,7 @@
 import re
 
 
-def format_cpf(doc):
+def format_cpf(doc: str) -> str | None:
     try:
         gp = re.search(r"^([\d]{3})\.*([\d]{3})\.*([\d]{3})-*([\d]{2})", doc)
         return f"%s%s%s%s" % (gp.group(1), gp.group(2), gp.group(3), gp.group(4))
@@ -9,7 +9,7 @@ def format_cpf(doc):
         return None
 
 
-def format_cel(cel):
+def format_cel(cel: str) -> str | None:
     try:
         cel = cel.replace(" ", "")
         gp = re.search(r"^([\d]{2})\.*([\d]{5})-*([\d]{4})", cel)
@@ -19,7 +19,7 @@ def format_cel(cel):
         return None
 
 
-def format_email(mail):
+def format_email(mail: str) -> str | None:
     gp = re.search(r"(?<=^[A-Za-z0-9]{2}).*?(?=@)", mail)
     new_mail = mail.replace(gp.group(0), "****")
     return new_mail
