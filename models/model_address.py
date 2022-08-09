@@ -13,15 +13,18 @@ class qAddress:
             "FROM user_address  AS ad "
             "INNER JOIN user AS us "
             "ON ad.user_id = us.id "
-            "WHERE us.id_user = %(user_id)s"
+            "WHERE us.id_user = %(user_id)s "
+            "AND ad.deleted IS NULL"
         )
 
     def q_delete_address():
+
         return (
-            "DELETE ad.* "
-            "FROM user_address AS ad "
-            "INNER JOIN user AS us "
+            "UPDATE user_address AS ad "
+            "LEFT JOIN user AS us "
             "ON ad.user_id = us.id "
+            "SET ad.deleted = %(delete_date)s "
             "WHERE us.id_user = %(user_id)s "
-            "AND ad.id = %(address_id)s"
+            "AND ad.id = %(address_id)s "
+            "AND ad.deleted IS NULL"
         )
