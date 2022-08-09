@@ -6,8 +6,8 @@ from models.model_address import qAddress
 class sAddress:
     def s_add_address(json):
         json["cep"] = json["cep"].replace("-", "")
-        execut_query.insert(qAddress.q_insert_address(), json)
-        return True
+        id_insert = execut_query.insert(qAddress.q_insert_address(), json)
+        return id_insert
 
     def s_get_address(user_id):
         list_address = execut_query.select(

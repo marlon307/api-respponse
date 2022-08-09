@@ -7,9 +7,13 @@ class cAddress:
         try:
             json = request.get_json()
             json["user_id"] = request.headers["user"]["id_user"]
-            sAddress.s_add_address(json)
+            id_addres = sAddress.s_add_address(json)
 
-            return {"msg": "Endereço adicionado.", "status": 201}, 201
+            return {
+                "msg": "Endereço adicionado.",
+                "address": id_addres,
+                "status": 201,
+            }, 201
         except Exception as err:
             print("address -> c_add_address ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
