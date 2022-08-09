@@ -29,9 +29,11 @@ class execut_query:
     def insert(query, data):
         cnn = execut_query()
         cnn.execute(query, data)
+        id_insert = cnn.cursor.lastrowid
         cnn.closeCursor()
         cnn.commit()
         cnn.closeConnection()
+        return id_insert
 
     def delete(query, data):
         cnn = execut_query()
