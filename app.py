@@ -12,16 +12,16 @@ app = Flask(__name__)
 CORS(app)
 routes(app)
 
-msg = {
-    "message": "Todos os serviços estão ativos no meomento.",
-    "date": datetime.now(),
-    "status": 200,
-}
-
 
 @app.route("/")
 def index():
-    res = jsonify(**msg)
+    res = jsonify(
+        {
+            "message": "Todos os serviços estão ativos no meomento.",
+            "date": datetime.now(),
+            "status": 200,
+        }
+    )
     return res, 200
 
 
