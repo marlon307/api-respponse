@@ -6,20 +6,20 @@ from controller.user.controller_address import cAddress
 address_blueprint = Blueprint("routes_address", __name__)
 
 
-@address_blueprint.route("/add_address", methods=["POST"])
+@address_blueprint.route("/address", methods=["POST"])
 @m_auth
 @m_address
 def addaddress():
     return cAddress.c_add_address()
 
 
-@address_blueprint.route("/get_address_user", methods=["GET"])
+@address_blueprint.route("/address", methods=["GET"])
 @m_auth
 def getaddress():
     return cAddress.c_get_address()
 
 
-@address_blueprint.route("/delete_address_user", methods=["DELETE"])
+@address_blueprint.route("/address", methods=["DELETE"])
 @m_auth
 def deleteaddress():
     return cAddress.c_delete_address()
