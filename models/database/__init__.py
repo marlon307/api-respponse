@@ -45,9 +45,11 @@ class execut_query:
     def insertMany(query, data):
         cnn = execut_query()
         cnn.executemany(query, data)
+        id_insert = [cnn.cursor.lastrowid + v for v in range(cnn.cursor.rowcount)]
         cnn.closeCursor()
         cnn.commit()
         cnn.closeConnection()
+        return id_insert
 
     def update(query, data):
         cnn = execut_query()
