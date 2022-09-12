@@ -7,7 +7,8 @@ class cProduct:
         try:
             # json = request.get_json()
             json = request.form.getlist("body")[0]
-            files = request.files.get("files")
+            files = request.files.getlist("file")
+            # print(files)
 
             sProduct.s_create_product(json, files)
             return {

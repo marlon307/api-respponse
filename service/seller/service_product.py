@@ -9,24 +9,25 @@ import json
 
 class sProduct:
     def s_create_product(data, files_list):
-        url = "https://api.imgur.com/3/image"
-        headers = {"Authorization": f"Bearer %s" % os.getenv("AUTH_TOKEN_IMGUR")}
+        print(files_list)
+        # url = "https://api.imgur.com/3/image"
+        # headers = {"Authorization": f"Bearer %s" % os.getenv("AUTH_TOKEN_IMGUR")}
 
-        payload = {
-            "name": "Teste",
-            "title": "title teste",
-            "description": "description",
-            "image": b64encode(files_list.read()),
-        }
+        # payload = {
+        #     "name": "Teste",
+        #     "title": "title teste",
+        #     "description": "description",
+        #     "image": b64encode(files_list.read()),
+        # }
 
-        response = requests.post(
-            url=url,
-            headers=headers,
-            data=payload,
-            # files=[files_list],
-        )
+        # response = requests.post(
+        #     url=url,
+        #     headers=headers,
+        #     data=payload,
+        #     # files=[files_list],
+        # )
 
-        print(response.json())
+        # print(response.json())
 
         data = json.loads(data)
         data["id_user"] = request.headers["user"]["id_user"]
