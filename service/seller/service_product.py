@@ -9,15 +9,16 @@ import json
 
 class sProduct:
     def s_create_product(data, files_list):
-        # https://api.imgur.com/oauth2/authorize?client_id=4d5605fbedd6974&response_type=token
         url = "https://api.imgur.com/3/image"
-        headers = {"Authorization": f"Bearer %" % os.getenv("AUTH_TOKEN_IMGUR")}
+        headers = {"Authorization": f"Bearer %s" % os.getenv("AUTH_TOKEN_IMGUR")}
+
         payload = {
             "name": "Teste",
             "title": "title teste",
             "description": "description",
-            "image": "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+            "image": b64encode(files_list.read()),
         }
+
         response = requests.post(
             url=url,
             headers=headers,
