@@ -15,7 +15,20 @@ class qProduct:
 
     def q_insert_image():
         return (
-            "INSERT INTO quantity "
-            "(sizes_id, colors_id, products_id, quantity, price, discount, url_image, sku) "
-            "VALUES (%(sizes_id)s, %(colors_id)s, %(products_id)s, %(quantity)s, %(price)s, %(discount)s, %(url_image)s, %(sku)s)"
+            "INSERT INTO products_images "
+            "(quantity_id, url_image, key_img, upload_id) "
+            "VALUES (%(quantity_id)s, %(url_image)s, %(key_img)s, %(upload_id)s)"
+        )
+
+    def q_list_prod():
+        return (
+            "SELECT p.id, p.title, c.category_name, "
+            "JSON_ARRAYAGG(JSON_OBJECT('id', q.id, 'color_name', cl.color_name, 'color', cl.color, 'price', q.price, 'discount',q.discount, 'url_image', q.url_image)) AS color_list "
+            "FROM products as p "
+            "INNER JOIN categorys as c ON c.id = p.categorys_id "
+            "INNER JOIN quantity as q ON q.products_id = p.id "
+            "INNER JOIN colors as cl ON cl.id = q.colors_id "
+            "GROUP BY p.id "
+            "ORDER BY p.id DESC "
+            "LIMIT 20"
         )
