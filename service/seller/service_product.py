@@ -19,7 +19,7 @@ class sProduct:
         def map_function(object_qtd):
             return {
                 "products_id": product_id,
-                "url_image": "https://i.imgur.com/c9nLPGY.png",
+                "url_image": uploaded_image[0]["link"],
                 **get_list[object_qtd],
             }
 
@@ -34,7 +34,7 @@ class sProduct:
 
             return {
                 "quantity_id": result[index],
-                "url_image": "https://i.imgur.com/c9nLPGY.png",
+                "url_image": l_img["link"],
                 "key_img": l_img["deletehash"],
                 "upload_id": l_img["id"],
             }
