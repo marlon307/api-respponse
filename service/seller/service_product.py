@@ -1,56 +1,45 @@
-from base64 import b64encode
 from flask import request
-import os
+from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models.model_product import qProduct
-import requests
 import json
 
 
 class sProduct:
     def s_create_product(data, files_list):
-        print(files_list)
-        # url = "https://api.imgur.com/3/image"
-        # headers = {"Authorization": f"Bearer %s" % os.getenv("AUTH_TOKEN_IMGUR")}
-
-        # payload = {
-        #     "name": "Teste",
-        #     "title": "title teste",
-        #     "description": "description",
-        #     "image": b64encode(files_list.read()),
-        # }
-
-        # response = requests.post(
-        #     url=url,
-        #     headers=headers,
-        #     data=payload,
-        #     # files=[files_list],
-        # )
-
-        # print(response.json())
+        uploaded_image = upload_image_imgur(files_list)
 
         data = json.loads(data)
         data["id_user"] = request.headers["user"]["id_user"]
-
         get_list = data["list_qtd"]
         del data["list_qtd"]
 
         product_id = execut_query.insert(qProduct.q_insert_product(), data)
 
-        def map_image(obj_list_image):
-            return {"pack_image": obj_list_image["listImage"]}
-
-        list_image = map(map_image, get_list)
-
         def map_function(object_qtd):
-            del object_qtd["listImage"]
-            object_qtd["url_image"] = "sds"
-            return {"products_id": product_id, **object_qtd}
+            return {
+                "products_id": product_id,
+                "url_image": "https://i.imgur.com/c9nLPGY.png",
+                **get_list[object_qtd],
+            }
 
         format_size = map(map_function, get_list)
         result = execut_query.insertMany(
             qProduct.q_insert_product_quantity(), format_size
         )
-        print(files_list)
+
+        def map_img_function(l_img):
+            index_color = l_img["ref_color"].replace("list_file-", "")
+            index = int(index_color) - 1
+
+            return {
+                "quantity_id": result[index],
+                "url_image": "https://i.imgur.com/c9nLPGY.png",
+                "key_img": l_img["deletehash"],
+                "upload_id": l_img["id"],
+            }
+
+        format_list_img = map(map_img_function, uploaded_image)
+        execut_query.insertMany(qProduct.q_insert_image(), format_list_img)
 
         return product_id
