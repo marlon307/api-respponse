@@ -23,6 +23,7 @@ class sProduct:
                 **get_list[object_qtd],
             }
 
+        print(get_list)
         format_size = map(map_function, get_list)
         result = execut_query.insertMany(
             qProduct.q_insert_product_quantity(), format_size
@@ -43,3 +44,22 @@ class sProduct:
         execut_query.insertMany(qProduct.q_insert_image(), format_list_img)
 
         return product_id
+
+    def s_list_product():
+        list_product = execut_query.select(qProduct.q_list_prod(), {})
+        new_list = list()
+
+        for list_obj in list_product:
+            conver_str_for_json = json.loads(list_obj["color_list"])
+            conver_str_for_json.sort(
+                key=lambda color_list: color_list["discount"], reverse=True
+            )
+
+            new_list.append(
+                {
+                    **list_obj,
+                    "color_list": conver_str_for_json,
+                }
+            )
+
+        return new_list

@@ -11,3 +11,8 @@ seller_product_blueprint = Blueprint("route_seller_product_create", __name__)
 # @m_create_product
 def create_product():
     return cProduct.c_product()
+
+
+@seller_product_blueprint.route("/list_product", methods=["GET"])
+def list_product():
+    return cProduct.c_list_product()
