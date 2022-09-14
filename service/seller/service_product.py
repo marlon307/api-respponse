@@ -63,3 +63,48 @@ class sProduct:
             )
 
         return new_list
+
+    def s_get_product_id(id):
+        list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
+        list_product["imgs"] = json.loads(list_product["imgs"])
+        list_product["options"] = json.loads(list_product["options"])
+        list_product["sizes"] = json.loads(list_product["sizes"])
+        new_options = list()
+        uniq_sizes = dict()
+
+        for key in list_product["sizes"]:
+            new_options.append(key)
+            new_key = list(key.keys())
+            new_key.remove("idc")
+
+            if str(key["idc"]) in uniq_sizes:
+                uniq_sizes[str(key["idc"])] = {
+                    **uniq_sizes[str(key["idc"])],
+                    new_key[0]: list(key.values())[1],
+                }
+            else:
+                uniq_sizes[str(key["idc"])] = {
+                    new_key[0]: list(key.values())[1],
+                }
+
+        def listImg(id_c: int, list_obj: list):
+            imgs = list()
+            for obj in list_obj:
+                if id_c == obj["idc"]:
+                    # del obj["idc"]
+                    imgs.append(obj)
+            return imgs
+
+        new_list_options = list()
+        for object_opt in list_product["options"]:
+            object_opt["size"] = uniq_sizes[str(object_opt["idc"])]
+            object_opt["imgs"] = listImg(object_opt["idc"], list_product["imgs"])
+
+            if object_opt not in new_list_options:
+                new_list_options.append(object_opt)
+
+        list_product["options"] = new_list_options
+        del list_product["sizes"]
+        del list_product["imgs"]
+
+        return list_product

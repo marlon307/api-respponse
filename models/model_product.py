@@ -32,3 +32,26 @@ class qProduct:
             "ORDER BY p.id DESC "
             "LIMIT 20"
         )
+
+    def q_get_product_id():
+        return (
+            "SELECT p.id, p.title, c.category_name, "
+            "JSON_ARRAYAGG(JSON_OBJECT('idc', cl.id, 'imgid', i.id, 'urlImg', i.url_image)) as imgs, "
+            "JSON_ARRAYAGG(JSON_OBJECT('idc', cl.id, s.size, q.quantity)) as sizes, "
+            "JSON_ARRAYAGG(JSON_OBJECT("
+            "'idc', cl.id, "
+            "'colorName' , cl.color_name, "
+            "'color', cl.color,"
+            "'price', q.price, "
+            "'discount', q.discount,"
+            "'imgs', 'teste' "
+            ")) AS options "
+            "FROM products as p "
+            "INNER JOIN quantity as q ON q.products_id = p.id "
+            "INNER JOIN categorys as c ON c.id = p.categorys_id "
+            "INNER JOIN colors as cl ON cl.id = q.colors_id "
+            "INNER JOIN sizes as s ON s.id = q.sizes_id "
+            "INNER JOIN products_images as i ON i.quantity_id = q.id "
+            "WHERE p.id = %(id)s"
+            "GROUP BY q.products_id"
+        )

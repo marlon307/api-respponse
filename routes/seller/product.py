@@ -16,3 +16,8 @@ def create_product():
 @seller_product_blueprint.route("/list_product", methods=["GET"])
 def list_product():
     return cProduct.c_list_product()
+
+
+@seller_product_blueprint.route("/product/<id>", methods=["GET"])
+def get_product_id(id):
+    return cProduct.c_get_product_id(id)
