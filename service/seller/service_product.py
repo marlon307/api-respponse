@@ -80,10 +80,40 @@ class sProduct:
 
     def s_get_product_id(id):
         list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
-        list_product["list_images"] = json.loads(list_product["list_images"])
         list_product["list_options"] = json.loads(list_product["list_options"])
+        list_product["list_images"] = json.loads(list_product["list_images"])
         list_product["list_sizes"] = json.loads(list_product["list_sizes"])
 
-        print(list_product)
+        def fomat_option(object_option):
+            return {
+                **object_option,
+                "sizes": list(
+                    filter(
+                        None,
+                        [
+                            obj
+                            if obj["option_id"] == object_option["option_id"]
+                            else None
+                            for obj in list_product["list_sizes"]
+                        ],
+                    )
+                ),
+                "images": list(
+                    filter(
+                        None,
+                        [
+                            obj
+                            if obj["option_id"] == object_option["option_id"]
+                            else None
+                            for obj in list_product["list_images"]
+                        ],
+                    )
+                ),
+            }
 
+        new_list_option = map(fomat_option, list_product["list_options"])
+
+        list_product["list_options"] = list(new_list_option)
+        del list_product["list_sizes"]
+        del list_product["list_images"]
         return list_product
