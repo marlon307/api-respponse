@@ -1,3 +1,4 @@
+from inspect import _void
 import os
 import mysql.connector
 from mysql.connector import connection
@@ -26,7 +27,7 @@ class execut_query:
             # self.connection.close()
             print(err)
 
-    def insert(query, data):
+    def insert(query: str, data) -> None:
         cnn = execut_query()
         cnn.execute(query, data)
         id_insert = cnn.cursor.lastrowid
@@ -35,14 +36,14 @@ class execut_query:
         cnn.closeConnection()
         return id_insert
 
-    def delete(query, data):
+    def delete(query: str, data) -> None:
         cnn = execut_query()
         cnn.execute(query, data)
         cnn.closeCursor()
         cnn.commit()
         cnn.closeConnection()
 
-    def insertMany(query, data):
+    def insertMany(query: str, data: list) -> list[int]:
         cnn = execut_query()
         cnn.executemany(query, data)
         id_insert = [cnn.cursor.lastrowid + v for v in range(cnn.cursor.rowcount)]
@@ -51,14 +52,14 @@ class execut_query:
         cnn.closeConnection()
         return id_insert
 
-    def update(query, data):
+    def update(query: str, data) -> None:
         cnn = execut_query()
         cnn.execute(query, data)
         cnn.closeCursor()
         cnn.commit()
         cnn.closeConnection()
 
-    def select(query, data):
+    def select(query: str, data) -> list:
         cnn = execut_query()
         cnn.execute(query, data)
         result = cnn.cursor.fetchall()
@@ -66,7 +67,7 @@ class execut_query:
         cnn.closeConnection()
         return result
 
-    def selectOne(query, data):
+    def selectOne(query: str, data) -> dict:
         cnn = execut_query()
         cnn.execute(query, data)
         result = cnn.cursor.fetchone()

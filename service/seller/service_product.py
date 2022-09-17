@@ -9,38 +9,53 @@ class sProduct:
     def s_create_product(data, files_list):
         uploaded_image = upload_image_imgur(files_list)
 
-        data = json.loads(data)
         data["id_user"] = request.headers["user"]["id_user"]
-        get_list = data["list_qtd"]
-        del data["list_qtd"]
+        get_options = json.loads(data["options"])
+        del data["options"]
 
         product_id = execut_query.insert(qProduct.q_insert_product(), data)
 
-        def map_function(object_qtd):
+        def map_function(object_opt):
             return {
                 "products_id": product_id,
-                "url_image": uploaded_image[0]["link"],
-                **get_list[object_qtd],
+                "price": object_opt["price"],
+                "discount": object_opt["price"],
+                "sku": object_opt["sku"],
+                "quantity": object_opt["quantity"],
+                "colors_id": object_opt["id"],
+                "url_image": "https://url.image",
             }
 
-        print(get_list)
-        format_size = map(map_function, get_list)
-        result = execut_query.insertMany(
-            qProduct.q_insert_product_quantity(), format_size
+        format_option = map(map_function, get_options)
+        list_options_ids = execut_query.insertMany(
+            qProduct.q_insert_product_option(), format_option
         )
 
-        def map_img_function(l_img):
-            index_color = l_img["ref_color"].replace("list_file-", "")
-            index = int(index_color) - 1
+        def map_has_sizes(id_option, option):
+            list_s = list()
+            for id_sizes in option["sizes"]:
+                list_s.append(
+                    {
+                        "options_product_id": id_option,
+                        "sizes_id": id_sizes,
+                    }
+                )
+            return list_s
 
+        format_has_size = map(map_has_sizes, list_options_ids, get_options)
+        execut_query.insertMany(
+            qProduct.q_insert_option_has_sizes(), sum(list(format_has_size), [])
+        )
+
+        def map_img_function(l_img, option_id):
             return {
-                "quantity_id": result[index],
+                "option_id": option_id,
                 "url_image": l_img["link"],
                 "key_img": l_img["deletehash"],
                 "upload_id": l_img["id"],
             }
 
-        format_list_img = map(map_img_function, uploaded_image)
+        format_list_img = map(map_img_function, uploaded_image, list_options_ids)
         execut_query.insertMany(qProduct.q_insert_image(), format_list_img)
 
         return product_id
@@ -54,7 +69,6 @@ class sProduct:
             conver_str_for_json.sort(
                 key=lambda color_list: color_list["discount"], reverse=True
             )
-
             new_list.append(
                 {
                     **list_obj,
@@ -91,7 +105,6 @@ class sProduct:
             imgs = list()
             for obj in list_obj:
                 if id_c == obj["idc"]:
-                    # del obj["idc"]
                     imgs.append(obj)
             return imgs
 

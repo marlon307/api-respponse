@@ -5,7 +5,7 @@ from service.seller.service_product import sProduct
 class cProduct:
     def c_product():
         try:
-            json = request.form.getlist("body")[0]
+            json = dict(request.form.items())
             files = request.files
 
             sProduct.s_create_product(json, files)
