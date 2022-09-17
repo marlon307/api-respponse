@@ -83,21 +83,24 @@ class sProduct:
         list_product["list_options"] = json.loads(list_product["list_options"])
         list_product["list_images"] = json.loads(list_product["list_images"])
         list_product["list_sizes"] = json.loads(list_product["list_sizes"])
+        # Remove objetos duplicados
+        list_product["list_options"] = [
+            dict(t) for t in {tuple(d.items()) for d in list_product["list_options"]}
+        ]
+
+        def mount_obj_size(id_option):
+            size_obj = dict()
+            for obj in list_product["list_sizes"]:
+                if id_option == obj["option_id"]:
+                    size_obj = {**size_obj, **obj}
+                    del size_obj["option_id"]
+
+            return size_obj
 
         def fomat_option(object_option):
             return {
                 **object_option,
-                "sizes": list(
-                    filter(
-                        None,
-                        [
-                            obj
-                            if obj["option_id"] == object_option["option_id"]
-                            else None
-                            for obj in list_product["list_sizes"]
-                        ],
-                    )
-                ),
+                "sizes": mount_obj_size(object_option["option_id"]),
                 "images": list(
                     filter(
                         None,
