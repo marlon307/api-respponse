@@ -49,7 +49,7 @@ class qProduct:
             "c.category_name, "
             "JSON_ARRAYAGG(JSON_OBJECT('option_id', op.id, 'price', op.price, 'discount', op.discount, 'idc', cl.id, 'colorName', cl.color_name, 'color', cl.color)) AS list_options, "
             "JSON_ARRAYAGG(JSON_OBJECT('option_id', opHs.options_product_id, s.size, op.quantity)) AS list_sizes, "
-            "JSON_ARRAYAGG(JSON_OBJECT('option_id', i.option_id, 'imgid', i.id, 'urlImg', i.url_image)) AS list_images "
+            "JSON_ARRAYAGG(JSON_OBJECT('option_id', op.id, 'imgid', i.id, 'urlImg', i.url_image)) AS list_images "
             "FROM products AS p "
             "INNER JOIN categorys AS c ON c.id = p.categorys_id "
             "INNER JOIN options_product AS op ON op.products_id = p.id "

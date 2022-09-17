@@ -79,14 +79,16 @@ class sProduct:
         return new_list
 
     def s_get_product_id(id):
+        def unique(list: list[dict]):
+            return [dict(t) for t in {tuple(d.items()) for d in list}]
+
+        # *******************************************************************
+        # ***************Favor montar uma query mais decente****************************
+        # *******************************************************************
         list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
-        list_product["list_options"] = json.loads(list_product["list_options"])
-        list_product["list_images"] = json.loads(list_product["list_images"])
-        list_product["list_sizes"] = json.loads(list_product["list_sizes"])
-        # Remove objetos duplicados
-        list_product["list_options"] = [
-            dict(t) for t in {tuple(d.items()) for d in list_product["list_options"]}
-        ]
+        list_product["list_options"] = unique(json.loads(list_product["list_options"]))
+        list_product["list_images"] = unique(json.loads(list_product["list_images"]))
+        list_product["list_sizes"] = unique(json.loads(list_product["list_sizes"]))
 
         def mount_obj_size(id_option):
             size_obj = dict()
@@ -118,5 +120,5 @@ class sProduct:
 
         list_product["list_options"] = list(new_list_option)
         del list_product["list_sizes"]
-        del list_product["list_images"]
+        # del list_product["list_images"]
         return list_product
