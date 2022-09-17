@@ -30,13 +30,15 @@ class qProduct:
     def q_list_prod():
         return (
             "SELECT p.id, p.title, c.category_name, "
-            "JSON_ARRAYAGG(JSON_OBJECT('id', q.id, 'color_name', cl.color_name, 'color', cl.color, 'price', q.price, 'discount',q.discount, 'url_image', q.url_image)) AS color_list "
-            "FROM products as p "
-            "INNER JOIN categorys as c ON c.id = p.categorys_id "
-            "INNER JOIN quantity as q ON q.products_id = p.id "
-            "INNER JOIN colors as cl ON cl.id = q.colors_id "
+            "JSON_ARRAYAGG(JSON_OBJECT( "
+            "'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', op.url_image, "
+            "'color_name', cl.color_name, 'color', cl.color "
+            ")) AS color_list "
+            "FROM products AS p "
+            "INNER JOIN categorys AS c ON c.id = p.categorys_id "
+            "INNER JOIN options_product AS op ON op.products_id = p.id "
+            "INNER JOIN colors AS cl ON cl.id = op.colors_id "
             "GROUP BY p.id "
-            "ORDER BY p.id DESC "
             "LIMIT 20"
         )
 
