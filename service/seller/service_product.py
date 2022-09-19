@@ -21,7 +21,6 @@ class sProduct:
                 "price": object_opt["price"],
                 "discount": object_opt["price"],
                 "sku": object_opt["sku"],
-                "quantity": object_opt["quantity"],
                 "colors_id": object_opt["id"],
                 "url_image": "https://url.image",
             }
@@ -33,11 +32,12 @@ class sProduct:
 
         def map_has_sizes(id_option, option):
             list_s = list()
-            for id_sizes in option["sizes"]:
+            for obj_opt in option["sizes"]:
                 list_s.append(
                     {
                         "options_product_id": id_option,
-                        "sizes_id": id_sizes,
+                        "sizes_id": obj_opt["id"],
+                        "quantity": obj_opt["quantity"],
                     }
                 )
             return list_s
