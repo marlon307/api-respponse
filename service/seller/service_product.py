@@ -24,7 +24,7 @@ class sProduct:
                 "discount": object_opt["discount"],
                 "sku": object_opt["sku"],
                 "colors_id": object_opt["id"],
-                "url_image": "https://url.image",
+                "url_image": uploaded_image[0]["url_image"],
             }
 
         format_option = map(map_function, get_options)
