@@ -4,6 +4,8 @@ from models.database import execut_query
 from models.model_product import qProduct
 import json
 
+from utility.unique import unique
+
 
 class sProduct:
     def s_create_product(data, files_list):
@@ -19,7 +21,7 @@ class sProduct:
             return {
                 "products_id": product_id,
                 "price": object_opt["price"],
-                "discount": object_opt["price"],
+                "discount": object_opt["discount"],
                 "sku": object_opt["sku"],
                 "colors_id": object_opt["id"],
                 "url_image": "https://url.image",
@@ -79,11 +81,8 @@ class sProduct:
         return new_list
 
     def s_get_product_id(id):
-        def unique(list: list[dict]):
-            return [dict(t) for t in {tuple(d.items()) for d in list}]
-
         # *******************************************************************
-        # ***************Favor montar uma query mais decente****************************
+        # ***************Favor montar uma query mais decente*****************
         # *******************************************************************
         list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
         list_product["list_options"] = unique(json.loads(list_product["list_options"]))
@@ -100,8 +99,14 @@ class sProduct:
             return size_obj
 
         def fomat_option(object_option):
+            calc_discount = (float(object_option["discount"]) / 100) * object_option[
+                "price"
+            ]
+            old_price = object_option["price"] + calc_discount
             return {
                 **object_option,
+                "discount": object_option["discount"],
+                "oldPrice": old_price,
                 "sizes": mount_obj_size(object_option["option_id"]),
                 "images": list(
                     filter(
