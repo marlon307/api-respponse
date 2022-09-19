@@ -21,7 +21,6 @@ class sProduct:
                 "price": object_opt["price"],
                 "discount": object_opt["price"],
                 "sku": object_opt["sku"],
-                "quantity": object_opt["quantity"],
                 "colors_id": object_opt["id"],
                 "url_image": "https://url.image",
             }
@@ -33,11 +32,12 @@ class sProduct:
 
         def map_has_sizes(id_option, option):
             list_s = list()
-            for id_sizes in option["sizes"]:
+            for obj_opt in option["sizes"]:
                 list_s.append(
                     {
                         "options_product_id": id_option,
-                        "sizes_id": id_sizes,
+                        "sizes_id": obj_opt["id"],
+                        "quantity": obj_opt["quantity"],
                     }
                 )
             return list_s
@@ -79,45 +79,46 @@ class sProduct:
         return new_list
 
     def s_get_product_id(id):
+        def unique(list: list[dict]):
+            return [dict(t) for t in {tuple(d.items()) for d in list}]
+
+        # *******************************************************************
+        # ***************Favor montar uma query mais decente****************************
+        # *******************************************************************
         list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
-        list_product["imgs"] = json.loads(list_product["imgs"])
-        list_product["options"] = json.loads(list_product["options"])
-        list_product["sizes"] = json.loads(list_product["sizes"])
-        new_options = list()
-        uniq_sizes = dict()
+        list_product["list_options"] = unique(json.loads(list_product["list_options"]))
+        list_product["list_images"] = unique(json.loads(list_product["list_images"]))
+        list_product["list_sizes"] = unique(json.loads(list_product["list_sizes"]))
 
-        for key in list_product["sizes"]:
-            new_options.append(key)
-            new_key = list(key.keys())
-            new_key.remove("idc")
+        def mount_obj_size(id_option):
+            size_obj = dict()
+            for obj in list_product["list_sizes"]:
+                if id_option == obj["option_id"]:
+                    size_obj = {**size_obj, **obj}
+                    del size_obj["option_id"]
 
-            if str(key["idc"]) in uniq_sizes:
-                uniq_sizes[str(key["idc"])] = {
-                    **uniq_sizes[str(key["idc"])],
-                    new_key[0]: list(key.values())[1],
-                }
-            else:
-                uniq_sizes[str(key["idc"])] = {
-                    new_key[0]: list(key.values())[1],
-                }
+            return size_obj
 
-        def listImg(id_c: int, list_obj: list):
-            imgs = list()
-            for obj in list_obj:
-                if id_c == obj["idc"]:
-                    imgs.append(obj)
-            return imgs
+        def fomat_option(object_option):
+            return {
+                **object_option,
+                "sizes": mount_obj_size(object_option["option_id"]),
+                "images": list(
+                    filter(
+                        None,
+                        [
+                            obj
+                            if obj["option_id"] == object_option["option_id"]
+                            else None
+                            for obj in list_product["list_images"]
+                        ],
+                    )
+                ),
+            }
 
-        new_list_options = list()
-        for object_opt in list_product["options"]:
-            object_opt["size"] = uniq_sizes[str(object_opt["idc"])]
-            object_opt["imgs"] = listImg(object_opt["idc"], list_product["imgs"])
+        new_list_option = map(fomat_option, list_product["list_options"])
 
-            if object_opt not in new_list_options:
-                new_list_options.append(object_opt)
-
-        list_product["options"] = new_list_options
-        del list_product["sizes"]
-        del list_product["imgs"]
-
+        list_product["list_options"] = list(new_list_option)
+        del list_product["list_sizes"]
+        # del list_product["list_images"]
         return list_product
