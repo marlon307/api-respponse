@@ -2,7 +2,7 @@ class qBag:
     def q_insert_bag():
         return (
             "INSERT INTO bag (user_id, quantity, option_product_id, sizes_id) "
-            "VALUES ((SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1), %(quantity)s, %(option_product_id)s, %(sizes_id)s)"
+            "VALUES ((SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1), %(quantity)s, %(option_product_id)s, (SELECT id FROM sizes WHERE size = %(size)s))"
         )
 
     def q_list_bag():

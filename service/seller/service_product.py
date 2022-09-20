@@ -2,6 +2,7 @@ from flask import request
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models.model_product import qProduct
+from utility.calca_discount import calc_discount
 from utility.unique import unique
 import json
 
@@ -97,10 +98,7 @@ class sProduct:
             return size_obj
 
         def fomat_option(object_option):
-            calc_discount = (float(object_option["discount"]) / 100) * object_option[
-                "price"
-            ]
-            old_price = object_option["price"] + calc_discount
+            old_price = calc_discount(object_option["discount"], object_option["price"])
             return {
                 **object_option,
                 "discount": object_option["discount"],
