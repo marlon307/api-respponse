@@ -2,9 +2,8 @@ from flask import request
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models.model_product import qProduct
-import json
-
 from utility.unique import unique
+import json
 
 
 class sProduct:
@@ -124,5 +123,5 @@ class sProduct:
 
         list_product["list_options"] = list(new_list_option)
         del list_product["list_sizes"]
-        # del list_product["list_images"]
+        del list_product["list_images"]
         return list_product
