@@ -2,6 +2,8 @@ from flask import request
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models.model_product import qProduct
+from utility.calca_discount import calc_discount
+from utility.unique import unique
 import json
 
 
@@ -19,10 +21,9 @@ class sProduct:
             return {
                 "products_id": product_id,
                 "price": object_opt["price"],
-                "discount": object_opt["price"],
+                "discount": object_opt["discount"],
                 "sku": object_opt["sku"],
                 "colors_id": object_opt["id"],
-                "url_image": "https://url.image",
             }
 
         format_option = map(map_function, get_options)
@@ -79,11 +80,8 @@ class sProduct:
         return new_list
 
     def s_get_product_id(id):
-        def unique(list: list[dict]):
-            return [dict(t) for t in {tuple(d.items()) for d in list}]
-
         # *******************************************************************
-        # ***************Favor montar uma query mais decente****************************
+        # ***************Favor montar uma query mais decente*****************
         # *******************************************************************
         list_product = execut_query.selectOne(qProduct.q_get_product_id(), {"id": id})
         list_product["list_options"] = unique(json.loads(list_product["list_options"]))
@@ -100,8 +98,11 @@ class sProduct:
             return size_obj
 
         def fomat_option(object_option):
+            old_price = calc_discount(object_option["discount"], object_option["price"])
             return {
                 **object_option,
+                "discount": object_option["discount"],
+                "oldPrice": old_price,
                 "sizes": mount_obj_size(object_option["option_id"]),
                 "images": list(
                     filter(
@@ -120,5 +121,5 @@ class sProduct:
 
         list_product["list_options"] = list(new_list_option)
         del list_product["list_sizes"]
-        # del list_product["list_images"]
+        del list_product["list_images"]
         return list_product

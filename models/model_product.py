@@ -9,8 +9,8 @@ class qProduct:
     def q_insert_product_option():
         return (
             "INSERT INTO options_product "
-            "(colors_id, products_id, price, discount, url_image, sku) "
-            "VALUES (%(colors_id)s, %(products_id)s, %(price)s, %(discount)s, %(url_image)s, %(sku)s)"
+            "(colors_id, products_id, price, discount, sku) "
+            "VALUES (%(colors_id)s, %(products_id)s, %(price)s, %(discount)s, %(sku)s)"
         )
 
     def q_insert_option_has_sizes():
@@ -31,13 +31,14 @@ class qProduct:
         return (
             "SELECT p.id, p.title, c.category_name, "
             "JSON_ARRAYAGG(JSON_OBJECT( "
-            "'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', op.url_image, "
+            "'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', i.url_image, "
             "'color_name', cl.color_name, 'color', cl.color "
             ")) AS color_list "
             "FROM products AS p "
             "INNER JOIN categorys AS c ON c.id = p.categorys_id "
             "INNER JOIN options_product AS op ON op.products_id = p.id "
             "INNER JOIN colors AS cl ON cl.id = op.colors_id "
+            "INNER JOIN (SELECT option_id, url_image FROM products_images GROUP BY id) as i ON i.option_id = op.id "
             "GROUP BY p.id "
             "LIMIT 20"
         )
