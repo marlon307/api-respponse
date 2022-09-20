@@ -7,7 +7,7 @@ class qBag:
 
     def q_list_bag():
         return (
-            "SELECT b.quantity, s.size, o.price, o.discount, p.title,"
+            "SELECT p.id, b.quantity, s.size, o.price, o.discount, p.title,"
             "ctg.category_name, cl.color, cl.color_name, pi.url_image "
             "FROM bag AS b "
             "INNER JOIN sizes AS s ON s.id = b.sizes_id "
