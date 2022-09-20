@@ -9,5 +9,4 @@ class sBag:
 
     def s_list_bag(user_id):
         list_bag = execut_query.select(qBag.q_list_bag(), {"user_id": user_id})
-        print("dsd", user_id)
         return list_bag
