@@ -7,7 +7,7 @@ class qBag:
 
     def q_list_bag():
         return (
-            "SELECT p.id, b.quantity, s.size, o.price, o.discount, p.title,"
+            "SELECT p.id, o.id AS product_option, b.quantity, s.size, o.price, o.discount, p.title,"
             "ctg.category_name, cl.color, cl.color_name, pi.url_image "
             "FROM bag AS b "
             "INNER JOIN sizes AS s ON s.id = b.sizes_id "
@@ -17,4 +17,17 @@ class qBag:
             "INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id "
             "INNER JOIN products_images AS pi ON pi.option_id = o.id "
             "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1)"
+        )
+
+    def q_bag_update_quantity():
+        return (
+            "UPDATE bag SET quantity = %(quantity)s WHERE "
+            "user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
+            "AND option_product_id = %(option_id)s"
+        )
+
+    def q_bag_delete_item():
+        return (
+            "DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
+            "AND option_product_id = %(option_id)s"
         )

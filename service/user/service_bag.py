@@ -21,3 +21,11 @@ class sBag:
 
         list_bag = map(calc_dicount, list_bag)
         return list(list_bag)
+
+    def s_update_quantity_bag(json):
+        execut_query.update(qBag.q_bag_update_quantity(), json)
+        return True
+
+    def s_delete_item_bag(json):
+        execut_query.delete(qBag.q_bag_delete_item(), json)
+        return True
