@@ -16,7 +16,8 @@ class qBag:
             "INNER JOIN products AS p ON p.id = o.products_id "
             "INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id "
             "INNER JOIN products_images AS pi ON pi.option_id = o.id "
-            "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1)"
+            "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) "
+            "AND b.orders_id IS NULL"
         )
 
     def q_bag_update_quantity():
