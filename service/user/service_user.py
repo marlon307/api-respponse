@@ -20,7 +20,7 @@ class sUser:
 
         json["id_user"] = generate_id()
         json["password"] = encrypt(json["password"])
-        json["user_token"] = key
+        json["user_token"] = str(key)
         execut_query.insert(qUser.q_register_user(), json)
         send_mail_confirm_user(key, json)
         return True

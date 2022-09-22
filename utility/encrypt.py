@@ -6,13 +6,13 @@ import os
 from cryptography.fernet import Fernet
 
 
-def encrypt(string):
+def encrypt(string: str) -> str:
     code = str.encode(string) * int(os.getenv("CALC_PSW"))
     value = bcrypt.hashpw(
         base64.b64encode(hashlib.sha256(code).digest()),
         bcrypt.gensalt(int(os.getenv("SALT_BC"))),
     )
-    return value
+    return str(value)
 
 
 def checkcrypt(string, hash):
