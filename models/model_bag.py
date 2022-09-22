@@ -2,7 +2,7 @@ class qBag:
     def q_insert_bag():
         return (
             "INSERT INTO bag (user_id, quantity, option_product_id, sizes_id) "
-            "VALUES ((SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1), %(quantity)s, %(option_product_id)s, (SELECT id FROM sizes WHERE size = %(size)s))"
+            "VALUES ((SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1), %(quantity)s, %(product_option)s, (SELECT id FROM sizes WHERE size = %(size)s))"
         )
 
     def q_list_bag():
@@ -16,20 +16,21 @@ class qBag:
             "INNER JOIN products AS p ON p.id = o.products_id "
             "INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id "
             "INNER JOIN products_images AS pi ON pi.option_id = o.id "
-            "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1)"
+            "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) "
+            "AND b.orders_id IS NULL"
         )
 
     def q_bag_update_quantity():
         return (
             "UPDATE bag SET quantity = %(quantity)s WHERE "
             "user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
-            "AND option_product_id = %(option_id)s "
+            "AND option_product_id = %(product_option)s "
             "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"
         )
 
     def q_bag_delete_item():
         return (
             "DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
-            "AND option_product_id = %(option_id)s "
+            "AND option_product_id = %(product_option)s "
             "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"
         )
