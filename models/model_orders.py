@@ -2,13 +2,14 @@ class qOrder:
     def q_get_order_id():
         return (
             "SELECT o.id, o.status_id, o.date_order, o.value_order, "
-            "JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, 'uf', uadd.uf, 'zipcode', uadd.cep) AS address_order, "
+            "JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, "
+            "'uf', uadd.uf, 'zipcode', uadd.cep, 'number_home', uadd.number_home, 'road', uadd.road) AS address, "
             "JSON_OBJECT('name_carrier', crr.name_carrier, 'code', o.tracking_code, 'delivery_value', o.delivery_value) AS carrier, "
             "JSON_ARRAYAGG(JSON_OBJECT( "
-            "'title', p.title, 'category', ctg.category_name, 'id', p.id, "
+            "'title', p.title, 'category_name', ctg.category_name, 'id', p.id, "
             "'size', sz.size, 'quantity', b.quantity, "
             "'url_image', img.url_image, 'color', cl.color, "
-            "'color_name', cl.color_name "
+            "'color_name', cl.color_name, 'price', op.price "
             ")) AS list_products "
             "FROM orders AS o "
             "INNER JOIN user_address AS uadd ON uadd.id = o.user_id "

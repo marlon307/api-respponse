@@ -6,7 +6,7 @@ import json
 class sOrders:
     def s_get_orderid(data_json):
         order = execut_query.selectOne(qOrder.q_get_order_id(), data_json)
-        order["address_order"] = json.loads(order["address_order"])
+        order["address"] = json.loads(order["address"])
         order["carrier"] = json.loads(order["carrier"])
         order["list_products"] = json.loads(order["list_products"])
         return order
