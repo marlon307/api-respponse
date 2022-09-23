@@ -1,8 +1,12 @@
 from models.database import execut_query
 from models.model_orders import qOrder
+import json
 
 
 class sOrders:
-    def s_get_orderid(json):
-        order = execut_query.selectOne(qOrder.q_get_order_id(), json)
+    def s_get_orderid(data_json):
+        order = execut_query.selectOne(qOrder.q_get_order_id(), data_json)
+        order["address_order"] = json.loads(order["address_order"])
+        order["carrier"] = json.loads(order["carrier"])
+        order["list_products"] = json.loads(order["list_products"])
         return order

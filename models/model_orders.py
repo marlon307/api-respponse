@@ -5,7 +5,7 @@ class qOrder:
             "JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, 'uf', uadd.uf, 'zipcode', uadd.cep) AS address_order, "
             "JSON_OBJECT('name_carrier', crr.name_carrier, 'code', o.tracking_code, 'delivery_value', o.delivery_value) AS carrier, "
             "JSON_ARRAYAGG(JSON_OBJECT( "
-            "'title', p.title, 'category', ctg.category_name, "
+            "'title', p.title, 'category', ctg.category_name, 'id', p.id, "
             "'size', sz.size, 'quantity', b.quantity, "
             "'url_image', img.url_image, 'color', cl.color, "
             "'color_name', cl.color_name "
@@ -20,6 +20,6 @@ class qOrder:
             "INNER JOIN sizes AS sz ON sz.id = b.sizes_id "
             "INNER JOIN products_images AS img ON img.id = b.option_product_id "
             "INNER JOIN colors AS cl ON cl.id = op.colors_id "
-            "WHERE o.user_id = %(user_id)s AND o.id = %(order_id)s "
+            "WHERE o.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) AND o.id = %(order_id)s "
             "GROUP BY o.id"
         )
