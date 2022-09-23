@@ -1,4 +1,12 @@
 class qOrder:
+    def q_get_orders():
+        return (
+            "SELECT o.id, date_order, s.status "
+            "FROM orders AS o "
+            "INNER JOIN status AS s ON s.id = o.status_id "
+            "WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s)"
+        )
+
     def q_get_order_id():
         return (
             "SELECT o.id, o.status_id, o.date_order, o.value_order, "
