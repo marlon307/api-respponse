@@ -20,6 +20,6 @@ class qOrder:
             "INNER JOIN sizes AS sz ON sz.id = b.sizes_id "
             "INNER JOIN products_images AS img ON img.id = b.option_product_id "
             "INNER JOIN colors AS cl ON cl.id = op.colors_id "
-            "WHERE o.user_id = %(user_id)s AND o.id = %(oder_id)s "
+            "WHERE o.user_id = %(user_id)s AND o.id = %(order_id)s "
             "GROUP BY o.id"
         )

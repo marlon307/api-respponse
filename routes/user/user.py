@@ -1,7 +1,7 @@
 from flask import Blueprint
 from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import m_auth
-from controller.user.contoller_user import cUser
+from controller.user.controller_user import cUser
 
 user_blueprint = Blueprint("routes_user", __name__)
 
