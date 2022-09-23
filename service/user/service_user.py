@@ -1,6 +1,5 @@
 import ast
 import os
-
 from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models.model_user import qUser
@@ -20,7 +19,7 @@ class sUser:
 
         json["id_user"] = generate_id()
         json["password"] = encrypt(json["password"])
-        json["user_token"] = str(key)
+        json["user_token"] = key
         execut_query.insert(qUser.q_register_user(), json)
         send_mail_confirm_user(key, json)
         return True

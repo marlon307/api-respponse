@@ -12,7 +12,7 @@ def encrypt(string: str) -> str:
         base64.b64encode(hashlib.sha256(code).digest()),
         bcrypt.gensalt(int(os.getenv("SALT_BC"))),
     )
-    return str(value)
+    return value
 
 
 def checkcrypt(string, hash):
