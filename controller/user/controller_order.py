@@ -8,7 +8,6 @@ class cOrders:
     def c_get_orders():
         try:
             json = {"user_id": request.headers["user"]["id_user"]}
-            print(json)
             orders = sOrders.s_get_orders(json)
             return {
                 "msg": "Lista de pedidos.",
