@@ -5,7 +5,6 @@ from utility.calca_discount import calc_discount
 
 class sBag:
     def s_add_bag(json):
-        print(json)
         id_insert = execut_query.insert(qBag.q_insert_bag(), json)
         return id_insert
 
