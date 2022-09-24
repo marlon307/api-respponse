@@ -7,8 +7,11 @@ BEGIN
     DECLARE quantityvols INT;
     DECLARE idorder INT;
     
-    DECLARE error_sql BOOL DEFAULT FALSE;
-    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET error_sql = TRUE;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        SHOW ERRORS;  -- this is the only one which you need
+        ROLLBACK;   
+    END; 
     
     SET iduser = (SELECT id FROM user WHERE id_user = p_userid);
     SET idaddres = (SELECT id FROM user_address WHERE user_id = iduser AND id = p_addressid);
@@ -26,11 +29,5 @@ BEGIN
 		INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
 		SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity 
 		WHERE b.user_id = iduser AND b.orders_id IS NULL;
-	IF error_sql = FALSE THEN
-		COMMIT;
-		SELECT * FROM orders WHERE user_id = iduser AND id = idorder;
-	ELSE
-		ROLLBACK;
-        SELECT 'Não foi possivel concluir essa operação.' AS msg;
-	END IF;
+	COMMIT;
 END
