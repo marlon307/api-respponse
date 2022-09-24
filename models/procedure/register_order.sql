@@ -32,6 +32,8 @@ BEGIN
 			SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity 
 			WHERE b.user_id = iduser AND b.orders_id IS NULL;
 		COMMIT;
+        
+        SELECT idorder AS 'number_order';
 	ELSE
 		SELECT '400 - Não possui informações o suficiente para registrar um pedido.' AS MSG;
 	END IF;
