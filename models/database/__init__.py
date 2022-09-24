@@ -16,16 +16,17 @@ class execut_query:
     def __init__(self):
         try:
             self.connection = connection.MySQLConnection(**config_connection)
-            self.cursor = self.connection.cursor(dictionary=True)
+            self.cursor = self.connection.cursor(dictionary=True, buffered=True)
             self.execute = self.cursor.execute
+            self.callProc = self.cursor.callproc
             self.executemany = self.cursor.executemany
             self.commit = self.connection.commit
             self.closeCursor = self.cursor.close
             self.closeConnection = self.connection.close
         except mysql.connector.Error as err:
-            # self.connection.close()
-            # self.connection.close()
             print(err)
+            # self.cursor.close()
+            # self.connection.close()
 
     def insert(query: str, data) -> None:
         cnn = execut_query()
@@ -71,6 +72,16 @@ class execut_query:
         cnn = execut_query()
         cnn.execute(query, data)
         result = cnn.cursor.fetchone()
+        cnn.closeCursor()
+        cnn.closeConnection()
+        return result
+
+    def callProcedure(procedure_name: str, data):
+        cnn = execut_query()
+        cnn.callProc(procedure_name, data)
+        result = list()
+        for obj in cnn.cursor.stored_results():
+            result = obj.fetchall()
         cnn.closeCursor()
         cnn.closeConnection()
         return result

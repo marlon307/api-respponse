@@ -55,3 +55,17 @@ class cBag:
         except Exception as err:
             print("bag -> c_delete_bag ->", err)
             return {"msg": "Falha nossa.", "status": 500}, 500
+
+    def c_bag_register_order():
+        try:
+            json = request.get_json()
+            json["p_userid"] = request.headers["user"]["id_user"]
+            order = sBag.s_register_order(json)
+            return {
+                "msg": "Produto removido da sacola.",
+                "status": 200,
+                "order": order,
+            }, 200
+        except Exception as err:
+            print("bag -> c_bag_register_order ->", err)
+            return {"msg": "Falha nossa.", "status": 500}, 500

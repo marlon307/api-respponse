@@ -27,3 +27,9 @@ def updatequantity():
 @m_auth
 def deleteitembag():
     return cBag.c_bag_delete()
+
+
+@bag_blueprint.route("/register_order", methods=["POST"])
+@m_auth
+def registerorder():
+    return cBag.c_bag_register_order()

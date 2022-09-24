@@ -9,7 +9,6 @@ class sBag:
         return id_insert
 
     def s_list_bag(user_id):
-
         list_bag = execut_query.select(qBag.q_list_bag(), {"user_id": user_id})
 
         def calc_dicount(object_calc):
@@ -29,3 +28,13 @@ class sBag:
     def s_delete_item_bag(json):
         execut_query.delete(qBag.q_bag_delete_item(), json)
         return True
+
+    def s_register_order(data_json):
+        json_for_tuple = (
+            data_json["p_userid"],
+            data_json["address"],
+            data_json["carrie"],
+            16.65,
+        )
+        order = execut_query.callProcedure("register_order", json_for_tuple)
+        return order[0]
