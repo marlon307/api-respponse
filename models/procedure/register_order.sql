@@ -6,7 +6,10 @@ BEGIN
     DECLARE price INT;
     DECLARE quantityvols INT;
     DECLARE idorder INT;
-	
+    
+    DECLARE error_sql BOOL DEFAULT FALSE;
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION SET error_sql = TRUE;
+    
     SET iduser = (SELECT id FROM user WHERE id_user = p_userid);
     SET idaddres = (SELECT id FROM user_address WHERE user_id = iduser AND id = p_addressid);
     SET price = (SELECT SUM(op.price) FROM bag AS b
@@ -14,8 +17,20 @@ BEGIN
 				 WHERE b.user_id = iduser AND b.orders_id IS NULL);
 	SET quantityvols = (SELECT SUM(quantity) FROM bag AS b WHERE b.user_id = iduser AND b.orders_id IS NULL); 
     
-	INSERT INTO orders (user_id, address_id, carrier_id, status_id, value_order, quantity_vol, delivery_value) 
-    VALUES (iduser, idaddres, p_carriesid, 1, price, quantityvols, p_deliveryvalue);
-    SET idorder = (SELECT LAST_INSERT_ID() FROM orders AS o WHERE o.user_id = iduser LIMIT 1);
-    UPDATE bag AS b SET orders_id = idorder WHERE b.user_id = iduser AND b.orders_id IS NULL;
+    START TRANSACTION;
+		INSERT INTO orders (user_id, address_id, carrier_id, status_id, value_order, quantity_vol, delivery_value) 
+		VALUES (iduser, idaddres, p_carriesid, 1, price, quantityvols, p_deliveryvalue);
+		SET idorder = (SELECT LAST_INSERT_ID() FROM orders AS o WHERE o.user_id = iduser LIMIT 1);
+		
+		UPDATE bag AS b 
+		INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
+		SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity 
+		WHERE b.user_id = iduser AND b.orders_id IS NULL;
+	IF error_sql = FALSE THEN
+		COMMIT;
+		SELECT * FROM orders WHERE user_id = iduser AND id = idorder;
+	ELSE
+		ROLLBACK;
+        SELECT 'Não foi possivel concluir essa operação.' AS msg;
+	END IF;
 END
