@@ -1,6 +1,7 @@
 from models.database import execut_query
 from models.model_bag import qBag
 from utility.calca_discount import calc_discount
+import json
 
 
 class sBag:
@@ -9,7 +10,9 @@ class sBag:
         return id_insert
 
     def s_list_bag(user_id):
-        list_bag = execut_query.select(qBag.q_list_bag(), {"user_id": user_id})
+        list_bag = execut_query.selectOne(qBag.q_list_bag(), {"user_id": user_id})
+        list_bag["list_add"] = json.loads(list_bag["list_add"] or "[]")
+        list_bag["list_b"] = json.loads(list_bag["list_b"] or "[]")
 
         def calc_dicount(object_calc):
             old_price = calc_discount(object_calc["discount"], object_calc["price"])
@@ -18,8 +21,8 @@ class sBag:
                 "oldPrice": old_price,
             }
 
-        list_bag = map(calc_dicount, list_bag)
-        return list(list_bag)
+        list_bag["list_b"] = list(map(calc_dicount, list_bag["list_b"]))
+        return list_bag
 
     def s_update_quantity_bag(json):
         execut_query.update(qBag.q_bag_update_quantity(), json)
