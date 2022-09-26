@@ -23,7 +23,7 @@ class cBag:
             list_items = sBag.s_list_bag(request.headers["user"]["id_user"])
             return {
                 "msg": "Lista da sacola.",
-                "list_bag": list_items,
+                "infobag": list_items,
                 "status": 200,
             }, 200
         except Exception as err:
