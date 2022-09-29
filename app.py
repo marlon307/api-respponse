@@ -17,7 +17,7 @@ routes(app)
 def index():
     res = jsonify(
         {
-            "message": "Todos os serviços estão ativos no meomento.",
+            "message": "Todos os serviços estão ativos.",
             "date": datetime.now(),
             "status": 200,
         }
