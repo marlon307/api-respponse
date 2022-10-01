@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 import os, time
 from datetime import datetime
 from routes.init_route import routes
@@ -13,7 +13,7 @@ app = FastAPI()
 routes(app)
 
 
-@app.get("/")
+@app.get("/", status_code=status.HTTP_200_OK)
 def home():
     res = {
         "message": "Todos os serviços estão ativos.",

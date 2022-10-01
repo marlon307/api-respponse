@@ -1,18 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import m_auth
 from controller.user.controller_user import cUser
 
 
 def user_routes(app: FastAPI):
-    @app.post("/createuser")
+    @app.post("/createuser", status_code=status.HTTP_201_CREATED)
     def createuser(body: m_register):
         return cUser.c_user_register(body)
 
     # # Need Authorization
     @app.patch("/confirm_acc")
     # @m_auth
-    def confirm_acc():
+    def confirm_acc(authorization: str):
+        print(authorization)
         return cUser.c_user_confirmacc()
 
     # @app.route("/request_new_confirm_acc", methods=["POST"])

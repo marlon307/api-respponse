@@ -1,9 +1,8 @@
+from pydantic import BaseModel, EmailStr
 from functools import wraps
-from flask import request
 from utility.credentials import valid_email, valid_psw, valid_name
 from utility.format_doc import format_cpf
 from utility.valid_cpf import cpf_validate
-from pydantic import BaseModel
 
 msgErr = {
     "msg": "Credenciais Inválidas.",
@@ -13,7 +12,7 @@ msgErr = {
 
 class m_register(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     password: str
 
 
