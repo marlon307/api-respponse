@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, validator
-from functools import wraps
+from datetime import date
 from utility.credentials import valid_email, valid_psw, valid_name
 from utility.format_doc import format_cpf
 from utility.valid_cpf import cpf_validate
@@ -61,46 +61,26 @@ class m_login(BaseModel):
         return v.title()
 
 
-def m_psw(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
-            if (
-                "password" not in data
-                or data["password"] is None
-                or valid_psw(data["password"]) is not True
-            ):
-                return msgErr
-            return f(*args, **kwargs)
+class m_psw(BaseModel):
+    password: str
 
-        except Exception as err:
-            print(f"[Middleware Login] ( %s )" % (err))
-            return msgErr
-
-    return decorated
+    @validator("password")
+    def valid_psw(cls, v: str):
+        if valid_psw(v) is not True:
+            raise ValueError("Senha inválida.")
+        return v.title()
 
 
-def m_update_user(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            list_key_onj = ["cel", "date", "doc", "gender", "name", "tel"]
-            data = request.get_json()
+class m_update_user(BaseModel):
+    name: str
+    cel: str
+    te: str
+    date: date
+    doc: str
+    gender: int
 
-            for key in data:
-                if key not in list_key_onj:
-                    return msgErr
-            if (
-                valid_name(data["name"]) is not True
-                or cpf_validate(data["doc"]) is False
-            ):
-                return msgErr
-
-            return f(*args, **kwargs)
-
-        except Exception as err:
-            print(f"[Middleware update_user] ( %s )" % (err))
-            return msgErr
-
-    return decorated
+    @validator("name")
+    def valid_name(cls, v: str):
+        if valid_name(v) is not True:
+            raise ValueError("Nome inválido.")
+        return v.title()
