@@ -44,33 +44,21 @@ class m_email(BaseModel):
         return v.title()
 
 
-def m_login(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
+class m_login(BaseModel):
+    email: EmailStr
+    password: str
 
-            if (
-                "email" not in data
-                or data["email"] is None
-                or valid_email(data["email"]) is not True
-            ):
-                return msgErr
+    @validator("email")
+    def valid_email(cls, v: str):
+        if valid_email(v) is not True:
+            raise ValueError("Email inválido.")
+        return v.title()
 
-            if (
-                "password" not in data
-                or data["password"] is None
-                or valid_psw(data["password"]) is not True
-            ):
-                return msgErr
-
-            return f(*args, **kwargs)
-
-        except Exception as err:
-            print(f"[Middleware Login] ( %s ) [%s]" % (data, err))
-            return msgErr
-
-    return decorated
+    @validator("password")
+    def valid_psw(cls, v: str):
+        if valid_psw(v) is not True:
+            raise ValueError("Senha inválida.")
+        return v.title()
 
 
 def m_psw(f):

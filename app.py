@@ -13,7 +13,7 @@ app = FastAPI()
 routes(app)
 
 
-@app.get("/", status_code=status.HTTP_200_OK)
+@app.get("/", status_code=status.HTTP_200_OK, tags=["API STATUS"])
 def home():
     return {
         "message": "Todos os serviços estão ativos.",
