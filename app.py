@@ -8,7 +8,7 @@ from routes.init_route import routes
 os.environ["TZ"] = "America/Sao_Paulo"
 time.time()
 
-app = FastAPI()
+app = FastAPI(title="API Respponse")
 # CORS(app)
 routes(app)
 

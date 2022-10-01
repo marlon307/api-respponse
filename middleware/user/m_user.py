@@ -4,11 +4,6 @@ from utility.credentials import valid_email, valid_psw, valid_name
 from utility.format_doc import format_cpf
 from utility.valid_cpf import cpf_validate
 
-msgErr = {
-    "msg": "Credenciais Inválidas.",
-    "status": 400,
-}, 400
-
 
 class m_register(BaseModel):
     name: str
@@ -83,4 +78,10 @@ class m_update_user(BaseModel):
     def valid_name(cls, v: str):
         if valid_name(v) is not True:
             raise ValueError("Nome inválido.")
+        return v.title()
+
+    @validator("doc")
+    def valid_doc(cls, v: str):
+        if cpf_validate(v) is not True:
+            raise ValueError("Documento inválido.")
         return v.title()
