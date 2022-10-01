@@ -6,10 +6,9 @@ msgErr500 = {"msg": "Server error.", "status": 500}, 500
 
 
 class cUser:
-    def c_user_register():
+    def c_user_register(body):
         try:
-            json = request.get_json()
-            sUser.s_register_user(json)
+            sUser.s_register_user(body)
 
             return {"msg": "Confime sua conta.", "status": 201}, 201
         except Exception as err:
