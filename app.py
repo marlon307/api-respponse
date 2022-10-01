@@ -15,10 +15,8 @@ routes(app)
 
 @app.get("/", status_code=status.HTTP_200_OK)
 def home():
-    res = {
+    return {
         "message": "Todos os serviços estão ativos.",
         "date": datetime.now(),
         "status": 200,
     }
-
-    return res

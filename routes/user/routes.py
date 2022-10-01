@@ -1,8 +1,9 @@
 from .user import user_routes
-from .address import address_blueprint
-from .cards import cards_blueprint
-from .bag import bag_blueprint
-from .orders import orders_blueprint
+
+# from .address import address_blueprint
+# from .cards import cards_blueprint
+# from .bag import bag_blueprint
+# from .orders import orders_blueprint
 
 
 def routes_user(app):

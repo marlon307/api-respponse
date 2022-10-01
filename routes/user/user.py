@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Header
 from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import m_auth
 from controller.user.controller_user import cUser
@@ -11,15 +11,12 @@ def user_routes(app: FastAPI):
 
     # # Need Authorization
     @app.patch("/confirm_acc")
-    # @m_auth
-    def confirm_acc(authorization: str):
-        print(authorization)
+    def confirm_acc(authorization: str = Header(default="Bearer token")):
         return cUser.c_user_confirmacc()
 
-    # @app.route("/request_new_confirm_acc", methods=["POST"])
-    # @m_email
-    # def request_new_confirm_acc():
-    #     return cUser.c_request_new_confirm_acc()
+    @app.post("/request_new_confirm_acc")
+    def request_new_confirm_acc(data: m_email):
+        return cUser.c_request_new_confirm_acc()
 
     # @app.route("/login_user", methods=["POST"])
     # @m_login
