@@ -88,8 +88,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI()
 
 
-async def verify_password(plain_password, hashed_password):
-    return checkcrypt(plain_password, hashed_password)
+def verify_password(plain_password, hashed_password):
+    try:
+        return checkcrypt(plain_password, hashed_password)
+    except Exception as err:
+        print(f"[AUTH] %s" % (err))
+        return False
 
 
 def get_password_hash(password):
@@ -134,7 +138,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-    except Exception as err:
+    except jwt.PyJWTError:
         raise credentials_exception
     user = get_user(fake_users_db, username=token_data.username)
     if user is None:
