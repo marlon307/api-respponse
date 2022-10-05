@@ -3,6 +3,7 @@ import os, time
 from datetime import datetime
 from routes.init_route import routes
 from dotenv import load_dotenv
+from routes.user import user
 
 # from fastapi.responses import PlainTextResponse
 # from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -10,12 +11,12 @@ from dotenv import load_dotenv
 
 # from middleware.m_valid_cnn_front import request_front
 
+load_dotenv()
 os.environ["TZ"] = "America/Sao_Paulo"
 time.time()
 
 app = FastAPI(title="API Respponse")
 # CORS(app)
-load_dotenv()
 
 
 # @app.exception_handler(StarletteHTTPException)
