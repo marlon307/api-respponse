@@ -3,7 +3,6 @@ import os, time
 from datetime import datetime
 from routes.init_route import routes
 from dotenv import load_dotenv
-from routes.user import user
 
 # from fastapi.responses import PlainTextResponse
 # from starlette.exceptions import HTTPException as StarletteHTTPException
