@@ -1,5 +1,5 @@
-from fastapi import APIRouter, status, Header, Depends, HTTPException
-from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
+from fastapi import APIRouter, status, Header, Depends
+from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import get_current_active_user
 from controller.user.controller_user import cUser
 from pydantic import BaseModel
@@ -18,6 +18,7 @@ router = APIRouter(tags=["USER"])
 
 @router.post("/login_user")
 def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+    print(form_data.username)
     return cUser.c_user_login(form_data)
 
 
