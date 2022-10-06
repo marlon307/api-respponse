@@ -41,10 +41,9 @@ class cUser:
             print("user -> c_request_new_confirm_acc ->", err)
             return msgErr500
 
-    def c_user_login():
+    def c_user_login(data):
         try:
-            json = request.get_json()
-            result = sUser.s_login_user(json)
+            result = sUser.s_login_user(data)
             if result:
                 date_time = datetime.now() + timedelta(hours=6 + 3)
                 new_json = jsonify(

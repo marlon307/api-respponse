@@ -1,7 +1,6 @@
 import ast
 import os
 import jwt
-from flask import request
 from datetime import datetime, timedelta
 from utility.encrypt import fernetDecrypt
 from fastapi import status, HTTPException
@@ -19,8 +18,7 @@ credentials_exception = HTTPException(
 )
 
 
-def generate_token(data: object, hours: int, min: int) -> str:
-
+def generate_token(data: dict, hours: int, min: int) -> str:
     return jwt.encode(
         payload={
             **data,

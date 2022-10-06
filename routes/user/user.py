@@ -7,18 +7,18 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 
 class User(BaseModel):
-    username: str
     email: str | None = None
     full_name: str | None = None
-    disabled: bool | None = None
+    seller: bool | None = None
+    admin: bool | None = None
 
 
 router = APIRouter(tags=["USER"])
 
 
 @router.post("/login_user")
-def login_user(data: OAuth2PasswordRequestForm = Depends()):
-    return cUser.c_user_login()
+def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+    return cUser.c_user_login(form_data)
 
 
 @router.post("/createuser", status_code=status.HTTP_201_CREATED)
