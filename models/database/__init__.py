@@ -17,7 +17,6 @@ config_connection = {
 class execut_query:
     def __init__(self):
         try:
-            print(config_connection)
             self.connection = connection.MySQLConnection(**config_connection)
             self.cursor = self.connection.cursor(dictionary=True, buffered=True)
             self.execute = self.cursor.execute
