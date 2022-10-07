@@ -16,12 +16,15 @@ from utility.u_user import send_mail_confirm_user
 class sUser:
     def s_register_user(json):
         key = Fernet.generate_key()
-
-        json["id_user"] = generate_id()
-        json["password"] = encrypt(json["password"])
-        json["user_token"] = key
-        execut_query.insert(qUser.q_register_user(), json)
-        send_mail_confirm_user(key, json)
+        new_obj = {
+            "id_user": generate_id(),
+            "name": json.name,
+            "email": json.email,
+            "password": encrypt(json.password),
+            "user_token": key,
+        }
+        execut_query.insert(qUser.q_register_user(), new_obj)
+        send_mail_confirm_user(key, new_obj)
         return True
 
     def s_user_confirmacc(json):
