@@ -11,8 +11,8 @@ class cUser:
             sUser.s_register_user(body)
             return {"msg": "Confime sua conta.", "status": 201}, 201
         except Exception as err:
-            # if err.errno == 1062:
-            #     return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
+            if err.errno == 1062:
+                return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
             print("user -> c_user_register ->", err)
             return msgErr500
 

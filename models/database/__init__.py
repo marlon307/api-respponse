@@ -1,7 +1,9 @@
-from inspect import _void
 import os
 import mysql.connector
 from mysql.connector import connection
+from dotenv import load_dotenv
+
+load_dotenv()
 
 config_connection = {
     "user": os.getenv("DB_USER"),
@@ -15,6 +17,7 @@ config_connection = {
 class execut_query:
     def __init__(self):
         try:
+            print(config_connection)
             self.connection = connection.MySQLConnection(**config_connection)
             self.cursor = self.connection.cursor(dictionary=True, buffered=True)
             self.execute = self.cursor.execute
