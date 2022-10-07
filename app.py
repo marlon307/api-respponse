@@ -1,7 +1,7 @@
 from fastapi import FastAPI, status, HTTPException
 import os, time
 from datetime import datetime
-from routes.init_route import routes
+from routes import routers
 from dotenv import load_dotenv
 
 # from fastapi.responses import PlainTextResponse
@@ -37,4 +37,4 @@ def home():
     }
 
 
-routes(app)
+routers(app)
