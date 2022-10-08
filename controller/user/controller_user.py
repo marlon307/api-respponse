@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from flask import request, jsonify
 from service.user.service_user import sUser
 
 msgErr500 = {"msg": "Server error.", "status": 500}, 500
@@ -16,9 +15,10 @@ class cUser:
             print("user -> c_user_register ->", err)
             return msgErr500
 
-    def c_user_confirmacc():
+    def c_user_confirmacc(data):
         try:
-            reult = sUser.s_user_confirmacc(request.headers["user"])
+            # request.headers["user"]
+            reult = sUser.s_user_confirmacc(data)
             if reult:
                 return {"msg": "Conta confimarda.", "status": 200}, 200
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
@@ -26,10 +26,9 @@ class cUser:
             print("user -> c_user_confirmacc ->", err)
             return msgErr500
 
-    def c_request_new_confirm_acc():
+    def c_request_new_confirm_acc(data):
         try:
-            json = request.get_json()
-            reult = sUser.s_request_new_confirm_acc(json)
+            reult = sUser.s_request_new_confirm_acc(data)
             if reult:
                 return {
                     "msg": "Novo email enviado para confirmar conta.",
@@ -45,13 +44,13 @@ class cUser:
             result = sUser.s_login_user(data)
             if result:
                 date_time = datetime.now() + timedelta(hours=6 + 3)
-                new_json = jsonify(
-                    user=result["info_login"],
-                    msg="Usuário logado com sucesso.",
-                    token=result["token"],
-                    exp=date_time,
-                    status=200,
-                )
+                new_json = {
+                    "user": result["info_login"],
+                    "msg": "Usuário logado com sucesso.",
+                    "token": result["token"],
+                    "exp": date_time,
+                    "status": 200,
+                }
                 return new_json, 200
             else:
                 return {"msg": "Dados Inválidos.", "status": 400}, 400
@@ -59,10 +58,10 @@ class cUser:
             print("user -> c_user_login ->", err)
             return msgErr500
 
-    def c_solicitation_user_resetpsw():
+    def c_solicitation_user_resetpsw(data):
         try:
-            json = request.get_json()
-            result = sUser.s_solicitation_user_resetpsw(json["email"])
+            # json["email"]
+            result = sUser.s_solicitation_user_resetpsw(data)
 
             if result:
                 return {
@@ -74,10 +73,11 @@ class cUser:
             print("user -> c_solicitation_user_resetpsw ->", err)
             return msgErr500
 
-    def c_user_resetpsw():
+    def c_user_resetpsw(data):
         try:
-            json = request.get_json()
-            result = sUser.s_user_resetpsw(request.headers["user"], json)
+            # request.headers["user"]
+            # request.headers["user"]
+            result = sUser.s_user_resetpsw("user", data)
             if result:
                 return {"msg": "Senha alterada com sucesso.", "status": 200}, 200
             return {"msg": "Senha já alterada com este token.", "status": 400}, 400
@@ -86,11 +86,10 @@ class cUser:
             print("user -> c_user_resetpsw ->", err)
             return msgErr500
 
-    def c_get_info_user():
+    def c_get_info_user(data):
         try:
-            id_user = request.headers["user"]["id_user"]
-            data = sUser.s_get_info_user(id_user)
-
+            # id_user = request.headers["user"]["id_user"]
+            data = sUser.s_get_info_user(data)
             if data:
                 return {
                     "msg": "User info.",
@@ -103,11 +102,11 @@ class cUser:
             print("user -> c_get_info_user ->", err)
             return msgErr500
 
-    def c_update_info_user():
+    def c_update_info_user(data_json):
         try:
-            json = request.get_json()
-            json["u_id"] = request.headers["user"]["id_user"]
-            data = sUser.s_update_info_user(json)
+            # json = request.get_json()
+            # data_json["u_id"] = request.headers["user"]["id_user"]
+            data = sUser.s_update_info_user(data_json)
 
             if data:
                 return {
