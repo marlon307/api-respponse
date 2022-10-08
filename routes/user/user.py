@@ -18,13 +18,13 @@ router = APIRouter(tags=["USER"])
 
 @router.post("/login_user")
 def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
-    return cUser.c_user_login(form_data)
+    return  cUser.c_user_login(form_data)
 
 
 # !31aDf6.
 @router.post("/createuser", status_code=status.HTTP_201_CREATED)
-def create_user(body: m_register):
-    return cUser.c_user_register(body)
+async def create_user(body: m_register):
+    return await cUser.c_user_register(body)
 
 
 # Need Authorization
