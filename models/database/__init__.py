@@ -10,7 +10,6 @@ config_connection = {
     "database": os.getenv("DB_NAME"),
 }
 
-
 class execut_query:
     def __init__(self):
         try:

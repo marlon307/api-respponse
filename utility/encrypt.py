@@ -17,7 +17,7 @@ def encrypt(string: str) -> str:
 
 def checkcrypt(string, hash):
     code = str.encode(string) * int(os.getenv("CALC_PSW"))
-    value = bcrypt.checkpw(
+    value =  bcrypt.checkpw(
         base64.b64encode(hashlib.sha256(code).digest()),
         hash.encode("utf-8"),
     )

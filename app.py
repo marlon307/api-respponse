@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, status, HTTPException
 import os, time
 from datetime import datetime
@@ -35,3 +36,6 @@ def home():
 
 
 routers(app)
+
+if __name__ == "__main__":
+    uvicorn.run("app:app", host="localhost", env_file=".env", reload=True)
