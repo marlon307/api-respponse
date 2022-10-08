@@ -9,7 +9,6 @@ def valid_name(name: str):
 
 
 def valid_email(email: str) -> bool:
-    print(os.getenv("VALID_EMAIL"), email)
     if re.fullmatch(r"%s" % os.getenv("VALID_EMAIL"), email):
         return True
     return False

@@ -1,10 +1,9 @@
 import ast
 import os
 import jwt
-from flask import request
 from datetime import datetime, timedelta
 from utility.encrypt import fernetDecrypt
-import json
+from fastapi import status, HTTPException
 
 
 msg = {
@@ -12,9 +11,14 @@ msg = {
     "status": 401,
 }, 401
 
+credentials_exception = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Could not validate credentials",
+    headers={"WWW-Authenticate": "Bearer"},
+)
 
-def generate_token(data: object, hours: int, min: int) -> str:
 
+def generate_token(data: dict, hours: int, min: int) -> str:
     return jwt.encode(
         payload={
             **data,
@@ -25,28 +29,22 @@ def generate_token(data: object, hours: int, min: int) -> str:
     )
 
 
-def valid_auth() -> None | object:
+def valid_auth(token: str) -> None | object:
     try:
-        if (
-            "Authorization" in request.headers
-            and "Bearer " in request.headers["Authorization"]
-        ):
-            data = jwt.decode(
-                jwt=request.headers["Authorization"].split(" ")[1],
-                key=os.getenv("JWT_KEY"),
-                algorithms=[os.getenv("ALGORITHM")],
-            )
 
-            if "mix" in data:
-                admin_lvl = fernetDecrypt(os.getenv("ADMIN_KEY"), data["mix"])
-                new_object = ast.literal_eval(admin_lvl)
-                data["admin"] = new_object["admin"]
-                del data["mix"]
+        data = jwt.decode(
+            # jwt=request.headers["Authorization"].split(" ")[1],
+            jwt=token,
+            key=os.getenv("JWT_KEY"),
+            algorithms=[os.getenv("ALGORITHM")],
+        )
 
-            request.headers = {**request.headers, "user": data}
-        else:
-            return msg
+        if "mix" in data:
+            admin_lvl = fernetDecrypt(os.getenv("ADMIN_KEY"), data["mix"])
+            new_object = ast.literal_eval(admin_lvl)
+            data["admin"] = new_object["admin"]
+            del data["mix"]
 
-    except Exception as err:
-        print(err)
-        return msg
+        return data
+    except jwt.PyJWTError:
+        return credentials_exception

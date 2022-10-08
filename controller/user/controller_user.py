@@ -9,7 +9,6 @@ class cUser:
     def c_user_register(body):
         try:
             sUser.s_register_user(body)
-
             return {"msg": "Confime sua conta.", "status": 201}, 201
         except Exception as err:
             if err.errno == 1062:
@@ -41,10 +40,9 @@ class cUser:
             print("user -> c_request_new_confirm_acc ->", err)
             return msgErr500
 
-    def c_user_login():
+    def c_user_login(data):
         try:
-            json = request.get_json()
-            result = sUser.s_login_user(json)
+            result = sUser.s_login_user(data)
             if result:
                 date_time = datetime.now() + timedelta(hours=6 + 3)
                 new_json = jsonify(

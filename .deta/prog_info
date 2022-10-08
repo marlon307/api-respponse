@@ -1,0 +1,1 @@
+{"id":"1451ae83-564f-4deb-89c2-96d893b7a4da","space":34504,"runtime":"python3.9","name":"api-respponse","path":"54y5cm","project":"e0lz133x","account":"144798365827","region":"sa-east-1","deps":["fastapi[all]","mysql-connector-python","bcrypt","uvicorn","gunicorn","pyjwt","requests","cryptography","python-dotenv"],"envs":null,"public":true,"log_level":"debug","cron":""}
