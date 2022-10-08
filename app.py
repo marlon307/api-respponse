@@ -2,15 +2,12 @@ from fastapi import FastAPI, status, HTTPException
 import os, time
 from datetime import datetime
 from routes import routers
-from dotenv import load_dotenv
 
 # from fastapi.responses import PlainTextResponse
 # from starlette.exceptions import HTTPException as StarletteHTTPException
 # from fastapi.exceptions import RequestValidationError
 
 # from middleware.m_valid_cnn_front import request_front
-
-load_dotenv()
 os.environ["TZ"] = "America/Sao_Paulo"
 time.time()
 

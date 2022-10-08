@@ -1,9 +1,6 @@
 import os
 import mysql.connector
 from mysql.connector import connection
-from dotenv import load_dotenv
-
-load_dotenv()
 
 config_connection = {
     "user": os.getenv("DB_USER"),
