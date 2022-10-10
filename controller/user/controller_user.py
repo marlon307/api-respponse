@@ -12,7 +12,10 @@ class cUser:
             return {"msg": "Confime sua conta.", "status": 201}
         except Exception as err:
             if err.errno == 1062:
-                return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Este usuário já possui cadastro.",
+                )
             print("user -> c_user_register ->", err)
             return msgErr500
 
@@ -29,12 +32,12 @@ class cUser:
 
     def c_request_new_confirm_acc(data):
         try:
-            reult = sUser.s_request_new_confirm_acc(data)
+            reult = sUser.s_request_new_confirm_acc(data.email)
             if reult:
                 return {
                     "msg": "Novo email enviado para confirmar conta.",
                     "status": 200,
-                }, 200
+                }
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print("user -> c_request_new_confirm_acc ->", err)
@@ -61,14 +64,12 @@ class cUser:
 
     def c_solicitation_user_resetpsw(data):
         try:
-            # json["email"]
-            result = sUser.s_solicitation_user_resetpsw(data)
-
-            if result:
+            result = sUser.s_solicitation_user_resetpsw(data.email)
+            if result is True:
                 return {
                     "msg": "Email enviado com sucesso.",
                     "status": 200,
-                }, 200
+                }
             return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
             print("user -> c_solicitation_user_resetpsw ->", err)

@@ -53,16 +53,13 @@ class sUser:
             return False
         return False
 
-    def s_request_new_confirm_acc(json):
-        result = execut_query.selectOne(
-            qUser.q_select_emailuser(), {"email": json["email"], "confirm_acc": False}
-        )
-        if result is not None:
+    def s_request_new_confirm_acc(email):
+        json = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+        if json is not None:
             key = Fernet.generate_key()
             execut_query.update(
-                qUser.q_request_update_token(), {"email": result["email"], "key": key}
+                qUser.q_request_update_token(), {"email": json["email"], "key": key}
             )
-            json["id_user"] = result["id_user"]
             send_mail_confirm_user(key, json)
             return True
         return False
@@ -104,9 +101,7 @@ class sUser:
         return False
 
     def s_solicitation_user_resetpsw(email):
-        result = execut_query.selectOne(
-            qUser.q_select_emailuser(), {"email": email, "confirm_acc": True}
-        )
+        result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
 
         if result is not None:
             key = Fernet.generate_key()

@@ -36,24 +36,24 @@ def confirm_acc(authorization: str = Header(default="Bearer token")):
 
 @router.post("/request_new_confirm_acc")
 def request_new_confirm_acc(data: m_email):
-    return cUser.c_request_new_confirm_acc()
+    return cUser.c_request_new_confirm_acc(data)
 
 
 @router.post("/solicitation_reset_psw_user")
 def solicitation_reset_psw_user(data: m_email):
-    return cUser.c_solicitation_user_resetpsw()
+    return cUser.c_solicitation_user_resetpsw(data)
 
 
 # Need Authorization
 @router.patch("/reset_psw_user")
 def reset_psw_user(data: m_psw):
-    return cUser.c_user_resetpsw()
+    return cUser.c_user_resetpsw(data)
 
 
 # Need Authorization
 @router.get("/user")
 def get_info_user(current_user: User = Depends(get_current_active_user)):
-    return cUser.c_get_info_user()
+    return cUser.c_get_info_user(current_user)
 
 
 # Need Authorization

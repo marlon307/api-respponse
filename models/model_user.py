@@ -9,7 +9,7 @@ class qUser:
         return "UPDATE user SET user_token = %(key)s WHERE (email) = %(email)s"
 
     def q_select_emailuser():
-        return "SELECT email, id_user FROM user WHERE email = %(email)s AND confirm_acc = %(confirm_acc)s"
+        return "SELECT email, id_user, name FROM user WHERE email = %(email)s AND confirm_acc = False"
 
     def q_select_user_token():
         return "SELECT user_token FROM user WHERE email = %(email)s AND confirm_acc = %(confirm_acc)s"
