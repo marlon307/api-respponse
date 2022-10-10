@@ -14,18 +14,56 @@ from utility.u_user import send_mail_confirm_user
 
 
 class sUser:
-    def s_register_user(json):
+    def s_register_user(data):
         key = Fernet.generate_key()
+        print(data.password)
         new_obj = {
             "id_user": generate_id(),
-            "name": json.name,
-            "email": json.email,
-            "password": encrypt(json.password),
+            "name": data.name,
+            "email": data.email,
+            "password": encrypt(data.password),
             "user_token": key,
         }
         execut_query.insert(qUser.q_register_user(), new_obj)
         send_mail_confirm_user(key, new_obj)
         return True
+
+    def s_login_user(data):
+        info_login = execut_query.selectOne(
+            qUser.q_login_user(), {"email": data.username}
+        )
+
+        print(data.password)
+        if info_login is not None:
+            valid_psw = checkcrypt(data.password, info_login["password"])
+            if valid_psw is True:
+                # Token valido por 6 horas
+                if info_login["admin"] == True:
+                    info_for_crypt = {
+                        "exp": str(datetime.now() + timedelta(hours=6)),
+                        "admin": info_login["admin"],
+                    }
+                    fernet_token = fernetEncrypt(
+                        os.getenv("ADMIN_KEY").encode("utf8"), info_for_crypt
+                    )
+                    info_login["mix"] = fernet_token["crypt_hash"]
+
+                # Nunca passe esse (del) abaixo do (token = generate_token(info_login, 6, 0))
+                del info_login["admin"]
+                del info_login["password"]
+                # (del) proibido ficar abixo do (token = generate_token(info_login,6, 0))
+
+                token = generate_token(info_login, 6, 0)
+
+                if "mix" in info_login:
+                    del info_login["mix"]
+
+                return {
+                    "info_login": info_login,
+                    "token": token,
+                }
+            return False
+        return False
 
     def s_user_confirmacc(json):
         result = execut_query.selectOne(
@@ -62,42 +100,6 @@ class sUser:
             )
             send_mail_confirm_user(key, json)
             return True
-        return False
-
-    def s_login_user(json):
-        info_login = execut_query.selectOne(
-            qUser.q_login_user(), {"email": json.username}
-        )
-
-        if info_login is not None:
-            valid_psw = checkcrypt(json.password, info_login["password"])
-            if valid_psw is True:
-                # Token valido por 6 horas
-                if info_login["admin"] == True:
-                    info_for_crypt = {
-                        "exp": str(datetime.now() + timedelta(hours=6)),
-                        "admin": info_login["admin"],
-                    }
-                    fernet_token = fernetEncrypt(
-                        os.getenv("ADMIN_KEY").encode("utf8"), info_for_crypt
-                    )
-                    info_login["mix"] = fernet_token["crypt_hash"]
-
-                # Nunca passe esse (del) abaixo do (token = generate_token(info_login, 6, 0))
-                del info_login["admin"]
-                del info_login["password"]
-                # (del) proibido ficar abixo do (token = generate_token(info_login,6, 0))
-
-                token = generate_token(info_login, 6, 0)
-
-                if "mix" in info_login:
-                    del info_login["mix"]
-
-                return {
-                    "info_login": info_login,
-                    "token": token,
-                }
-            return False
         return False
 
     def s_solicitation_user_resetpsw(email):

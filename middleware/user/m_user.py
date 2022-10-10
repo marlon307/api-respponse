@@ -14,13 +14,13 @@ class m_register(BaseModel):
     def valid_email(cls, v: str):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return v.title()
+        return v.title
 
     @validator("password")
     def valid_psw(cls, v: str):
         if valid_psw(v) is not True:
             raise ValueError("Senha inválida.")
-        return v.title()
+        return v
 
     @validator("name")
     def valid_name(cls, v: str):
@@ -36,7 +36,7 @@ class m_email(BaseModel):
     def valid_email(cls, v: str):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return v.title()
+        return v
 
 
 class m_login(BaseModel):
@@ -47,13 +47,13 @@ class m_login(BaseModel):
     def valid_email(cls, v: str):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return v.title()
+        return v
 
     @validator("password")
     def valid_psw(cls, v: str):
         if valid_psw(v) is not True:
             raise ValueError("Senha inválida.")
-        return v.title()
+        return v
 
 
 class m_psw(BaseModel):
@@ -63,7 +63,7 @@ class m_psw(BaseModel):
     def valid_psw(cls, v: str):
         if valid_psw(v) is not True:
             raise ValueError("Senha inválida.")
-        return v.title()
+        return v
 
 
 class m_update_user(BaseModel):
@@ -84,4 +84,4 @@ class m_update_user(BaseModel):
     def valid_doc(cls, v: str):
         if cpf_validate(v) is not True:
             raise ValueError("Documento inválido.")
-        return v.title()
+        return v

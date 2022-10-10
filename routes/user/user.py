@@ -18,8 +18,7 @@ router = APIRouter(tags=["USER"])
 
 @router.post("/login_user")
 def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
-    result = cUser.c_user_login(form_data)
-    return result
+    return cUser.c_user_login(form_data)
 
 
 # 3!1aDf.6
