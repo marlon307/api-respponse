@@ -68,16 +68,12 @@ class sUser:
         return False
 
     def s_login_user(json):
-        new_data = {
-            "email": json.username,
-            "password": json.password,
-        }
-        info_login = execut_query.selectOne(qUser.q_login_user(), new_data)
-
+        info_login = execut_query.selectOne(
+            qUser.q_login_user(), {"email": json.username}
+        )
         if info_login:
             valid_psw = checkcrypt(json.password, info_login["password"])
-
-            if valid_psw:
+            if valid_psw is True:
                 # Token valido por 6 horas
                 if info_login["admin"] == True:
                     info_for_crypt = {

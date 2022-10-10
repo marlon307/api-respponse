@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from service.user.service_user import sUser
+from fastapi import status, HTTPException
 
 msgErr500 = {"msg": "Server error.", "status": 500}, 500
 
@@ -8,7 +9,7 @@ class cUser:
     def c_user_register(body):
         try:
             sUser.s_register_user(body)
-            return {"msg": "Confime sua conta.", "status": 201}, 201
+            return {"msg": "Confime sua conta.", "status": 201}
         except Exception as err:
             if err.errno == 1062:
                 return {"msg": "Este usuário já possui cadastro.", "status": 409}, 409
@@ -40,23 +41,23 @@ class cUser:
             return msgErr500
 
     def c_user_login(data):
-        try:
-            result = sUser.s_login_user(data)
-            if result:
-                date_time = datetime.now() + timedelta(hours=6 + 3)
-                new_json = {
-                    "user": result["info_login"],
-                    "msg": "Usuário logado com sucesso.",
-                    "token": result["token"],
-                    "exp": date_time,
-                    "status": 200,
-                }
-                return new_json, 200
-            else:
-                return {"msg": "Dados Inválidos.", "status": 400}, 400
-        except Exception as err:
-            print("user -> c_user_login ->", err)
-            return msgErr500
+        result = sUser.s_login_user(data)
+        if result is not False:
+            date_time = datetime.now() + timedelta(hours=6 + 3)
+            new_json = {
+                "user": result["info_login"],
+                "msg": "Usuário logado com sucesso.",
+                "token": result["token"],
+                "exp": date_time,
+                "status": 200,
+            }
+            return new_json, 200
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect e-mail or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
     def c_solicitation_user_resetpsw(data):
         try:
