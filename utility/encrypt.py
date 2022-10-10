@@ -8,7 +8,6 @@ from cryptography.fernet import Fernet
 
 def encrypt(string: str):
     code = str.encode(string) * int(os.getenv("CALC_PSW"))
-    print(base64.b64encode(hashlib.sha256(code).digest()))
     bytes = bcrypt.hashpw(
         base64.b64encode(hashlib.sha256(code).digest()),
         bcrypt.gensalt(int(os.getenv("SALT_BC"))),

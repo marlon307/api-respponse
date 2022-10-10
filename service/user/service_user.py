@@ -71,7 +71,8 @@ class sUser:
         info_login = execut_query.selectOne(
             qUser.q_login_user(), {"email": json.username}
         )
-        if info_login:
+
+        if info_login is not None:
             valid_psw = checkcrypt(json.password, info_login["password"])
             if valid_psw is True:
                 # Token valido por 6 horas
