@@ -48,13 +48,14 @@ class cUser:
         if result is not False:
             date_time = datetime.now() + timedelta(hours=6 + 3)
             new_json = {
+                "access_token": result["token"],
+                "token_type": "bearer",
                 "user": result["info_login"],
                 "msg": "Usuário logado com sucesso.",
-                "token": result["token"],
                 "exp": date_time,
                 "status": 200,
             }
-            return new_json, 200
+            return new_json
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

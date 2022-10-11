@@ -33,7 +33,6 @@ class sUser:
             qUser.q_login_user(), {"email": data.username}
         )
 
-        print(data.password)
         if info_login is not None:
             valid_psw = checkcrypt(data.password, info_login["password"])
             if valid_psw is True:
@@ -135,7 +134,7 @@ class sUser:
 
     def s_user_resetpsw(data, json):
         result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": data["email"], "confirm_acc": True}
+            qUser.q_select_user_token(), {"email": data["email"]}
         )
         if result is not None and result["user_token"] != data["rtx"]:
             object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])

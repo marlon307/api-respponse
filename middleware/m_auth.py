@@ -1,4 +1,4 @@
-from fastapi import Header
+from fastapi import Header, status
 from pydantic import BaseModel, validator
 from fastapi import Header, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
@@ -34,17 +34,18 @@ class m_auth(BaseModel):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = valid_auth(token)
-    user_id: str = payload.get("id_user")
-    if user_id is None:
-        raise payload
-
-
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = valid_auth(token)
+        return payload
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized!",
+        )
+    # user_id: str = payload.get("id_user")
+    # if user_id is None:
+    #     raise payload
 
 
 def m_auth_adm(f):
