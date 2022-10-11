@@ -31,10 +31,8 @@ def generate_token(data: dict, hours: int, min: int) -> str:
 
 def valid_auth(token: str) -> None | object:
     try:
-
         data = jwt.decode(
-            # jwt=request.headers["Authorization"].split(" ")[1],
-            jwt=token,
+            jwt=token.split(" ")[1] if " " in token else token,
             key=os.getenv("JWT_KEY"),
             algorithms=[os.getenv("ALGORITHM")],
         )
@@ -47,4 +45,4 @@ def valid_auth(token: str) -> None | object:
 
         return data
     except jwt.PyJWTError:
-        return credentials_exception
+        raise credentials_exception

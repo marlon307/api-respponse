@@ -82,7 +82,7 @@ class cUser:
     def c_user_resetpsw(data):
         try:
             # request.headers["user"]
-            # request.headers["user"]
+            print(data)
             result = sUser.s_user_resetpsw("user", data)
             if result:
                 return {"msg": "Senha alterada com sucesso.", "status": 200}, 200

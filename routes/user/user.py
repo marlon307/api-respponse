@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Header, Depends, Request
 from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
-from middleware.m_auth import get_current_user
+from middleware.m_auth import get_current_user, m_auth
 from controller.user.controller_user import cUser
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordRequestForm
@@ -45,8 +45,9 @@ def solicitation_reset_psw_user(data: m_email):
 
 # Need Authorization
 @router.patch("/reset_psw_user")
-def reset_psw_user(data: m_psw, auth: str = Header(default="Bearer token")):
-    print(auth, data)
+def reset_psw_user(data: m_psw, token: str = Header(default="Bearer token")):
+    dict = m_auth(token)
+    print(dict)
     return cUser.c_user_resetpsw(data)
 
 

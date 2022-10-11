@@ -118,7 +118,7 @@ class sUser:
             fernet_token = fernetEncrypt(key, info_for_crypt)
             info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
             token = generate_token(info_token, 0, 15)
-
+            print(token)
             params = {
                 "url_reset_psw": "%sreset_psw/%s"
                 % (os.getenv("WEB_APPLICATION_URL"), token),
