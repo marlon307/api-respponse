@@ -2,7 +2,10 @@ from datetime import datetime, timedelta
 from service.user.service_user import sUser
 from fastapi import status, HTTPException
 
-msgErr500 = {"msg": "Server error.", "status": 500}, 500
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
 
 
 class cUser:
@@ -17,7 +20,7 @@ class cUser:
                     detail="Este usuário já possui cadastro.",
                 )
             print("user -> c_user_register ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_user_confirmacc(data):
         try:
@@ -28,7 +31,7 @@ class cUser:
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print("user -> c_user_confirmacc ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_request_new_confirm_acc(data):
         try:
@@ -41,7 +44,7 @@ class cUser:
             return {"msg": "Conta já confirmada ou não existe.", "status": 400}, 400
         except Exception as err:
             print("user -> c_request_new_confirm_acc ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_user_login(data):
         result = sUser.s_login_user(data)
@@ -74,7 +77,7 @@ class cUser:
             return {"msg": "Dados Inválidos.", "status": 400}, 400
         except Exception as err:
             print("user -> c_solicitation_user_resetpsw ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_user_resetpsw(data):
         try:
@@ -87,23 +90,25 @@ class cUser:
 
         except Exception as err:
             print("user -> c_user_resetpsw ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_get_info_user(data):
         try:
-            # id_user = request.headers["user"]["id_user"]
-            data = sUser.s_get_info_user(data)
+            data = sUser.s_get_info_user(data["id_user"])
             if data:
                 return {
                     "msg": "User info.",
                     "status": 200,
                     "response": data,
-                }, 200
-            return {"msg": "Usuario inexistente!", "status": 400}, 400
+                }
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Usuario inexistente!",
+            )
 
         except Exception as err:
             print("user -> c_get_info_user ->", err)
-            return msgErr500
+            raise msgErr500
 
     def c_update_info_user(data_json):
         try:
@@ -120,4 +125,4 @@ class cUser:
 
         except Exception as err:
             print("user -> c_update_info_user ->", err)
-            return msgErr500
+            raise msgErr500

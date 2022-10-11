@@ -36,16 +36,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
-        payload = valid_auth(token)
-        return payload
+        return valid_auth(token)
     except:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized!",
         )
-    # user_id: str = payload.get("id_user")
-    # if user_id is None:
-    #     raise payload
 
 
 def m_auth_adm(f):
