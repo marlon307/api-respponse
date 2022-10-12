@@ -132,7 +132,7 @@ class sUser:
             return True
         return False
 
-    def s_user_resetpsw(data, json):
+    def s_user_resetpsw(data):
         result = execut_query.selectOne(
             qUser.q_select_user_token(), {"email": data["email"]}
         )
@@ -143,7 +143,7 @@ class sUser:
                 new_object = ast.literal_eval(object_decrypt or "{'exp': 0}")
 
                 if conpare_date(new_object["exp"], new_object["exp"]):
-                    new_psw = encrypt(json["password"])
+                    new_psw = encrypt(data["password"])
                     execut_query.update(
                         qUser.q_update_psw_user(),
                         {

@@ -80,19 +80,23 @@ class cUser:
             raise msgErr500
 
     def c_user_resetpsw(data):
+        status_err = None
         try:
-            # request.headers["user"]
-            print(data)
-            result = sUser.s_user_resetpsw("user", data)
-            if result:
-                return {"msg": "Senha alterada com sucesso.", "status": 200}, 200
-            return {"msg": "Senha já alterada com este token.", "status": 400}, 400
+            result = sUser.s_user_resetpsw(data)
 
+            if result is True:
+                return {"msg": "Senha alterada com sucesso.", "status": 200}
+            status_err = HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Senha já alterada com este token.",
+            )
         except Exception as err:
             print("user -> c_user_resetpsw ->", err)
             raise msgErr500
+        raise status_err
 
     def c_get_info_user(data):
+        status_err = None
         try:
             data = sUser.s_get_info_user(data["id_user"])
             if data:
@@ -101,7 +105,7 @@ class cUser:
                     "status": 200,
                     "response": data,
                 }
-            raise HTTPException(
+            status_err = HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Usuario inexistente!",
             )
@@ -109,6 +113,7 @@ class cUser:
         except Exception as err:
             print("user -> c_get_info_user ->", err)
             raise msgErr500
+        raise status_err
 
     def c_update_info_user(data_json):
         try:

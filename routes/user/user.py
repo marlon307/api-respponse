@@ -47,8 +47,8 @@ def solicitation_reset_psw_user(data: m_email):
 @router.patch("/reset_psw_user")
 def reset_psw_user(data: m_psw, token: str = Header(default="Bearer token")):
     dict = m_auth(token)
-    print(dict)
-    return cUser.c_user_resetpsw(data)
+    dict["password"] = data.password
+    return cUser.c_user_resetpsw(dict)
 
 
 # Need Authorization

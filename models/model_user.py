@@ -13,7 +13,7 @@ class qUser:
 
     def q_select_user_token():
         return (
-            "SELECT user_token FROM user WHERE email = %(email)s AND confirm_acc = True"
+            "SELECT user_token FROM user WHERE email = %(email)s"
         )
 
     def q_update_active_acc():
