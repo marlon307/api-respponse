@@ -2,7 +2,7 @@ from functools import wraps
 from flask import request
 
 msgErr = {
-    "msg": "Dados enviados inválidos.",
+    "detail": "Dados enviados inválidos.",
     "status": 400,
 }, 400
 

@@ -7,7 +7,7 @@ from fastapi import status, HTTPException
 
 
 msg = {
-    "msg": "Acesso não autorizado!",
+    "detail": "Acesso não autorizado!",
     "status": 401,
 }, 401
 

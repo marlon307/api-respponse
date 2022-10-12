@@ -2,7 +2,7 @@ from functools import wraps
 from flask import request
 
 msgErr = {
-    "msg": "Não foi possivel inserir este status.",
+    "detail": "Não foi possivel inserir este status.",
     "status": 400,
 }, 400
 

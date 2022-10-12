@@ -1,5 +1,5 @@
 from fastapi import status, Depends, HTTPException
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer
 from auth.auth_jwt import valid_auth
 
