@@ -35,7 +35,6 @@ def fernetEncrypt(key: bytes, info_for_crypt: any) -> object:
 
 def fernetDecrypt(key: str, info_for_decrypt: any) -> str | bool:
     try:
-        print(2344234)
         cyper = Fernet(str(key).encode("utf-8"))
         decrypt = cyper.decrypt(str(info_for_decrypt).encode("utf-8"))
         object_decrypt = decrypt.decode("utf-8")

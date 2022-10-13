@@ -1,8 +1,15 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, UUID4
-from model_response.user import user
+from .md_user import resp_user
 
-resp_user = user.resp_user
+resp_user
+
+
+class User(BaseModel):
+    email: str | None = None
+    full_name: str | None = None
+    seller: bool | None = None
+    admin: bool | None = None
 
 
 class inf_uAuth(BaseModel):

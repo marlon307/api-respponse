@@ -66,7 +66,7 @@ class sUser:
 
     def s_user_confirmacc(json):
         result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": json["email"], "confirm_acc": False}
+            qUser.q_select_user_token(), {"email": json["email"]}
         )
 
         if result is not None and result["user_token"] != json["rtx"]:

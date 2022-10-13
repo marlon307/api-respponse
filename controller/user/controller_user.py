@@ -24,18 +24,17 @@ class cUser:
 
     def c_user_confirmacc(data):
         try:
-            # request.headers["user"]
             reult = sUser.s_user_confirmacc(data)
             if reult:
-                return {"detail": "Conta confimarda.", "status": 200}, 200
-            return {"detail": "Conta já confirmada ou não existe.", "status": 400}, 400
+                return {"detail": "Conta confimarda.", "status": 200}
+            return {"detail": "Conta já confirmada ou não existe.", "status": 400}
         except Exception as err:
             print("user -> c_user_confirmacc ->", err)
             raise msgErr500
 
     def c_request_new_confirm_acc(data):
         try:
-            reult = sUser.s_request_new_confirm_acc(data.email)
+            reult = sUser.s_request_new_confirm_acc(data["email"])
             if reult:
                 return {
                     "detail": "Novo email enviado para confirmar conta.",

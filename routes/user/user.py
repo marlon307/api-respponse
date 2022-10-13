@@ -1,17 +1,9 @@
-from fastapi import APIRouter, status, Header, Depends, Request
+from fastapi import APIRouter, status, Header, Depends
 from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import get_current_user, m_auth
 from controller.user.controller_user import cUser
-from pydantic import BaseModel
-from model_response import resp_auth, resp_user
+from ..user.models import resp_auth, resp_user, User
 from fastapi.security import OAuth2PasswordRequestForm
-
-
-class User(BaseModel):
-    email: str | None = None
-    full_name: str | None = None
-    seller: bool | None = None
-    admin: bool | None = None
 
 
 router = APIRouter(tags=["USER"])
@@ -29,13 +21,14 @@ def create_user(body: m_register):
 
 
 @router.patch("/confirm_acc")
-def confirm_acc(authorization: str = Header(default="Bearer token")):
-    return cUser.c_user_confirmacc()
+def confirm_acc(token: str = Header(default="Token")):
+    dict = m_auth(token)
+    return cUser.c_user_confirmacc(dict)
 
 
 @router.post("/request_new_confirm_acc")
-def request_new_confirm_acc(data: m_email):
-    return cUser.c_request_new_confirm_acc(data)
+def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
+    return cUser.c_request_new_confirm_acc(current_user)
 
 
 @router.post("/solicitation_reset_psw_user")
@@ -44,7 +37,7 @@ def solicitation_reset_psw_user(data: m_email):
 
 
 @router.patch("/reset_psw_user")
-def reset_psw_user(data: m_psw, token: str = Header(default="Bearer token")):
+def reset_psw_user(data: m_psw, token: str = Header(default="Token")):
     dict = m_auth(token)
     dict["password"] = data.password
     return cUser.c_user_resetpsw(dict)
