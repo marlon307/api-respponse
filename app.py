@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import os, time
 from datetime import datetime
 from routes import routers
@@ -10,6 +11,19 @@ time.time()
 
 app = FastAPI(
     title="API Respponse", swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
