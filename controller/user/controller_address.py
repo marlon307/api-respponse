@@ -1,45 +1,46 @@
-from flask import request
+from fastapi import status, HTTPException
 from service.user.service_address import sAddress
+
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
 
 
 class cAddress:
-    def c_add_address():
+    def c_add_address(json, c_user):
         try:
-            json = request.get_json()
-            json["user_id"] = request.headers["user"]["id_user"]
+            json["user_id"] = c_user["id_user"]
             id_addres = sAddress.s_add_address(json)
 
             return {
-                "msg": "Endereço adicionado.",
+                "detail": "Endereço adicionado.",
                 "address": id_addres,
                 "status": 201,
-            }, 201
+            }
         except Exception as err:
             print("address -> c_add_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_get_address():
+    def c_get_address(data):
         try:
-            list_address = sAddress.s_get_address(request.headers["user"]["id_user"])
+            list_address = sAddress.s_get_address(data["id_user"])
             return {
-                "msg": "Lista de endereço.",
+                "detail": "Lista de endereço.",
                 "address": list_address,
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("address -> c_get_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_delete_address():
+    def c_delete_address(json, id_user):
         try:
-            id_user = request.headers["user"]["id_user"]
-            json = request.get_json()
-
-            sAddress.s_delete_address(id_user, json["address"])
+            sAddress.s_delete_address(id_user, json["id"])
             return {
-                "msg": "Endereço excluído.",
+                "detail": "Endereço excluído.",
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("address -> c_delete_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            raise msgErr500

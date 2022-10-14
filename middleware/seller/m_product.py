@@ -3,7 +3,7 @@ from functools import wraps
 from flask import request
 
 msgErr = {
-    "msg": "Não foi possível criar este produto.",
+    "detail": "Não foi possível criar este produto.",
     "status": 400,
 }, 400
 list_keys = [

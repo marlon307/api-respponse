@@ -14,70 +14,28 @@ from utility.u_user import send_mail_confirm_user
 
 
 class sUser:
-    def s_register_user(json):
+    def s_register_user(data):
         key = Fernet.generate_key()
+        print(data.password)
         new_obj = {
             "id_user": generate_id(),
-            "name": json.name,
-            "email": json.email,
-            "password": encrypt(json.password),
+            "name": data.name,
+            "email": data.email,
+            "password": encrypt(data.password),
             "user_token": key,
         }
         execut_query.insert(qUser.q_register_user(), new_obj)
         send_mail_confirm_user(key, new_obj)
         return True
 
-    def s_user_confirmacc(json):
-        result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": json["email"], "confirm_acc": False}
+    def s_login_user(data):
+        info_login = execut_query.selectOne(
+            qUser.q_login_user(), {"email": data.username}
         )
 
-        if result is not None and result["user_token"] != json["rtx"]:
-            object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
-
-            if object_decrypt is not False:
-                new_object = ast.literal_eval(object_decrypt)
-
-                if conpare_date(new_object["exp"], new_object["exp"]):
-                    execut_query.update(
-                        qUser.q_update_active_acc(),
-                        {
-                            "id_user": new_object["uuid"],
-                            "email": json["email"],
-                            "date": datetime.now(),
-                            "user_token": json["rtx"],
-                        },
-                    )
-                    return True
-                return False
-            return False
-        return False
-
-    def s_request_new_confirm_acc(json):
-        result = execut_query.selectOne(
-            qUser.q_select_emailuser(), {"email": json["email"], "confirm_acc": False}
-        )
-        if result is not None:
-            key = Fernet.generate_key()
-            execut_query.update(
-                qUser.q_request_update_token(), {"email": result["email"], "key": key}
-            )
-            json["id_user"] = result["id_user"]
-            send_mail_confirm_user(key, json)
-            return True
-        return False
-
-    def s_login_user(json):
-        new_data = {
-            "email": json.username,
-            "password": json.password,
-        }
-        info_login = execut_query.selectOne(qUser.q_login_user(), new_data)
-
-        if info_login:
-            valid_psw = checkcrypt(json.password, info_login["password"])
-
-            if valid_psw:
+        if info_login is not None:
+            valid_psw = checkcrypt(data.password, info_login["password"])
+            if valid_psw is True:
                 # Token valido por 6 horas
                 if info_login["admin"] == True:
                     info_for_crypt = {
@@ -106,10 +64,45 @@ class sUser:
             return False
         return False
 
-    def s_solicitation_user_resetpsw(email):
+    def s_user_confirmacc(json):
         result = execut_query.selectOne(
-            qUser.q_select_emailuser(), {"email": email, "confirm_acc": True}
+            qUser.q_select_user_token(), {"email": json["email"]}
         )
+
+        if result is not None and result["user_token"] != json["rtx"]:
+            object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
+
+            if object_decrypt is not False:
+                new_object = ast.literal_eval(object_decrypt)
+
+                if conpare_date(new_object["exp"], new_object["exp"]):
+                    execut_query.update(
+                        qUser.q_update_active_acc(),
+                        {
+                            "id_user": new_object["uuid"],
+                            "email": json["email"],
+                            "date": datetime.now(),
+                            "user_token": json["rtx"],
+                        },
+                    )
+                    return True
+                return False
+            return False
+        return False
+
+    def s_request_new_confirm_acc(email):
+        json = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+        if json is not None:
+            key = Fernet.generate_key()
+            execut_query.update(
+                qUser.q_request_update_token(), {"email": json["email"], "key": key}
+            )
+            send_mail_confirm_user(key, json)
+            return True
+        return False
+
+    def s_solicitation_user_resetpsw(email):
+        result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
 
         if result is not None:
             key = Fernet.generate_key()
@@ -125,7 +118,7 @@ class sUser:
             fernet_token = fernetEncrypt(key, info_for_crypt)
             info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
             token = generate_token(info_token, 0, 15)
-
+            print(token)
             params = {
                 "url_reset_psw": "%sreset_psw/%s"
                 % (os.getenv("WEB_APPLICATION_URL"), token),
@@ -139,9 +132,9 @@ class sUser:
             return True
         return False
 
-    def s_user_resetpsw(data, json):
+    def s_user_resetpsw(data):
         result = execut_query.selectOne(
-            qUser.q_select_user_token(), {"email": data["email"], "confirm_acc": True}
+            qUser.q_select_user_token(), {"email": data["email"]}
         )
         if result is not None and result["user_token"] != data["rtx"]:
             object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
@@ -150,7 +143,7 @@ class sUser:
                 new_object = ast.literal_eval(object_decrypt or "{'exp': 0}")
 
                 if conpare_date(new_object["exp"], new_object["exp"]):
-                    new_psw = encrypt(json["password"])
+                    new_psw = encrypt(data["password"])
                     execut_query.update(
                         qUser.q_update_psw_user(),
                         {

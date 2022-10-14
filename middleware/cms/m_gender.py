@@ -2,7 +2,7 @@ from functools import wraps
 from flask import request
 
 msgErr = {
-    "msg": "Não foi possivel cirar este género.",
+    "detail": "Não foi possivel cirar este género.",
     "status": 400,
 }, 400
 

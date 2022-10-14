@@ -7,9 +7,9 @@ class cColor:
         try:
             json = request.get_json()
             sColor.s_create_color(json)
-            return {"msg": "Cor criada.", "status": 201}, 201
+            return {"detail": "Cor criada.", "status": 201}, 201
         except Exception as err:
             if err.errno == 1062:
-                return {"msg": "Esta cor já existe.", "status": 409}, 409
+                return {"detail": "Esta cor já existe.", "status": 409}, 409
             print("cms -> c_color ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            return {"detail": "Falha nossa.", "status": 500}, 500
