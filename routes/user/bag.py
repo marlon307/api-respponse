@@ -1,35 +1,34 @@
-from flask import Blueprint
-from middleware.m_auth import m_auth
+from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
 from controller.user.controller_bag import cBag
-
-bag_blueprint = Blueprint("routes_bag", __name__)
-
-
-@bag_blueprint.route("/bag", methods=["POST"])
-@m_auth
-def additembag():
-    return cBag.c_add_bag()
+from middleware.m_auth import get_current_user
+from middleware.user.m_bag import add_bag, del_bag, up_bag, r_order
+from ..user.models import User
 
 
-@bag_blueprint.route("/bag", methods=["GET"])
-@m_auth
-def listbag():
-    return cBag.c_list_bag()
+router = APIRouter(tags=["USER"])
 
 
-@bag_blueprint.route("/bag", methods=["PATCH"])
-@m_auth
-def updatequantity():
-    return cBag.c_bag_update_quantity()
+@router.post("/bag", status_code=201)
+def additembag(data: add_bag, current_user: User = Depends(get_current_user)):
+    return cBag.c_add_bag(jsonable_encoder(data), current_user)
 
 
-@bag_blueprint.route("/bag", methods=["DELETE"])
-@m_auth
-def deleteitembag():
-    return cBag.c_bag_delete()
+@router.get("/bag")
+def listbag(current_user: User = Depends(get_current_user)):
+    return cBag.c_list_bag(current_user)
 
 
-@bag_blueprint.route("/register_order", methods=["POST"])
-@m_auth
-def registerorder():
-    return cBag.c_bag_register_order()
+@router.patch("/bag")
+def updatequantity(data: up_bag, current_user: User = Depends(get_current_user)):
+    return cBag.c_bag_update_quantity(jsonable_encoder(data), current_user)
+
+
+@router.delete("/bag")
+def deleteitembag(data: del_bag, current_user: User = Depends(get_current_user)):
+    return cBag.c_bag_delete(jsonable_encoder(data), current_user)
+
+
+@router.post("/register_order", status_code=201)
+def registerorder(data: r_order, current_user: User = Depends(get_current_user)):
+    return cBag.c_bag_register_order(jsonable_encoder(data), current_user)

@@ -1,71 +1,74 @@
-from flask import request
+from fastapi import status, HTTPException
 from service.user.service_bag import sBag
 
 
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
+
+
 class cBag:
-    def c_add_bag():
+    def c_add_bag(json, c_user):
         try:
-            json = request.get_json()
-            json["user_id"] = request.headers["user"]["id_user"]
+            json["user_id"] = c_user["id_user"]
             product = sBag.s_add_bag(json)
 
             return {
                 "detail": "Produto adicionado a sacola.",
                 "item_bag": product,
                 "status": 201,
-            }, 201
+            }
         except Exception as err:
             print("bag -> c_add_bag ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_list_bag():
+    def c_list_bag(c_user):
         try:
-            list_items = sBag.s_list_bag(request.headers["user"]["id_user"])
+            list_items = sBag.s_list_bag(c_user["id_user"])
             return {
                 "detail": "Lista da sacola.",
                 "infobag": list_items,
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("bag -> c_list_bag ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_bag_update_quantity():
+    def c_bag_update_quantity(json, c_user):
         try:
-            json = request.get_json()
-            json["user_id"] = request.headers["user"]["id_user"]
+            json["user_id"] = c_user["id_user"]
             sBag.s_update_quantity_bag(json)
+
             return {
                 "detail": "Quantidade atualizada.",
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("bag -> c_update_bag ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_bag_delete():
+    def c_bag_delete(json, c_user):
         try:
-            json = request.get_json()
-            json["user_id"] = request.headers["user"]["id_user"]
+            json["user_id"] = c_user["id_user"]
             sBag.s_delete_item_bag(json)
             return {
                 "detail": "Produto removido da sacola.",
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("bag -> c_delete_bag ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
-    def c_bag_register_order():
+    def c_bag_register_order(json, c_user):
         try:
-            json = request.get_json()
-            json["p_userid"] = request.headers["user"]["id_user"]
+            json["p_userid"] = c_user["id_user"]
             order = sBag.s_register_order(json)
             return {
                 "detail": "Produto removido da sacola.",
                 "status": 200,
                 "order": order,
-            }, 200
+            }
         except Exception as err:
             print("bag -> c_bag_register_order ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
