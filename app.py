@@ -5,11 +5,12 @@ from datetime import datetime
 from routes import routers
 from pydantic import BaseModel
 
-
 os.environ["TZ"] = "America/Sao_Paulo"
 time.time()
 
-app = FastAPI(title="API Respponse")
+app = FastAPI(
+    title="API Respponse", swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+)
 
 
 class Status(BaseModel):

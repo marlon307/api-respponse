@@ -21,23 +21,23 @@ def create_user(body: m_register):
     return cUser.c_user_register(body)
 
 
-@router.patch("/confirm_acc")
+@router.patch("/confirm_acc", response_model=Default)
 def confirm_acc(token: str = Header(default="Token")):
     dict = m_auth(token)
     return cUser.c_user_confirmacc(dict)
 
 
-@router.post("/request_new_confirm_acc")
+@router.post("/request_new_confirm_acc", response_model=Default)
 def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
     return cUser.c_request_new_confirm_acc(current_user)
 
 
-@router.post("/solicitation_reset_psw_user")
+@router.post("/solicitation_reset_psw_user", response_model=Default)
 def solicitation_reset_psw_user(data: m_email):
     return cUser.c_solicitation_user_resetpsw(data)
 
 
-@router.patch("/reset_psw_user")
+@router.patch("/reset_psw_user", response_model=Default)
 def reset_psw_user(data: m_psw, token: str = Header(default="Token")):
     dict = m_auth(token)
     dict["password"] = data.password

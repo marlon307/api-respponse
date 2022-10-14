@@ -1,7 +1,6 @@
 from pydantic import BaseModel, EmailStr, validator
 from datetime import date
 from utility.credentials import valid_email, valid_psw, valid_name
-from utility.format_doc import format_cpf
 from utility.valid_cpf import cpf_validate
 
 
