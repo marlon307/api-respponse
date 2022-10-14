@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 
 
-class m_addAddress(BaseModel):
+class AddressProps(BaseModel):
+    id: int
     name_delivery: str
     city: str
     district: str
@@ -11,5 +12,7 @@ class m_addAddress(BaseModel):
     number_home: str
 
 
-class m_delAddress(BaseModel):
-    id: int
+class ListAdd(BaseModel):
+    detail: str
+    status: int
+    address: list[AddressProps]

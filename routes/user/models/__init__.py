@@ -1,9 +1,11 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, UUID4
 from .md_user import resp_user, resp_cUser
+from .md_address import ListAdd
 
 resp_user
 resp_cUser
+ListAdd
 
 
 class Default(BaseModel):

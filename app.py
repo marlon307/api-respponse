@@ -15,7 +15,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost",
-    "http://localhost:8080",
+    "http://localhost:8000",
 ]
 
 app.add_middleware(
@@ -27,16 +27,16 @@ app.add_middleware(
 )
 
 
-class Status(BaseModel):
+class StatusModel(BaseModel):
     datail: str
     date: datetime
     status: int
 
 
-@app.get("/", response_model=Status, tags=["API STATUS"])
+@app.get("/", response_model=StatusModel, tags=["API STATUS"])
 def status():
     return {
-        "detail": "Todos os serviços estão ativos.",
+        "datail": "Todos os serviços estão ativos.",
         "date": datetime.now(),
         "status": 200,
     }

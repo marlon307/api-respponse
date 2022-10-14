@@ -1,25 +1,24 @@
-from flask import Blueprint
-from middleware.m_auth import m_auth
-from middleware.user.m_address import m_address
+from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
+from middleware.m_auth import get_current_user
+from middleware.user.m_address import m_addAddress, m_delAddress
 from controller.user.controller_address import cAddress
-
-address_blueprint = Blueprint("routes_address", __name__)
-
-
-@address_blueprint.route("/address", methods=["POST"])
-@m_auth
-@m_address
-def addaddress():
-    return cAddress.c_add_address()
+from ..user.models import User, Default, ListAdd
 
 
-@address_blueprint.route("/address", methods=["GET"])
-@m_auth
-def getaddress():
-    return cAddress.c_get_address()
+router = APIRouter(tags=["USER"])
 
 
-@address_blueprint.route("/address", methods=["DELETE"])
-@m_auth
-def deleteaddress():
-    return cAddress.c_delete_address()
+@router.post("/address", response_model=Default, status_code=201)
+def addaddress(data: m_addAddress, current_user: User = Depends(get_current_user)):
+    return cAddress.c_add_address(jsonable_encoder(data), current_user)
+
+
+@router.get("/address", response_model=ListAdd)
+def getaddress(current_user: User = Depends(get_current_user)):
+    return cAddress.c_get_address(current_user)
+
+
+@router.delete("/address", response_model=Default)
+def deleteaddress(data: m_delAddress, current_user: User = Depends(get_current_user)):
+    return cAddress.c_delete_address(jsonable_encoder(data), current_user["id_user"])

@@ -16,7 +16,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 # @3dFt53As
-@router.post("/createuser", response_model=resp_cUser)
+@router.post("/createuser", response_model=resp_cUser, status_code=201)
 def create_user(body: m_register):
     return cUser.c_user_register(body)
 

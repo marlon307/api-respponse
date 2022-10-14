@@ -1,7 +1,6 @@
+from fastapi import status, HTTPException
 from datetime import datetime, timedelta
 from service.user.service_user import sUser
-from fastapi import status, HTTPException
-import json
 
 msgErr500 = HTTPException(
     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
