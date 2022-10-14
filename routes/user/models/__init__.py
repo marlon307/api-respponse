@@ -1,8 +1,14 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, UUID4
-from .md_user import resp_user
+from .md_user import resp_user, resp_cUser
 
 resp_user
+resp_cUser
+
+
+class Default(BaseModel):
+    detail: str
+    status: int
 
 
 class User(BaseModel):

@@ -1,35 +1,27 @@
 import uvicorn
-from fastapi import FastAPI, status, HTTPException
+from fastapi import FastAPI
 import os, time
 from datetime import datetime
 from routes import routers
+from pydantic import BaseModel
 
-# from fastapi.responses import PlainTextResponse
-# from starlette.exceptions import HTTPException as StarletteHTTPException
-# from fastapi.exceptions import RequestValidationError
 
-# from middleware.m_valid_cnn_front import request_front
 os.environ["TZ"] = "America/Sao_Paulo"
 time.time()
 
 app = FastAPI(title="API Respponse")
-# CORS(app)
 
 
-# @app.exception_handler(StarletteHTTPException)
-# async def http_exception_handler(request, exc):
-#     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+class Status(BaseModel):
+    datail: str
+    date: datetime
+    status: int
 
 
-# @app.exception_handler(RequestValidationError)
-# async def validation_exception_handler(request, exc):
-#     return PlainTextResponse(str(exc), status_code=400)
-
-
-@app.get("/", status_code=status.HTTP_200_OK, tags=["API STATUS"])
-def home():
+@app.get("/", response_model=Status, tags=["API STATUS"])
+def status():
     return {
-        "message": "Todos os serviços estão ativos.",
+        "detail": "Todos os serviços estão ativos.",
         "date": datetime.now(),
         "status": 200,
     }

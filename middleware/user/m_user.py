@@ -69,7 +69,7 @@ class m_psw(BaseModel):
 class m_update_user(BaseModel):
     name: str
     cel: str
-    te: str
+    tel: str
     date: date
     doc: str
     gender: int

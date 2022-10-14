@@ -16,3 +16,9 @@ class resp_user(BaseModel):
     detail: str
     status: int
     response: props_user
+
+# Create User
+class resp_cUser(BaseModel):
+    detail: str
+    status: int
+    response: props_user

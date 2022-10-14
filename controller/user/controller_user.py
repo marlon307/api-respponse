@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from service.user.service_user import sUser
 from fastapi import status, HTTPException
+import json
 
 msgErr500 = HTTPException(
     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -116,15 +117,13 @@ class cUser:
 
     def c_update_info_user(data_json):
         try:
-            # json = request.get_json()
-            # data_json["u_id"] = request.headers["user"]["id_user"]
             data = sUser.s_update_info_user(data_json)
 
             if data:
                 return {
                     "detail": "Usuário atualizado.",
                     "status": 200,
-                }, 200
+                }
             return {"detail": "Usuario inexistente!", "status": 400}
 
         except Exception as err:

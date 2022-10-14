@@ -1,8 +1,9 @@
-from fastapi import APIRouter, status, Header, Depends
+from fastapi.encoders import jsonable_encoder
+from fastapi import APIRouter, Header, Depends
 from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import get_current_user, m_auth
 from controller.user.controller_user import cUser
-from ..user.models import resp_auth, resp_user, User
+from ..user.models import resp_auth, resp_user, User, resp_cUser, Default
 from fastapi.security import OAuth2PasswordRequestForm
 
 
@@ -15,7 +16,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 # @3dFt53As
-@router.post("/createuser", status_code=status.HTTP_201_CREATED)
+@router.post("/createuser", response_model=resp_cUser)
 def create_user(body: m_register):
     return cUser.c_user_register(body)
 
@@ -48,8 +49,9 @@ def get_info_user(current_user: User = Depends(get_current_user)):
     return cUser.c_get_info_user(current_user)
 
 
-@router.patch("/user")
+@router.patch("/user", response_model=Default)
 def update_info_user(
     data: m_update_user, current_user: User = Depends(get_current_user)
 ):
-    return cUser.c_update_info_user()
+    new_json = {**current_user, **jsonable_encoder(data)}
+    return cUser.c_update_info_user(new_json)
