@@ -18,13 +18,12 @@ class cProduct:
 
     def c_list_product():
         try:
-
             list_product = sProduct.s_list_product()
             return {
                 "list": list_product,
                 "detail": "Produto listado.",
                 "status": 200,
-            }, 200
+            }
         except Exception as err:
             print("seller -> c_list_product ->", err)
             return {"detail": "Falha nossa.", "status": 500}, 500
