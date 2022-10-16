@@ -1,4 +1,10 @@
+from fastapi import status, HTTPException
 from service.cms.service_size import sSize
+
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
 
 
 class cSize:
@@ -10,4 +16,4 @@ class cSize:
             if err.errno == 1062:
                 return {"detail": "Este tamnho já existe.", "status": 409}
             print("cms -> c_size ->", err)
-            return {"detail": "Falha nossa.", "status": 500}
+            raise msgErr500
