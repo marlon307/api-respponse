@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from controller.user.controller_bag import cBag
-from middleware.m_auth import get_current_user
+from middleware.m_auth import User, get_current_user
 from middleware.user.m_bag import add_bag, del_bag, up_bag, r_order
-from ..user.models import Default, User, rListBag
+from ..user.models import Default, rListBag
 
 
 router = APIRouter(tags=["USER"])

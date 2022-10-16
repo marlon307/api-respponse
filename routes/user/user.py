@@ -1,9 +1,9 @@
-from fastapi.encoders import jsonable_encoder
 from fastapi import APIRouter, Header, Depends
+from fastapi.encoders import jsonable_encoder
 from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
-from middleware.m_auth import get_current_user, m_auth
+from middleware.m_auth import get_current_user, m_auth, User
 from controller.user.controller_user import cUser
-from ..user.models import resp_auth, resp_user, User, resp_cUser, Default
+from ..user.models import resp_auth, resp_user, resp_cUser, Default
 from fastapi.security import OAuth2PasswordRequestForm
 
 

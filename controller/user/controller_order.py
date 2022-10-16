@@ -1,6 +1,10 @@
+from fastapi import status, HTTPException
 from service.user.service_order import sOrders
 
-msgErr500 = {"detail": "Server error.", "status": 500}, 500
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
 
 
 class cOrders:
@@ -15,7 +19,7 @@ class cOrders:
             }, 200
         except Exception as err:
             print("bag -> c_get_list_orders ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
 
     def c_get_order_id(id, c_user):
         try:
@@ -31,4 +35,4 @@ class cOrders:
             }, 200
         except Exception as err:
             print("bag -> c_get_order ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+            raise msgErr500
