@@ -1,4 +1,3 @@
-from flask import request
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models.model_product import qProduct
