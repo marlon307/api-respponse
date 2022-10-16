@@ -1,13 +1,13 @@
-from flask import Blueprint
+from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
 from middleware.cms.m_gender import m_add_gender
 from controller.cms.controller_gender import cGender
-from middleware.m_auth import m_auth_adm
+from middleware.m_auth import User, get_current_adm
+from ..cms.models import Default
 
-gender_cms_blueprint = Blueprint("route_product_gender_cms", __name__)
+router = APIRouter(tags=["CMS"])
 
 
-@gender_cms_blueprint.route("/create_gender", methods=["POST"])
-@m_auth_adm
-@m_add_gender
-def add_gender():
-    return cGender.c_gender()
+@router.post("/create_gender", response_model=Default, status_code=201)
+def add_gender(data: m_add_gender, current_user: User = Depends(get_current_adm)):
+    return cGender.c_gender(jsonable_encoder(data))

@@ -1,23 +1,25 @@
-from flask import Blueprint
+from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
 from controller.seller.c_product import cProduct
-from middleware.m_auth import m_auth_adm
+from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
+from .models import Default
 
-seller_product_blueprint = Blueprint("route_seller_product_create", __name__)
-
-
-@seller_product_blueprint.route("/product", methods=["POST"])
-@m_auth_adm
-# @m_create_product
-def create_product():
-    return cProduct.c_product()
+router = APIRouter(tags=["SELLER"])
 
 
-@seller_product_blueprint.route("/product", methods=["GET"])
+@router.post("/product", response_model=Default, status_code=201)
+def create_product(
+    data: m_create_product, current_user: User = Depends(get_current_adm)
+):
+    return cProduct.c_product(jsonable_encoder(data))
+
+
+@router.get("/product")
 def list_product():
     return cProduct.c_list_product()
 
 
-@seller_product_blueprint.route("/product/<id>", methods=["GET"])
-def get_product_id(id):
+@router.get("/product/{id}")
+def get_product_id(id: int):
     return cProduct.c_get_product_id(id)

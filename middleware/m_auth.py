@@ -32,17 +32,17 @@ def m_auth(token: str):
     return valid_auth(token)
 
 
-def m_auth_adm(f):
-    # @wraps(f)
-    # def decorated(*args, **kwargs):
-    #     try:
-    #         if valid_auth() is not None or "admin" not in request.headers["user"]:
-    #             abort(401)
-    #     except Exception as err:
-    #         print(f"[AUTH] %s" % (err))
-    #         return msgErr
-
-    #     return f(*args, **kwargs)
-
-    # return decorated
-    return 200
+def get_current_adm(token: str = Depends(oauth2_scheme)):
+    try:
+        c_adm = valid_auth(token)
+        if c_adm is None or "admin" not in c_adm:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unauthorized!",
+            )
+        return c_adm
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized!",
+        )

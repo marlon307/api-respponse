@@ -5,12 +5,6 @@ from datetime import datetime, timedelta
 from utility.encrypt import fernetDecrypt
 from fastapi import status, HTTPException
 
-
-msg = {
-    "detail": "Acesso não autorizado!",
-    "status": 401,
-}, 401
-
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Could not validate credentials",

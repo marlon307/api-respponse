@@ -1,23 +1,9 @@
-from functools import wraps
-from flask import request
-
-msgErr = {
-    "detail": "Não foi possivel inserir este status.",
-    "status": 400,
-}, 400
+from pydantic import BaseModel, validator
 
 
-def m_add_status(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
-            if "s_name" not in data:
-                return msgErr
-            return f(*args, **kwargs)
+class m_add_status(BaseModel):
+    s_name: str
 
-        except Exception as err:
-            print(f"[Middleware add status] ( %s )" % (err))
-            return msgErr
-
-    return decorated
+    @validator("s_name")
+    def valid_status(cls, v: str):
+        return v.title()

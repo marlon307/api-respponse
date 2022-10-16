@@ -2,22 +2,20 @@ from datetime import datetime
 from pydantic import BaseModel, EmailStr, UUID4
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
+from .md_bag import rListBag
+from .md_order import r_orderid, r_order
 
 resp_user
 resp_cUser
 ListAdd
+rListBag
+r_orderid
+r_order
 
 
 class Default(BaseModel):
     detail: str
     status: int
-
-
-class User(BaseModel):
-    email: str | None = None
-    full_name: str | None = None
-    seller: bool | None = None
-    admin: bool | None = None
 
 
 class inf_uAuth(BaseModel):

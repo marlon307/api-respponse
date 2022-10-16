@@ -1,4 +1,3 @@
-from flask import request
 from service.seller.service_product import sProduct
 
 
