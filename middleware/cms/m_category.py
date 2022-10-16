@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class m_add_category(BaseModel):
@@ -7,3 +7,11 @@ class m_add_category(BaseModel):
     c_title: str
     c_path: str
     c_color: str
+
+    @validator("c_title")
+    def valid_c_title(cls, v: str):
+        return v.title()
+
+    @validator("c_name")
+    def valid_c_name(cls, v: str):
+        return v.title()
