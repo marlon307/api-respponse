@@ -22,6 +22,7 @@ class execut_query:
             self.commit = self.connection.commit
             self.closeCursor = self.cursor.close
             self.closeConnection = self.connection.close
+            self.stored_results = self.cursor._stored_results
         except mysql.connector.Error as err:
             print(err)
             # self.cursor.close()
@@ -43,7 +44,9 @@ class execut_query:
 
     def insertMany(self, query: str, data: list) -> list[int]:
         self.executemany(query, data)
-        id_insert = [self.cursor.lastrowid + v for v in range(self.cursor.rowcount)]
+        # l_id last id
+        l_id = self.cursor.lastrowid or 0
+        id_insert = [l_id + v for v in range(self.cursor.rowcount)]
         self.closeCursor()
         self.commit()
         self.closeConnection()
@@ -72,7 +75,7 @@ class execut_query:
     def callProcedure(self, procedure_name: str, data):
         self.callProc(procedure_name, data)
         result = list()
-        for obj in self.cursor.stored_results():
+        for obj in self.stored_results:
             result = obj.fetchall()
         self.closeCursor()
         self.closeConnection()
