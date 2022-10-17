@@ -5,12 +5,12 @@ from .md_address import ListAdd
 from .md_bag import rListBag
 from .md_order import r_orderid, r_order
 
-resp_user
-resp_cUser
-ListAdd
-rListBag
-r_orderid
-r_order
+resp_user = resp_user
+resp_cUser = resp_cUser
+ListAdd = ListAdd
+rListBag = rListBag
+r_orderid = r_orderid
+r_order = r_order
 
 
 class Default(BaseModel):

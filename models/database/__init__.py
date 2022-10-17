@@ -10,6 +10,7 @@ config_connection = {
     "database": os.getenv("DB_NAME"),
 }
 
+
 class execut_query:
     def __init__(self):
         try:
@@ -58,7 +59,7 @@ class execut_query:
         cnn.commit()
         cnn.closeConnection()
 
-    def select(query: str, data) -> list:
+    def select(query: str, data) -> list | None:
         cnn = execut_query()
         cnn.execute(query, data)
         result = cnn.cursor.fetchall()
@@ -66,7 +67,7 @@ class execut_query:
         cnn.closeConnection()
         return result
 
-    def selectOne(query: str, data) -> dict:
+    def selectOne(query: str, data) -> dict | None:
         cnn = execut_query()
         cnn.execute(query, data)
         result = cnn.cursor.fetchone()

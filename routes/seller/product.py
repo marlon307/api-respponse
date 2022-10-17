@@ -1,6 +1,6 @@
 from fastapi import APIRouter, File, Form
 from fastapi.encoders import jsonable_encoder
-from controller.seller.c_product import cProduct
+from controller.seller import c_product
 from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
 from .models import Default
@@ -17,14 +17,14 @@ def create_product(
 ):
     print(file, data)
     return {"detail": "ok", "status": 200}
-    # return cProduct.c_product(jsonable_encoder(data))
+    # return c_product.product(jsonable_encoder(data))
 
 
 @router.get("/product")
 def list_product():
-    return cProduct.c_list_product()
+    return c_product.list_product()
 
 
 @router.get("/product/{id}")
 def get_product_id(id: int):
-    return cProduct.c_get_product_id(id)
+    return c_product.get_product_id(id)

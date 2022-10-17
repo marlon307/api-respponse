@@ -9,10 +9,11 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    email: str | None = None
-    full_name: str | None = None
-    seller: bool | None = None
-    admin: bool | None = None
+    email: str
+    id_user: str
+    name: str
+    seller: bool
+    admin: bool
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")

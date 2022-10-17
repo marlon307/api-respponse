@@ -23,7 +23,7 @@ def generate_token(data: dict, hours: int, min: int) -> str:
     )
 
 
-def valid_auth(token: str) -> None | object:
+def valid_auth(token: str) -> dict|None:
     try:
         data = jwt.decode(
             jwt=token.split(" ")[1] if " " in token else token,
