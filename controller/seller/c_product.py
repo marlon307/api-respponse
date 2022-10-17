@@ -5,13 +5,13 @@ class cProduct:
     def c_product():
         try:
             json = dict(request.form.items())
-            files = request.files
+            # files = request.files
 
             sProduct.s_create_product(json, files)
             return {
                 "detail": "Produto criado com sucesso.",
                 "status": 201,
-            }, 201
+            }
         except Exception as err:
             print("seller -> c_create_product ->", err)
             return {"detail": "Falha nossa.", "status": 500}, 500
