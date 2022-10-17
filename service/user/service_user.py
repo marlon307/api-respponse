@@ -23,13 +23,15 @@ def register_user(data):
         "password": encrypt(data.password),
         "user_token": key,
     }
-    execut_query.insert(qUser.q_register_user(), new_obj)
+    execut_query().insert(qUser.q_register_user(), new_obj)
     send_mail_confirm_user(key, new_obj)
     return True
 
 
 def login_user(data):
-    info_login = execut_query.selectOne(qUser.q_login_user(), {"email": data.username})
+    info_login = execut_query().selectOne(
+        qUser.q_login_user(), {"email": data.username}
+    )
 
     if info_login is not None:
         valid_psw = checkcrypt(data.password, info_login["password"])
@@ -64,7 +66,7 @@ def login_user(data):
 
 
 def user_confirmacc(json):
-    result = execut_query.selectOne(
+    result = execut_query().selectOne(
         qUser.q_select_user_token(), {"email": json["email"]}
     )
 
@@ -75,7 +77,7 @@ def user_confirmacc(json):
             new_object = ast.literal_eval(object_decrypt)
 
             if conpare_date(new_object["exp"], new_object["exp"]):
-                execut_query.update(
+                execut_query().update(
                     qUser.q_update_active_acc(),
                     {
                         "id_user": new_object["uuid"],
@@ -91,10 +93,10 @@ def user_confirmacc(json):
 
 
 def request_new_confirm_acc(email):
-    json = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+    json = execut_query().selectOne(qUser.q_select_emailuser(), {"email": email})
     if json is not None:
         key = Fernet.generate_key()
-        execut_query.update(
+        execut_query().update(
             qUser.q_request_update_token(), {"email": json["email"], "key": key}
         )
         send_mail_confirm_user(key, json)
@@ -103,11 +105,11 @@ def request_new_confirm_acc(email):
 
 
 def solicitation_user_resetpsw(email):
-    result = execut_query.selectOne(qUser.q_select_emailuser(), {"email": email})
+    result = execut_query().selectOne(qUser.q_select_emailuser(), {"email": email})
 
     if result is not None:
         key = Fernet.generate_key()
-        execut_query.update(
+        execut_query().update(
             qUser.q_request_update_token(), {"email": result["email"], "key": key}
         )
 
@@ -135,7 +137,7 @@ def solicitation_user_resetpsw(email):
 
 
 def user_resetpsw(data):
-    result = execut_query.selectOne(
+    result = execut_query().selectOne(
         qUser.q_select_user_token(), {"email": data["email"]}
     )
     if result is not None and result["user_token"] != data["rtx"]:
@@ -146,7 +148,7 @@ def user_resetpsw(data):
 
             if conpare_date(new_object["exp"], new_object["exp"]):
                 new_psw = encrypt(data["password"])
-                execut_query.update(
+                execut_query().update(
                     qUser.q_update_psw_user(),
                     {
                         "password": new_psw,
@@ -162,7 +164,7 @@ def user_resetpsw(data):
 
 
 def get_info_user(id_user):
-    result = execut_query.selectOne(qUser.q_select_info_user(), {"user_id": id_user})
+    result = execut_query().selectOne(qUser.q_select_info_user(), {"user_id": id_user})
     return result
 
 
@@ -171,5 +173,5 @@ def update_info_user(json):
     json["cel"] = format_cel(json["cel"])
     json["tel"] = format_cel(json["tel"])
 
-    execut_query.update(qUser.q_update_user(), json)
+    execut_query().update(qUser.q_update_user(), json)
     return True

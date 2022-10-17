@@ -27,60 +27,53 @@ class execut_query:
             # self.cursor.close()
             # self.connection.close()
 
-    def insert(query: str, data) -> None:
-        cnn = execut_query()
-        cnn.execute(query, data)
-        id_insert = cnn.cursor.lastrowid
-        cnn.closeCursor()
-        cnn.commit()
-        cnn.closeConnection()
+    def insert(self, query: str, data: dict) -> None:
+        self.execute(query, data)
+        id_insert = self.cursor.lastrowid
+        self.closeCursor()
+        self.commit()
+        self.closeConnection()
         return id_insert
 
-    def delete(query: str, data) -> None:
-        cnn = execut_query()
-        cnn.execute(query, data)
-        cnn.closeCursor()
-        cnn.commit()
-        cnn.closeConnection()
+    def delete(self, query: str, data) -> None:
+        self.execute(query, data)
+        self.closeCursor()
+        self.commit()
+        self.closeConnection()
 
-    def insertMany(query: str, data: list) -> list[int]:
-        cnn = execut_query()
-        cnn.executemany(query, data)
-        id_insert = [cnn.cursor.lastrowid + v for v in range(cnn.cursor.rowcount)]
-        cnn.closeCursor()
-        cnn.commit()
-        cnn.closeConnection()
+    def insertMany(self, query: str, data: list) -> list[int]:
+        self.executemany(query, data)
+        id_insert = [self.cursor.lastrowid + v for v in range(self.cursor.rowcount)]
+        self.closeCursor()
+        self.commit()
+        self.closeConnection()
         return id_insert
 
-    def update(query: str, data) -> None:
-        cnn = execut_query()
-        cnn.execute(query, data)
-        cnn.closeCursor()
-        cnn.commit()
-        cnn.closeConnection()
+    def update(self, query: str, data) -> None:
+        self.execute(query, data)
+        self.closeCursor()
+        self.commit()
+        self.closeConnection()
 
-    def select(query: str, data) -> list | None:
-        cnn = execut_query()
-        cnn.execute(query, data)
-        result = cnn.cursor.fetchall()
-        cnn.closeCursor()
-        cnn.closeConnection()
+    def select(self, query: str, data) -> list | None:
+        self.execute(query, data)
+        result = self.cursor.fetchall()
+        self.closeCursor()
+        self.closeConnection()
         return result
 
-    def selectOne(query: str, data) -> dict | None:
-        cnn = execut_query()
-        cnn.execute(query, data)
-        result = cnn.cursor.fetchone()
-        cnn.closeCursor()
-        cnn.closeConnection()
+    def selectOne(self, query: str, data) -> dict | None:
+        self.execute(query, data)
+        result = self.cursor.fetchone()
+        self.closeCursor()
+        self.closeConnection()
         return result
 
-    def callProcedure(procedure_name: str, data):
-        cnn = execut_query()
-        cnn.callProc(procedure_name, data)
+    def callProcedure(self, procedure_name: str, data):
+        self.callProc(procedure_name, data)
         result = list()
-        for obj in cnn.cursor.stored_results():
+        for obj in self.cursor.stored_results():
             result = obj.fetchall()
-        cnn.closeCursor()
-        cnn.closeConnection()
+        self.closeCursor()
+        self.closeConnection()
         return result

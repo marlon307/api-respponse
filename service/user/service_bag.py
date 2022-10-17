@@ -6,11 +6,11 @@ import json
 
 class sBag:
     def s_add_bag(json):
-        id_insert = execut_query.insert(qBag.q_insert_bag(), json)
+        id_insert = execut_query().insert(qBag.q_insert_bag(), json)
         return id_insert
 
     def s_list_bag(user_id):
-        list_bag = execut_query.selectOne(qBag.q_list_bag(), {"user_id": user_id})
+        list_bag = execut_query().selectOne(qBag.q_list_bag(), {"user_id": user_id})
         list_bag["list_add"] = json.loads(list_bag["list_add"] or "[]")
         list_bag["list_b"] = json.loads(list_bag["list_b"] or "[]")
 
@@ -25,11 +25,11 @@ class sBag:
         return list_bag
 
     def s_update_quantity_bag(json):
-        execut_query.update(qBag.q_bag_update_quantity(), json)
+        execut_query().update(qBag.q_bag_update_quantity(), json)
         return True
 
     def s_delete_item_bag(json):
-        execut_query.delete(qBag.q_bag_delete_item(), json)
+        execut_query().delete(qBag.q_bag_delete_item(), json)
         return True
 
     def s_register_order(data_json):
@@ -39,5 +39,5 @@ class sBag:
             data_json["carrie"],
             16.65,
         )
-        order = execut_query.callProcedure("register_order", json_for_tuple)
+        order = execut_query().callProcedure("register_order", json_for_tuple)
         return order[0]
