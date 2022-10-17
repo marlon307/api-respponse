@@ -2,7 +2,6 @@ fastapi[all]
 mysql-connector-python
 bcrypt
 uvicorn
-gunicorn
 pyjwt
 requests
 cryptography
