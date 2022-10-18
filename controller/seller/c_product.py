@@ -1,42 +1,42 @@
-from service.seller.service_product import sProduct
+from service.seller import service_product
 
 
-class cProduct:
-    def c_product():
-        try:
-            json = dict(request.form.items())
-            # files = request.files
+def product(json: dict):
+    try:
+        # json = dict(request.form.items())
+        # files = request.files
 
-            sProduct.s_create_product(json, files)
-            return {
-                "detail": "Produto criado com sucesso.",
-                "status": 201,
-            }
-        except Exception as err:
-            print("seller -> c_create_product ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+        service_product.create_product(json, files)
+        return {
+            "detail": "Produto criado com sucesso.",
+            "status": 201,
+        }
+    except Exception as err:
+        print("seller -> create_product ->", err)
+        return {"detail": "Falha nossa.", "status": 500}
 
-    def c_list_product():
-        try:
-            list_product = sProduct.s_list_product()
-            return {
-                "list": list_product,
-                "detail": "Produto listado.",
-                "status": 200,
-            }
-        except Exception as err:
-            print("seller -> c_list_product ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
 
-    def c_get_product_id(id_product):
-        try:
+def list_product():
+    try:
+        list_product = service_product.list_product()
+        return {
+            "list": list_product,
+            "detail": "Produto listado.",
+            "status": 200,
+        }
+    except Exception as err:
+        print("seller -> list_product ->", err)
+        return {"detail": "Falha nossa.", "status": 500}
 
-            product_id = sProduct.s_get_product_id(id_product)
-            return {
-                "product": product_id,
-                "detail": "Produto listado.",
-                "status": 200,
-            }, 200
-        except Exception as err:
-            print("seller -> c_get_product_id ->", err)
-            return {"detail": "Falha nossa.", "status": 500}, 500
+
+def get_product_id(id_product):
+    try:
+        product_id = service_product.get_product_id(id_product)
+        return {
+            "product": product_id,
+            "detail": "Produto listado.",
+            "status": 200,
+        }, 200
+    except Exception as err:
+        print("seller -> get_product_id ->", err)
+        return {"detail": "Falha nossa.", "status": 500}

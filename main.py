@@ -45,4 +45,4 @@ def status():
 routers(app)
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="localhost", env_file=".env", reload=True)
+    uvicorn.run("main:app", host="localhost", env_file=".env", reload=True)
