@@ -8,42 +8,33 @@ import json
 
 def create_product(data, files_list):
     uploaded_image = upload_image_imgur(files_list)
-
-    data["id_user"] = request.headers["user"]["id_user"]
-    get_options = json.loads(data["options"])
-    del data["options"]
+    list_options = data["list_qtd"]
+    del data["list_qtd"]
+    data["id_user"] = "a5faf350-5a43-4d15-aa6b-51ba536187b4"
 
     product_id = execut_query(model_product.q_insert_product).insert(data)
 
     def map_function(object_opt):
-        return {
-            "products_id": product_id,
-            "price": object_opt["price"],
-            "discount": object_opt["discount"],
-            "sku": object_opt["sku"],
-            "colors_id": object_opt["id"],
-        }
+        object_opt["products_id"] = product_id
+        return object_opt
 
-    format_option = map(map_function, get_options)
+    format_option = map(map_function, list_options)
+
     list_options_ids = execut_query(model_product.q_insert_product_option).insertMany(
-        format_option
+        list(format_option)
     )
 
     def map_has_sizes(id_option, option):
-        list_s = list()
-        for obj_opt in option["sizes"]:
-            list_s.append(
-                {
-                    "options_product_id": id_option,
-                    "sizes_id": obj_opt["id"],
-                    "quantity": obj_opt["quantity"],
-                }
-            )
-        return list_s
+        new_opt = dict()
+        new_opt["options_product_id"] = id_option
+        new_opt["quantity"] = option["quantity"]
+        new_opt["sizes_id"] = option["sizes_id"]
+        return new_opt
 
-    format_has_size = map(map_has_sizes, list_options_ids, get_options)
+    format_has_size = map(map_has_sizes, list_options_ids, list_options)
+
     execut_query(model_product.q_insert_option_has_sizes).insertMany(
-        sum(list(format_has_size), [])
+        list(format_has_size)
     )
 
     def map_img_function(l_img, option_id):
@@ -55,7 +46,7 @@ def create_product(data, files_list):
         }
 
     format_list_img = map(map_img_function, uploaded_image, list_options_ids)
-    execut_query(model_product.q_insert_image).insertMany(format_list_img)
+    execut_query(model_product.q_insert_image).insertMany(list(format_list_img))
 
     return product_id
 

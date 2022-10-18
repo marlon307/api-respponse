@@ -1,4 +1,3 @@
-from flask import Blueprint
 from controller.seller.c_list_options import cOptions
 from middleware.m_auth import m_auth_adm
 

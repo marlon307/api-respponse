@@ -1,7 +1,7 @@
 from service.seller import service_product
 
 
-def product(json: dict):
+def product(json: dict, files):
     try:
         # json = dict(request.form.items())
         # files = request.files
@@ -36,7 +36,7 @@ def get_product_id(id_product):
             "product": product_id,
             "detail": "Produto listado.",
             "status": 200,
-        }, 200
+        }
     except Exception as err:
         print("seller -> get_product_id ->", err)
         return {"detail": "Falha nossa.", "status": 500}

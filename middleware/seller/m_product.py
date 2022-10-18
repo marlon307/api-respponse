@@ -1,4 +1,3 @@
-from fastapi import File
 from pydantic import BaseModel, validator
 
 
@@ -8,7 +7,6 @@ class obj_size(BaseModel):
     quantity: int
     price: float
     discount: int
-    url_image: list[bytes] = File()
     sku: str
 
 
