@@ -2,7 +2,6 @@ from models.database import execut_query
 from models.model_color import qColor
 
 
-class sColor:
-    def s_create_color(json):
-        execut_query().insert(qColor.q_insert_color(), json)
-        return True
+def s_create_color(json):
+    execut_query().insert(qColor.q_insert_color(), json)
+    return True

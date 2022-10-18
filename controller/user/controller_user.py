@@ -35,7 +35,7 @@ def user_confirmacc(data):
 
 def request_new_confirm_acc(data):
     try:
-        reult = service_user.request_new_confirm_acc(data["email"])
+        reult = service_user.request_new_confirm_acc(data.email)
         if reult:
             return {
                 "detail": "Novo email enviado para confirmar conta.",
@@ -91,7 +91,7 @@ def user_resetpsw(data):
             return {"detail": "Senha alterada com sucesso.", "status": 200}
         status_err = HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Senha já alterada com este token.",
+            detail="Senha já alterada com este token ou inválido.",
         )
     except Exception as err:
         print("user -> c_user_resetpsw ->", err)
