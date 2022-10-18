@@ -21,14 +21,14 @@ def register_user(data):
         "password": encrypt(data.password),
         "user_token": key,
     }
-    execut_query().insert(model_user.q_register_user, new_obj)
+    execut_query(model_user.q_register_user).insert(new_obj)
     send_mail_confirm_user(key, new_obj)
     return True
 
 
 def login_user(data):
-    info_login = execut_query().selectOne(
-        model_user.q_login_user, {"email": data.username}
+    info_login = execut_query(model_user.q_login_user).selectOne(
+        {"email": data.username}
     )
 
     if info_login is not None:
@@ -64,8 +64,8 @@ def login_user(data):
 
 
 def user_confirmacc(json: dict):
-    result = execut_query().selectOne(
-        model_user.q_select_user_token, {"email": json["email"]}
+    result = execut_query(model_user.q_select_user_token).selectOne(
+        {"email": json["email"]}
     )
 
     if result is not None and result["user_token"] != json["rtx"]:
@@ -73,14 +73,13 @@ def user_confirmacc(json: dict):
 
         if object_decrypt is not False:
             if conpare_date(object_decrypt["exp"], object_decrypt["exp"]):
-                execut_query().update(
-                    model_user.q_update_active_acc,
+                execut_query(model_user.q_update_active_acc).update(
                     {
                         "id_user": object_decrypt["uuid"],
                         "email": json["email"],
                         "date": datetime.now(),
                         "user_token": json["rtx"],
-                    },
+                    }
                 )
                 return True
             return False
@@ -89,11 +88,11 @@ def user_confirmacc(json: dict):
 
 
 def request_new_confirm_acc(email):
-    json = execut_query().selectOne(model_user.q_select_emailuser, {"email": email})
+    json = execut_query(model_user.q_select_emailuser).selectOne({"email": email})
     if json is not None:
         key = Fernet.generate_key()
-        execut_query().update(
-            model_user.q_request_update_token, {"email": json["email"], "key": key}
+        execut_query(model_user.q_request_update_token).update(
+            {"email": json["email"], "key": key}
         )
         send_mail_confirm_user(key, json)
         return True
@@ -101,11 +100,11 @@ def request_new_confirm_acc(email):
 
 
 def solicitation_user_resetpsw(email):
-    result = execut_query().selectOne(model_user.q_select_emailuser, {"email": email})
+    result = execut_query(model_user.q_select_emailuser).selectOne({"email": email})
     if result is not None:
         key = Fernet.generate_key()
-        execut_query().update(
-            model_user.q_request_update_token, {"email": result["email"], "key": key}
+        execut_query(model_user.q_request_update_token).update(
+            {"email": result["email"], "key": key}
         )
 
         info_for_crypt = {
@@ -132,8 +131,8 @@ def solicitation_user_resetpsw(email):
 
 
 def user_resetpsw(data):
-    result = execut_query().selectOne(
-        model_user.q_select_user_token, {"email": data["email"]}
+    result = execut_query(model_user.q_select_user_token).selectOne(
+        {"email": data["email"]}
     )
     if result is not None and result["user_token"] != data["rtx"]:
         object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
@@ -141,8 +140,7 @@ def user_resetpsw(data):
         if object_decrypt is not False:
             if conpare_date(object_decrypt["exp"], object_decrypt["exp"]):
                 new_psw = encrypt(data["password"])
-                execut_query().update(
-                    model_user.q_update_psw_user,
+                execut_query(model_user.q_update_psw_user).update(
                     {
                         "password": new_psw,
                         "user_token": data["rtx"],
@@ -157,9 +155,7 @@ def user_resetpsw(data):
 
 
 def get_info_user(id_user):
-    result = execut_query().selectOne(
-        model_user.q_select_info_user, {"user_id": id_user}
-    )
+    result = execut_query(model_user.q_select_info_user).selectOne({"user_id": id_user})
     return result
 
 
@@ -168,5 +164,5 @@ def update_info_user(json):
     json["cel"] = format_cel(json["cel"])
     json["tel"] = format_cel(json["tel"])
 
-    execut_query().update(model_user.q_update_user, json)
+    execut_query(model_user.q_update_user).update(json)
     return True

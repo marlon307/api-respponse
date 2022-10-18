@@ -1,6 +1,6 @@
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
-from models.model_product import qProduct
+from models import model_product
 from utility.calca_discount import calc_discount
 from utility.unique import unique
 import json
@@ -13,7 +13,7 @@ def create_product(data, files_list):
     get_options = json.loads(data["options"])
     del data["options"]
 
-    product_id = execut_query().insert(qProduct.q_insert_product(), data)
+    product_id = execut_query().insert(model_product.q_insert_product, data)
 
     def map_function(object_opt):
         return {
@@ -25,8 +25,8 @@ def create_product(data, files_list):
         }
 
     format_option = map(map_function, get_options)
-    list_options_ids = execut_query().insertMany(
-        qProduct.q_insert_product_option(), format_option
+    list_options_ids = execut_query(model_product.q_insert_product_option).insertMany(
+        format_option
     )
 
     def map_has_sizes(id_option, option):
@@ -42,8 +42,8 @@ def create_product(data, files_list):
         return list_s
 
     format_has_size = map(map_has_sizes, list_options_ids, get_options)
-    execut_query().insertMany(
-        qProduct.q_insert_option_has_sizes(), sum(list(format_has_size), [])
+    execut_query(model_product.q_insert_option_has_sizes).insertMany(
+        sum(list(format_has_size), [])
     )
 
     def map_img_function(l_img, option_id):
@@ -55,13 +55,13 @@ def create_product(data, files_list):
         }
 
     format_list_img = map(map_img_function, uploaded_image, list_options_ids)
-    execut_query().insertMany(qProduct.q_insert_image(), format_list_img)
+    execut_query(model_product.q_insert_image).insertMany(format_list_img)
 
     return product_id
 
 
 def list_product():
-    list_product = execut_query().select(qProduct.q_list_prod(), {})
+    list_product = execut_query(model_product.q_list_prod).select({})
     new_list = list()
 
     for list_obj in list_product:
@@ -83,7 +83,7 @@ def get_product_id(id):
     # *******************************************************************
     # ***************Favor montar uma query mais decente*****************
     # *******************************************************************
-    list_product = execut_query().selectOne(qProduct.q_get_product_id(), {"id": id})
+    list_product = execut_query(model_product.q_get_product_id).selectOne({"id": id})
     list_product["list_options"] = unique(json.loads(list_product["list_options"]))
     list_product["list_images"] = unique(json.loads(list_product["list_images"]))
     list_product["list_sizes"] = unique(json.loads(list_product["list_sizes"]))

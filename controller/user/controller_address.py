@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException
-from service.user.service_address import sAddress
+from service.user import service_address
 
 msgErr500 = HTTPException(
     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -10,7 +10,7 @@ msgErr500 = HTTPException(
 def add_address(json, user):
     try:
         json["user_id"] = user.id_user
-        id_addres = sAddress.s_add_address(json)
+        id_addres = service_address.s_add_address(json)
 
         return {
             "detail": "Endereço adicionado.",
@@ -24,7 +24,7 @@ def add_address(json, user):
 
 def get_address(data):
     try:
-        list_address = sAddress.s_get_address(data.id_user)
+        list_address = service_address.s_get_address(data.id_user)
         return {
             "detail": "Lista de endereço.",
             "address": list_address,
@@ -37,7 +37,7 @@ def get_address(data):
 
 def delete_address(json, id_user):
     try:
-        sAddress.s_delete_address(id_user, json["id"])
+        service_address.s_delete_address(id_user, json["id"])
         return {
             "detail": "Endereço excluído.",
             "status": 200,

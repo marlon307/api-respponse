@@ -1,8 +1,7 @@
 from models.database import execut_query
-from models.mode_gender import qGender
-
+from models import mode_gender
 
 
 def s_create_gender(json):
-    execut_query().insert(qGender.q_insert_gender(), json)
+    execut_query(mode_gender.q_insert_gender).insert(json)
     return True
