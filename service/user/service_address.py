@@ -22,6 +22,6 @@ def s_delete_address(user_id, id_address):
             "delete_date": datetime.now(),
             "user_id": user_id,
             "address_id": id_address,
-        },
+        }
     )
     return True

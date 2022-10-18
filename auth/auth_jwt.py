@@ -32,7 +32,8 @@ def valid_auth(token: str):
 
         if "mix" in data:
             admin_lvl = fernetDecrypt(os.getenv("ADMIN_KEY", ""), data["mix"])
-            data["admin"] = admin_lvl["admin"]
+            if admin_lvl is not False:
+                data["admin"] = admin_lvl["admin"]
             del data["mix"]
 
         return data

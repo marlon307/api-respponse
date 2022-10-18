@@ -7,7 +7,7 @@ msgErr500 = HTTPException(
 )
 
 
-def c_get_orders(c_user):
+def get_orders(c_user):
     try:
         json = {"user_id": c_user.id_user}
         orders = service_order.s_get_orders(json)
@@ -21,7 +21,7 @@ def c_get_orders(c_user):
         raise msgErr500
 
 
-def c_get_order_id(id, c_user):
+def get_order_id(id, c_user):
     try:
         json = {
             "user_id": c_user["id_user"],

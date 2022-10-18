@@ -13,7 +13,6 @@ config_connection = {
 
 class execut_query:
     def __init__(self, query: str):
-        print(query)
         try:
             self.connection = connection.MySQLConnection(**config_connection)
             self.cursor = self.connection.cursor(dictionary=True, buffered=True)
@@ -31,13 +30,13 @@ class execut_query:
             self.connection.close()
             raise errno
 
-    def insert(self, data: dict) -> None:
+    def insert(self, data: dict) -> int:
         self.execute(self.query, data)
         id_insert = self.cursor.lastrowid
         self.closeCursor()
         self.commit()
         self.closeConnection()
-        return id_insert
+        return id_insert or 0
 
     def delete(self, condition: dict) -> None:
         self.execute(self.query, condition)
@@ -61,19 +60,19 @@ class execut_query:
         self.commit()
         self.closeConnection()
 
-    def select(self, condition: dict = {}) -> list | None:
+    def select(self, condition: dict = {}) -> list:
         self.execute(self.query, condition)
         result = self.cursor.fetchall()
         self.closeCursor()
         self.closeConnection()
-        return result
+        return result or list()
 
-    def selectOne(self, condition: dict = {}) -> dict | None:
+    def selectOne(self, condition: dict = {}) -> dict:
         self.execute(self.query, condition)
         result = self.cursor.fetchone()
         self.closeCursor()
         self.closeConnection()
-        return result
+        return result or dict()
 
     def callProcedure(self, data):
         self.callProc(self.query, data)

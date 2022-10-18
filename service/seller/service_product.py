@@ -13,7 +13,7 @@ def create_product(data, files_list):
     get_options = json.loads(data["options"])
     del data["options"]
 
-    product_id = execut_query().insert(model_product.q_insert_product, data)
+    product_id = execut_query(model_product.q_insert_product).insert(data)
 
     def map_function(object_opt):
         return {

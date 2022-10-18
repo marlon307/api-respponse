@@ -8,9 +8,9 @@ router = APIRouter(tags=["USER"])
 
 @router.get("/order", response_model=r_order)
 def get_orders(current_user: User = Depends(get_current_user)):
-    return controller_order.c_get_orders(current_user)
+    return controller_order.get_orders(current_user)
 
 
 @router.get("/order/{id}", response_model=r_orderid)
 def get_order_id(id: int, current_user: User = Depends(get_current_user)):
-    return controller_order.c_get_order_id(id, current_user)
+    return controller_order.get_order_id(id, current_user)
