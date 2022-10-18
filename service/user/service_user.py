@@ -1,4 +1,3 @@
-import ast
 import os
 from auth.auth_jwt import generate_token
 from models.database import execut_query
@@ -15,7 +14,6 @@ from utility.u_user import send_mail_confirm_user
 
 def register_user(data):
     key = Fernet.generate_key()
-    print(data.password)
     new_obj = {
         "id_user": generate_id(),
         "name": data.name,
@@ -65,7 +63,7 @@ def login_user(data):
     return False
 
 
-def user_confirmacc(json):
+def user_confirmacc(json: dict):
     result = execut_query().selectOne(
         qUser.q_select_user_token(), {"email": json["email"]}
     )
@@ -74,13 +72,11 @@ def user_confirmacc(json):
         object_decrypt = fernetDecrypt(result["user_token"], json["rtx"])
 
         if object_decrypt is not False:
-            new_object = ast.literal_eval(object_decrypt)
-
-            if conpare_date(new_object["exp"], new_object["exp"]):
+            if conpare_date(object_decrypt["exp"], object_decrypt["exp"]):
                 execut_query().update(
                     qUser.q_update_active_acc(),
                     {
-                        "id_user": new_object["uuid"],
+                        "id_user": object_decrypt["uuid"],
                         "email": json["email"],
                         "date": datetime.now(),
                         "user_token": json["rtx"],
@@ -139,20 +135,18 @@ def user_resetpsw(data):
     result = execut_query().selectOne(
         qUser.q_select_user_token(), {"email": data["email"]}
     )
-    print(data)
     if result is not None and result["user_token"] != data["rtx"]:
         object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
-        if object_decrypt is not False:
-            new_object = ast.literal_eval(object_decrypt or "{'exp': 0}")
 
-            if conpare_date(new_object["exp"], new_object["exp"]):
+        if object_decrypt is not False:
+            if conpare_date(object_decrypt["exp"], object_decrypt["exp"]):
                 new_psw = encrypt(data["password"])
                 execut_query().update(
                     qUser.q_update_psw_user(),
                     {
                         "password": new_psw,
                         "user_token": data["rtx"],
-                        "id_user": new_object["uuid"],
+                        "id_user": object_decrypt["uuid"],
                         "email": data["email"],
                     },
                 )

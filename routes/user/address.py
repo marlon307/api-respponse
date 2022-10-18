@@ -22,5 +22,5 @@ def getaddress(current_user: User = Depends(get_current_user)):
 @router.delete("/address", response_model=Default)
 def deleteaddress(data: m_delAddress, current_user: User = Depends(get_current_user)):
     return controller_address.delete_address(
-        jsonable_encoder(data), current_user["id_user"]
+        jsonable_encoder(data), current_user.id_user
     )

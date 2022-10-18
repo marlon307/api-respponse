@@ -12,8 +12,8 @@ class User(BaseModel):
     email: str
     id_user: str
     name: str
-    seller: bool
-    admin: bool
+    seller: bool = False
+    admin: bool = False
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
@@ -21,8 +21,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
-        return valid_auth(token)
-    except:
+        return User(**valid_auth(token))
+    except Exception as err:
+        print("get_current_user -> ", err)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized!",
@@ -41,8 +42,9 @@ def get_current_adm(token: str = Depends(oauth2_scheme)):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Unauthorized!",
             )
-        return c_adm
-    except:
+        return User(**c_adm)
+    except Exception as err:
+        print("get_current_user -> ", err)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Unauthorized!",

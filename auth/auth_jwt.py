@@ -1,4 +1,3 @@
-import ast
 import os
 import jwt
 from datetime import datetime, timedelta
@@ -18,23 +17,22 @@ def generate_token(data: dict, hours: int, min: int) -> str:
             **data,
             "exp": datetime.now() + timedelta(hours=hours + 3, minutes=min),
         },
-        key=os.getenv("JWT_KEY"),
+        key=os.getenv("JWT_KEY", ""),
         algorithm=os.getenv("ALGORITHM"),
     )
 
 
-def valid_auth(token: str) -> dict|None:
+def valid_auth(token: str):
     try:
         data = jwt.decode(
             jwt=token.split(" ")[1] if " " in token else token,
-            key=os.getenv("JWT_KEY"),
-            algorithms=[os.getenv("ALGORITHM")],
+            key=os.getenv("JWT_KEY", ""),
+            algorithms=[os.getenv("ALGORITHM", "")],
         )
 
         if "mix" in data:
-            admin_lvl = fernetDecrypt(os.getenv("ADMIN_KEY"), data["mix"])
-            new_object = ast.literal_eval(admin_lvl)
-            data["admin"] = new_object["admin"]
+            admin_lvl = fernetDecrypt(os.getenv("ADMIN_KEY", ""), data["mix"])
+            data["admin"] = admin_lvl["admin"]
             del data["mix"]
 
         return data

@@ -9,7 +9,7 @@ msgErr500 = HTTPException(
 
 def add_address(json, user):
     try:
-        json["user_id"] = user["id_user"]
+        json["user_id"] = user.id_user
         id_addres = sAddress.s_add_address(json)
 
         return {
@@ -24,7 +24,7 @@ def add_address(json, user):
 
 def get_address(data):
     try:
-        list_address = sAddress.s_get_address(data["id_user"])
+        list_address = sAddress.s_get_address(data.id_user)
         return {
             "detail": "Lista de endereço.",
             "address": list_address,

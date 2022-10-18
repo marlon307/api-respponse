@@ -53,5 +53,5 @@ def get_info_user(current_user: User = Depends(get_current_user)):
 def update_info_user(
     data: m_update_user, current_user: User = Depends(get_current_user)
 ):
-    new_json = {**current_user, **jsonable_encoder(data)}
+    new_json = {**jsonable_encoder(current_user), **jsonable_encoder(data)}
     return controller_user.update_info_user(new_json)

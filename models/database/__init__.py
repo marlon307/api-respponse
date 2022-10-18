@@ -23,10 +23,11 @@ class execut_query:
             self.closeCursor = self.cursor.close
             self.closeConnection = self.connection.close
             self.stored_results = self.cursor._stored_results
-        except mysql.connector.Error as err:
-            print(err)
-            # self.cursor.close()
-            # self.connection.close()
+        except mysql.connector.Error as errno:
+            print("MySQL connector: -> ", errno)
+            self.cursor.close()
+            self.connection.close()
+            raise errno
 
     def insert(self, query: str, data: dict) -> None:
         self.execute(query, data)

@@ -1,6 +1,7 @@
 # https://libraries.io/pypi/bcrypt
 import base64
 import hashlib
+import ast
 import bcrypt
 import os
 from cryptography.fernet import Fernet
@@ -33,11 +34,11 @@ def fernetEncrypt(key: bytes, info_for_crypt) -> dict:
     }
 
 
-def fernetDecrypt(key: str, info_for_decrypt) -> str | bool:
+def fernetDecrypt(key: str, info_for_decrypt: dict):
     try:
         cyper = Fernet(str(key).encode("utf-8"))
         decrypt = cyper.decrypt(str(info_for_decrypt).encode("utf-8"))
-        object_decrypt = decrypt.decode("utf-8")
-        return object_decrypt
-    except:
+        return ast.literal_eval(decrypt.decode("utf-8"))
+    except Exception as err:
+        print("fernetEncrypt", err)
         return False

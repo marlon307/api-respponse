@@ -10,14 +10,14 @@ msgErr500 = HTTPException(
 
 def user_register(body):
     try:
-        service_user.register_user(body)
-        return {"detail": "Confime sua conta.", "status": 201}
+        result = service_user.register_user(body)
+        if result is True:
+            return {"detail": "Confime sua conta.", "status": 201}
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Este usuário já possui cadastro.",
+        )
     except Exception as err:
-        if err.errno == 1062:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Este usuário já possui cadastro.",
-            )
         print("user -> c_user_register ->", err)
         raise msgErr500
 
@@ -102,7 +102,7 @@ def user_resetpsw(data):
 def get_info_user(data):
     status_err = None
     try:
-        data = service_user.get_info_user(data["id_user"])
+        data = service_user.get_info_user(data.id_user)
         if data:
             return {
                 "detail": "User info.",
