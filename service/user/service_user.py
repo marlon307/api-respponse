@@ -43,7 +43,7 @@ def login_user(data):
                     "admin": info_login["admin"],
                 }
                 fernet_token = fernetEncrypt(
-                    os.getenv("ADMIN_KEY").encode("utf8"), info_for_crypt
+                    os.getenv("ADMIN_KEY", "").encode("utf8"), info_for_crypt
                 )
                 info_login["mix"] = fernet_token["crypt_hash"]
 
@@ -106,7 +106,6 @@ def request_new_confirm_acc(email):
 
 def solicitation_user_resetpsw(email):
     result = execut_query().selectOne(qUser.q_select_emailuser(), {"email": email})
-
     if result is not None:
         key = Fernet.generate_key()
         execut_query().update(
@@ -140,9 +139,9 @@ def user_resetpsw(data):
     result = execut_query().selectOne(
         qUser.q_select_user_token(), {"email": data["email"]}
     )
+    print(data)
     if result is not None and result["user_token"] != data["rtx"]:
         object_decrypt = fernetDecrypt(result["user_token"], data["rtx"])
-
         if object_decrypt is not False:
             new_object = ast.literal_eval(object_decrypt or "{'exp': 0}")
 
