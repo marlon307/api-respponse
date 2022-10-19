@@ -5,6 +5,6 @@ uvicorn
 pyjwt
 requests
 cryptography
+pydantic
 # 
-pydantic[email]
 python-multipart

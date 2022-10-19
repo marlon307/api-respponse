@@ -15,4 +15,5 @@ build/
 
 env/
 .env*
+*.env
 .vercel
