@@ -1,6 +1,6 @@
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
-from models import model_product
+from models import model_product, model_seller
 from utility.calca_discount import calc_discount
 from utility.unique import unique
 import json
@@ -111,3 +111,12 @@ def get_product_id(id):
     del list_product["list_sizes"]
     del list_product["list_images"]
     return list_product
+
+
+def list_option():
+    object_lists = execut_query(model_seller.q_list_options).selectOne({"info": None})
+    object_lists["list_colors"] = json.loads(object_lists["list_colors"] or "[]")
+    object_lists["list_ctg"] = json.loads(object_lists["list_ctg"] or "[]")
+    object_lists["list_gender"] = json.loads(object_lists["list_gender"] or "[]")
+    object_lists["list_sizes"] = json.loads(object_lists["list_sizes"] or "[]")
+    return object_lists

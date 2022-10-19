@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from controller.seller import c_product
 from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
-from .models import Default, ProductId, ListProduct
+from .models import Default, ProductId, ListProduct, OptionProduct
 
 router = APIRouter(tags=["SELLER"])
 
@@ -62,3 +62,8 @@ def list_product():
 @router.get("/product/{id}", response_model=ProductId)
 def get_product_id(id: int):
     return c_product.get_product_id(id)
+
+
+@router.get("/list_options", response_model=OptionProduct)
+def list_options(current_user: User = Depends(get_current_adm)):
+    return c_product.options()

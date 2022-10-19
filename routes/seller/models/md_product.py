@@ -55,3 +55,42 @@ class ListProduct(BaseModel):
     list: list[MinInfoProductList]
     detail: str
     status: int
+
+
+# List Options
+class Color(BaseModel):
+    id: int
+    color: str
+    color_name: str
+
+
+class Category(BaseModel):
+    id: int
+    color: str
+    sub_title: str
+    url_image: str
+    category_name: str
+
+
+class Gender(BaseModel):
+    id: int
+    gender: str
+    gender_name: str
+
+
+class Size(BaseModel):
+    id: int
+    size: str
+
+
+class OptionList(BaseModel):
+    list_colors: list[Color]
+    list_ctg: list[Category]
+    list_gender: list[Gender]
+    list_sizes: list[Size]
+
+
+class OptionProduct(BaseModel):
+    option_list: OptionList
+    detail: str
+    status: int
