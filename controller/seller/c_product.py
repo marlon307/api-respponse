@@ -3,9 +3,6 @@ from service.seller import service_product
 
 def product(json: dict, files):
     try:
-        # json = dict(request.form.items())
-        # files = request.files
-
         service_product.create_product(json, files)
         return {
             "detail": "Produto criado com sucesso.",

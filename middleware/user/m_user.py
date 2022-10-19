@@ -13,7 +13,7 @@ class m_register(BaseModel):
     def valid_email(cls, v: str):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return v.title
+        return v.title()
 
     @validator("password")
     def valid_psw(cls, v: str):

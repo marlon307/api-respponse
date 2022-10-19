@@ -10,7 +10,6 @@ def create_product(data, files_list):
     uploaded_image = upload_image_imgur(files_list)
     list_options = data["list_qtd"]
     del data["list_qtd"]
-    data["id_user"] = "a5faf350-5a43-4d15-aa6b-51ba536187b4"
 
     product_id = execut_query(model_product.q_insert_product).insert(data)
 

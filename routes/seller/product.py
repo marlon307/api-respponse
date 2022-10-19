@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, Form, status, HTTPException
+from fastapi import APIRouter, File, Form, status, HTTPException, Depends
 import json
 from pydantic import ValidationError
 from controller.seller import c_product
@@ -11,7 +11,6 @@ router = APIRouter(tags=["SELLER"])
 format_str = {
     "categorys_id": 0,
     "gender_id": 0,
-    "user_id": 0,
     "title": "Tilte",
     "subTitle": "subTitle",
     "warranty": 0,
@@ -41,12 +40,14 @@ def create_product(
     data: str = Form(
         default=json.dumps(format_str),
         description="Copie as informaçoes do input e altere os valores mantendo o formato (JSON)",
-    )
-    # current_user: User = Depends(get_current_adm)
+    ),
+    current_user: User = Depends(get_current_adm),
 ):
     try:
-        n_data = m_create_product(**json.loads(data))
-        # return {"detail": "ok", "status": 200}
+        # validar informações do
+        serialize_json = json.loads(data)
+        serialize_json["id_user"] = current_user.id_user
+        n_data = m_create_product(**serialize_json)
         return c_product.product(n_data.dict(), file)
     except ValidationError as e:
         print("Route -> product: ", e.raw_errors)
