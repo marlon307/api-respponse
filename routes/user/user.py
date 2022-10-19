@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Header, Depends
-from fastapi.encoders import jsonable_encoder
 from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
 from middleware.m_auth import get_current_user, m_auth, User
 from controller.user import controller_user
@@ -53,5 +52,5 @@ def get_info_user(current_user: User = Depends(get_current_user)):
 def update_info_user(
     data: m_update_user, current_user: User = Depends(get_current_user)
 ):
-    new_json = {**jsonable_encoder(current_user), **jsonable_encoder(data)}
+    new_json = {**current_user.dict(), **data.dict()}
     return controller_user.update_info_user(new_json)

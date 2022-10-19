@@ -7,9 +7,10 @@ msgErr500 = HTTPException(
 )
 
 
-def add_address(json, user):
+def add_address(json, c_user):
+    print(type(json))
     try:
-        json["user_id"] = user.id_user
+        json["user_id"] = c_user.id_user
         id_addres = service_address.s_add_address(json)
 
         return {

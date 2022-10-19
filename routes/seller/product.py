@@ -1,6 +1,5 @@
 from fastapi import APIRouter, File, Form, status, HTTPException
 import json
-from fastapi.encoders import jsonable_encoder
 from pydantic import ValidationError
 from controller.seller import c_product
 from middleware.m_auth import User, get_current_adm
@@ -48,7 +47,7 @@ def create_product(
     try:
         n_data = m_create_product(**json.loads(data))
         # return {"detail": "ok", "status": 200}
-        return c_product.product(jsonable_encoder(n_data), file)
+        return c_product.product(n_data.dict(), file)
     except ValidationError as e:
         print("Route -> product: ", e.raw_errors)
         raise msgErr415
