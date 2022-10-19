@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from controller.seller import c_product
 from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
-from .models import Default, ProductId
+from .models import Default, ProductId, ListProduct
 
 router = APIRouter(tags=["SELLER"])
 
@@ -54,12 +54,11 @@ def create_product(
         raise msgErr415
 
 
-@router.get("/product")
+@router.get("/product", response_model=ListProduct)
 def list_product():
     return c_product.list_product()
 
 
-# @router.get("/product/{id}", response_model=ProductId)
-@router.get("/product/{id}")
+@router.get("/product/{id}", response_model=ProductId)
 def get_product_id(id: int):
     return c_product.get_product_id(id)
