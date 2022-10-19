@@ -6,7 +6,7 @@ import os
 
 def send_mail(
     title: str,
-    destinatary: str | list[str],
+    destinatary: str or list[str],
     template_name: str,
     params: object,
 ) -> None:

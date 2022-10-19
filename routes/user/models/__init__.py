@@ -1,5 +1,9 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, UUID4
+from wsgiref.validate import validator
+from pydantic import BaseModel, UUID4
+from middleware.user.m_user import ModelEmail
+
+from utility.credentials import valid_email
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
 from .md_bag import rListBag
@@ -18,10 +22,9 @@ class Default(BaseModel):
     status: int
 
 
-class inf_uAuth(BaseModel):
+class inf_uAuth(ModelEmail):
     id_user: UUID4
     name: str
-    email: EmailStr
 
 
 class resp_auth(BaseModel):

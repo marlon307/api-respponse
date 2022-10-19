@@ -1,7 +1,10 @@
-fastapi[all]
+fastapi
 mysql-connector-python
 bcrypt
 uvicorn
 pyjwt
 requests
 cryptography
+# 
+pydantic[email]
+python-multipart

@@ -1,5 +1,4 @@
-from pydantic import BaseModel, validator
-from uuid import UUID
+from pydantic import BaseModel, validator, UUID4
 
 
 class obj_size(BaseModel):
@@ -14,7 +13,7 @@ class obj_size(BaseModel):
 class m_create_product(BaseModel):
     categorys_id: int
     gender_id: int
-    id_user: UUID
+    id_user: UUID4
     title: str
     subTitle: str
     warranty: int
@@ -23,5 +22,5 @@ class m_create_product(BaseModel):
     list_qtd: list[obj_size]
 
     @validator("id_user")
-    def valid_uuid(cls, v: str):
+    def valid_uuid(cls, v):
         return str(v)

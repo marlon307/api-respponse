@@ -1,4 +1,4 @@
-import uvicorn
+# import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os, time
@@ -41,8 +41,8 @@ def status():
         "status": 200,
     }
 
-
 routers(app)
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="localhost", env_file=".env", reload=True)
+
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="localhost", env_file=".env", reload=True)
