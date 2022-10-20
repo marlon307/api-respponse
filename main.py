@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -42,7 +41,5 @@ def status():
 
 routers(app)
 # https://betterprogramming.pub/how-to-build-and-deploy-a-fastapi-task-manager-app-on-vercel-c3aa82b8365e
-# https://form.deta.dev/timeout/status?mid=0309c6e0-ac93-4347-b230-6ed43c1c64ec
 
-# if __name__ == "__main__":
-#     uvicorn.run("main:app")
+
