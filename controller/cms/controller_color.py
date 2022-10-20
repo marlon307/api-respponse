@@ -1,10 +1,5 @@
-from fastapi import status, HTTPException
 from service.cms import service_color
-
-msgErr500 = HTTPException(
-    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    detail="Server error.",
-)
+from utility.handleErr import handlerErr,status,HTTPException
 
 
 def c_color(json):
@@ -13,6 +8,8 @@ def c_color(json):
         return {"detail": "Cor criada.", "status": 201}
     except Exception as err:
         if err.errno == 1062:
-            return {"detail": "Esta cor já existe.", "status": 409}
-        print("cms -> c_color ->", err)
-        raise msgErr500
+            raise HTTPException(
+                datail="Cor já existe.",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+        raise handlerErr("cms -> c_color -> %s" % err)

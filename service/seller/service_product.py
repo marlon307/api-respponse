@@ -7,6 +7,7 @@ import json
 
 
 def create_product(data, files_list):
+    # print(files_list[0])
     uploaded_image = upload_image_imgur(files_list)
     list_options = data["list_qtd"]
     del data["list_qtd"]

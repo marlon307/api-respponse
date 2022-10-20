@@ -1,11 +1,5 @@
-from fastapi import status, HTTPException
 from service.user import service_bag
-
-
-msgErr500 = HTTPException(
-    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    detail="Server error.",
-)
+from utility.handleErr import handlerErr
 
 
 def c_add_bag(json, c_user):
@@ -19,8 +13,7 @@ def c_add_bag(json, c_user):
             "status": 201,
         }
     except Exception as err:
-        print("bag -> c_add_bag ->", err)
-        raise msgErr500
+        raise handlerErr("bag -> c_add_bag -> %s" % err)
 
 
 def c_list_bag(c_user):
@@ -32,8 +25,7 @@ def c_list_bag(c_user):
             "status": 200,
         }
     except Exception as err:
-        print("bag -> c_list_bag ->", err)
-        raise msgErr500
+        raise handlerErr("bag -> c_list_bag -> %s" % err)
 
 
 def c_bag_update_quantity(json, c_user):
@@ -46,8 +38,7 @@ def c_bag_update_quantity(json, c_user):
             "status": 200,
         }
     except Exception as err:
-        print("bag -> c_update_bag ->", err)
-        raise msgErr500
+        raise handlerErr("bag -> c_update_bag -> %s" % err)
 
 
 def c_bag_delete(json, c_user):
@@ -59,8 +50,7 @@ def c_bag_delete(json, c_user):
             "status": 200,
         }
     except Exception as err:
-        print("bag -> c_delete_bag ->", err)
-        raise msgErr500
+        raise handlerErr("bag -> c_delete_bag -> %s" % err)
 
 
 def c_bag_register_order(json, c_user):
@@ -73,5 +63,4 @@ def c_bag_register_order(json, c_user):
             "order": order,
         }
     except Exception as err:
-        print("bag -> c_bag_register_order ->", err)
-        raise msgErr500
+        raise handlerErr("bag -> c_bag_register_order -> %s" % err)

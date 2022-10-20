@@ -1,10 +1,5 @@
-from fastapi import status, HTTPException
 from service.user import service_address
-
-msgErr500 = HTTPException(
-    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    detail="Server error.",
-)
+from utility.handleErr import handlerErr
 
 
 def add_address(json, c_user):
@@ -19,8 +14,7 @@ def add_address(json, c_user):
             "status": 201,
         }
     except Exception as err:
-        print("address -> add_address ->", err)
-        raise msgErr500
+        raise handlerErr("address -> add_address -> %s" % err)
 
 
 def get_address(data):
@@ -32,8 +26,7 @@ def get_address(data):
             "status": 200,
         }
     except Exception as err:
-        print("address -> get_address ->", err)
-        raise msgErr500
+        raise handlerErr("address -> get_address -> %s" % err)
 
 
 def delete_address(json, id_user):
@@ -44,5 +37,4 @@ def delete_address(json, id_user):
             "status": 200,
         }
     except Exception as err:
-        print("address -> delete_address ->", err)
-        raise msgErr500
+        raise handlerErr("address -> delete_address -> %s" % err)
