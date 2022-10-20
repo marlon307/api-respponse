@@ -30,7 +30,7 @@ class execut_query:
             self.connection.close()
             raise errno
 
-    def insert(self, data) -> int:
+    def insert(self, data:dict) -> int:
         self.execute(self.query, data)
         id_insert = self.cursor.lastrowid
         self.closeCursor()
