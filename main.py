@@ -1,13 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import os, time
 from datetime import datetime
 from routes import routers
 from pydantic import BaseModel
 
-os.environ["TZ"] = "America/Sao_Paulo"
-time.time()
 
 app = FastAPI(
     title="API Respponse", swagger_ui_parameters={"defaultModelsExpandDepth": -1}
@@ -44,6 +41,7 @@ def status():
 
 
 routers(app)
+# https://betterprogramming.pub/how-to-build-and-deploy-a-fastapi-task-manager-app-on-vercel-c3aa82b8365e
 # https://form.deta.dev/timeout/status?mid=0309c6e0-ac93-4347-b230-6ed43c1c64ec
 
 # if __name__ == "__main__":
