@@ -1,11 +1,7 @@
-from fastapi import status, HTTPException
 from datetime import datetime, timedelta
+from fastapi import status, HTTPException
 from service.user import service_user
-
-msgErr500 = HTTPException(
-    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-    detail="Server error.",
-)
+from utility.handleErr import handlerErr
 
 
 def user_register(body):
@@ -18,8 +14,7 @@ def user_register(body):
             detail="Este usuário já possui cadastro.",
         )
     except Exception as err:
-        print("user -> c_user_register ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_user_register -> %s" % err)
 
 
 def user_confirmacc(data):
@@ -29,8 +24,7 @@ def user_confirmacc(data):
             return {"detail": "Conta confimarda.", "status": 200}
         return {"detail": "Conta já confirmada ou não existe.", "status": 400}
     except Exception as err:
-        print("user -> c_user_confirmacc ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_user_confirmacc -> %s" % err)
 
 
 def request_new_confirm_acc(data):
@@ -43,8 +37,7 @@ def request_new_confirm_acc(data):
             }
         return {"detail": "Conta já confirmada ou não existe.", "status": 400}
     except Exception as err:
-        print("user -> c_request_new_confirm_acc ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_request_new_confirm_acc -> %s" % err)
 
 
 def user_login(data):
@@ -78,8 +71,7 @@ def solicitation_user_resetpsw(data):
             }
         return {"detail": "Dados Inválidos.", "status": 400}
     except Exception as err:
-        print("user -> c_solicitation_user_resetpsw ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_solicitation_user_resetpsw -> %s" % err)
 
 
 def user_resetpsw(data):
@@ -94,8 +86,7 @@ def user_resetpsw(data):
             detail="Senha já alterada com este token ou inválido.",
         )
     except Exception as err:
-        print("user -> c_user_resetpsw ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_user_resetpsw -> %s" % err)
     raise status_err
 
 
@@ -115,8 +106,7 @@ def get_info_user(data):
         )
 
     except Exception as err:
-        print("user -> c_get_info_user ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_get_info_user -> %s" % err)
     raise status_err
 
 
@@ -132,5 +122,4 @@ def update_info_user(data_json):
         return {"detail": "Usuario inexistente!", "status": 400}
 
     except Exception as err:
-        print("user -> c_update_info_user ->", err)
-        raise msgErr500
+        raise handlerErr("user -> c_update_info_user -> %s" % err)
