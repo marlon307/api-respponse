@@ -46,5 +46,5 @@ def status():
 routers(app)
 # https://form.deta.dev/timeout/status?mid=0309c6e0-ac93-4347-b230-6ed43c1c64ec
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", env_file=".env", reload=True)
+# if __name__ == "__main__":
+#     uvicorn.run("main:app")
