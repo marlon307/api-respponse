@@ -22,4 +22,3 @@ class resp_user(BaseModel):
 class resp_cUser(BaseModel):
     detail: str
     status: int
-    response: props_user
