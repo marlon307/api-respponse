@@ -6,5 +6,5 @@ class m_add_color(BaseModel):
     color: str
 
     @validator("color_name")
-    def valid_color_name(cls, v: str):
+    def valid_color_name(cls, v):
         return v.title()

@@ -1,5 +1,4 @@
-from fastapi import File
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, UUID4
 
 
 class obj_size(BaseModel):
@@ -8,17 +7,20 @@ class obj_size(BaseModel):
     quantity: int
     price: float
     discount: int
-    url_image: list[bytes] = File()
     sku: str
 
 
 class m_create_product(BaseModel):
     categorys_id: int
     gender_id: int
-    user_id: int
+    id_user: UUID4
     title: str
     subTitle: str
     warranty: int
     details: str
     specifications: str
     list_qtd: list[obj_size]
+
+    @validator("id_user")
+    def valid_uuid(cls, v):
+        return str(v)

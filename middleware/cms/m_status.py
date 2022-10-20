@@ -5,5 +5,5 @@ class m_add_status(BaseModel):
     s_name: str
 
     @validator("s_name")
-    def valid_status(cls, v: str):
+    def valid_status(cls, v):
         return v.title()

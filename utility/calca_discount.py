@@ -1,4 +1,3 @@
-def calc_discount(precentage_discount: int, value: int) -> int:
+def calc_discount(precentage_discount: int, value: int) -> float:
     calc = (float(precentage_discount) / 100) * value
-    value = value + calc
-    return value
+    return value + calc

@@ -1,86 +1,53 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, validator
 from datetime import date
 from utility.credentials import valid_email, valid_psw, valid_name
 from utility.valid_cpf import cpf_validate
 
 
-class m_register(BaseModel):
+class ModelUsrName(BaseModel):
     name: str
-    email: EmailStr
-    password: str
-
-    @validator("email")
-    def valid_email(cls, v: str):
-        if valid_email(v) is not True:
-            raise ValueError("Email inválido.")
-        return v.title
-
-    @validator("password")
-    def valid_psw(cls, v: str):
-        if valid_psw(v) is not True:
-            raise ValueError("Senha inválida.")
-        return v
 
     @validator("name")
-    def valid_name(cls, v: str):
+    def validator_name(cls, v):
         if valid_name(v) is not True:
             raise ValueError("Nome inválido.")
         return v.title()
 
 
-class m_email(BaseModel):
-    email: EmailStr
+class ModelEmail(BaseModel):
+    email: str
 
     @validator("email")
-    def valid_email(cls, v: str):
+    def validator_email(cls, v):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
         return v
 
 
-class m_login(BaseModel):
-    email: EmailStr
+class ModelPsw(BaseModel):
     password: str
 
-    @validator("email")
-    def valid_email(cls, v: str):
-        if valid_email(v) is not True:
-            raise ValueError("Email inválido.")
-        return v
-
     @validator("password")
-    def valid_psw(cls, v: str):
+    def validator_password(cls, v):
         if valid_psw(v) is not True:
             raise ValueError("Senha inválida.")
         return v
 
 
-class m_psw(BaseModel):
+class ModelRegister(ModelUsrName):
+    email: str
     password: str
 
-    @validator("password")
-    def valid_psw(cls, v: str):
-        if valid_psw(v) is not True:
-            raise ValueError("Senha inválida.")
-        return v
 
-
-class m_update_user(BaseModel):
-    name: str
+class ModelUpUser(ModelUsrName):
     cel: str
     tel: str
     date: date
     doc: str
     gender: int
 
-    @validator("name")
-    def valid_name(cls, v: str):
-        if valid_name(v) is not True:
-            raise ValueError("Nome inválido.")
-        return v.title()
-
     @validator("doc")
-    def valid_doc(cls, v: str):
+    def validator_doc(cls, v):
         if cpf_validate(v) is not True:
             raise ValueError("Documento inválido.")
         return v

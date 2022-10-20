@@ -30,7 +30,7 @@ class execut_query:
             self.connection.close()
             raise errno
 
-    def insert(self, data: dict) -> int:
+    def insert(self, data) -> int:
         self.execute(self.query, data)
         id_insert = self.cursor.lastrowid
         self.closeCursor()
@@ -48,10 +48,11 @@ class execut_query:
         self.executemany(self.query, data)
         # l_id last id
         l_id = self.cursor.lastrowid or 0
-        id_insert = [l_id + v for v in range(self.cursor.rowcount)]
+        id_insert = [l_id - v for v in range(self.cursor.rowcount)]
         self.closeCursor()
         self.commit()
         self.closeConnection()
+        id_insert.sort()
         return id_insert
 
     def update(self, condition: dict) -> None:

@@ -6,9 +6,9 @@ class m_add_gender(BaseModel):
     g_name: str
 
     @validator("g_initials")
-    def valid_initial(cls, v: str):
+    def valid_initial(cls, v):
         return v.title()
 
     @validator("g_name")
-    def valid_name(cls, v: str):
+    def valid_name(cls, v):
         return v.title()

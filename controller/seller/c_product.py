@@ -1,11 +1,14 @@
+from fastapi import status, HTTPException
 from service.seller import service_product
 
+msgErr500 = HTTPException(
+    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    detail="Server error.",
+)
 
-def product(json: dict):
+
+def product(json: dict, files):
     try:
-        # json = dict(request.form.items())
-        # files = request.files
-
         service_product.create_product(json, files)
         return {
             "detail": "Produto criado com sucesso.",
@@ -13,7 +16,7 @@ def product(json: dict):
         }
     except Exception as err:
         print("seller -> create_product ->", err)
-        return {"detail": "Falha nossa.", "status": 500}
+        raise msgErr500
 
 
 def list_product():
@@ -26,7 +29,7 @@ def list_product():
         }
     except Exception as err:
         print("seller -> list_product ->", err)
-        return {"detail": "Falha nossa.", "status": 500}
+        raise msgErr500
 
 
 def get_product_id(id_product):
@@ -36,7 +39,20 @@ def get_product_id(id_product):
             "product": product_id,
             "detail": "Produto listado.",
             "status": 200,
-        }, 200
+        }
     except Exception as err:
         print("seller -> get_product_id ->", err)
-        return {"detail": "Falha nossa.", "status": 500}
+        raise msgErr500
+
+
+def options():
+    try:
+        list_options = service_product.list_option()
+        return {
+            "detail": "Lista de opções.",
+            "option_list": list_options,
+            "status": 200,
+        }
+    except Exception as err:
+        print("seller -> c_list_options_seller_register_product ->", err)
+        raise msgErr500

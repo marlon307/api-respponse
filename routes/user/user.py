@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Header, Depends
-from fastapi.encoders import jsonable_encoder
-from middleware.user.m_user import m_register, m_email, m_psw, m_update_user
+from middleware.user.m_user import ModelEmail, ModelPsw, ModelRegister, ModelUpUser
 from middleware.m_auth import get_current_user, m_auth, User
 from controller.user import controller_user
 from ..user.models import resp_auth, resp_user, resp_cUser, Default
@@ -17,7 +16,7 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
 
 # @3dFt53As
 @router.post("/createuser", response_model=resp_cUser, status_code=201)
-def create_user(body: m_register):
+def create_user(body: ModelRegister):
     return controller_user.user_register(body)
 
 
@@ -33,12 +32,12 @@ def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/solicitation_reset_psw_user", response_model=Default)
-def solicitation_reset_psw_user(data: m_email):
+def solicitation_reset_psw_user(data: ModelEmail):
     return controller_user.solicitation_user_resetpsw(data)
 
 
 @router.patch("/reset_psw_user", response_model=Default)
-def reset_psw_user(data: m_psw, token: str = Header(default="Token")):
+def reset_psw_user(data: ModelPsw, token: str = Header(default="Token")):
     dict = m_auth(token)
     dict["password"] = data.password
     return controller_user.user_resetpsw(dict)
@@ -50,8 +49,6 @@ def get_info_user(current_user: User = Depends(get_current_user)):
 
 
 @router.patch("/user", response_model=Default)
-def update_info_user(
-    data: m_update_user, current_user: User = Depends(get_current_user)
-):
-    new_json = {**jsonable_encoder(current_user), **jsonable_encoder(data)}
+def update_info_user(data: ModelUpUser, current_user: User = Depends(get_current_user)):
+    new_json = {**current_user.dict(), **data.dict()}
     return controller_user.update_info_user(new_json)

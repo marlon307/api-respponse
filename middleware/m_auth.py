@@ -1,19 +1,19 @@
 from fastapi import status, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import validator, UUID4
 from fastapi.security import OAuth2PasswordBearer
 from auth.auth_jwt import valid_auth
+from middleware.user.m_user import ModelEmail
 
 
-class TokenData(BaseModel):
-    id_user: str | None = None
-
-
-class User(BaseModel):
-    email: str
-    id_user: str
+class User(ModelEmail):
+    id_user: UUID4
     name: str
     seller: bool = False
     admin: bool = False
+
+    @validator("id_user")
+    def valid_uuid(cls, v):
+        return str(v)
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
