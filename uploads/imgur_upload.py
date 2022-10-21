@@ -1,21 +1,19 @@
 import requests
-from base64 import b64encode
 import os
 
 
-def upload_image_imgur(files_list):
+def upload_image_imgur(files_list: list[bytes], title: str, details: str):
     url = "https://api.imgur.com/3/image"
     headers = {"Authorization": f"Bearer %s" % os.getenv("AUTH_TOKEN_IMGUR")}
     info_files = list()
 
-    for file in files_list:
+    for index, file in enumerate(files_list):
         payload = {
-            "name": "Teste",
-            "title": "title teste",
-            "description": "description",
+            "name": "Image Product",
+            "title": title,
+            "description": details,
             "image": file,
         }
-
         response = requests.post(
             url=url,
             headers=headers,
@@ -25,7 +23,7 @@ def upload_image_imgur(files_list):
         info_files.append(
             {
                 "id": response["id"],
-                "ref_color": "file.filename",
+                "ref_color": index,  # "file.filename",
                 "link": response["link"],
                 "deletehash": response["deletehash"],
             }

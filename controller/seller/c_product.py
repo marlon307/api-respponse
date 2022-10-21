@@ -1,14 +1,22 @@
 from service.seller import service_product
-from utility.handleErr import handlerErr
+from utility.handleErr import handlerErr, JSONResponse, status
 
 
 def product(json: dict, files):
     try:
-        service_product.create_product(json, files)
-        return {
-            "detail": "Produto criado com sucesso.",
-            "status": 201,
-        }
+        result = service_product.create_product(json, files)
+        if result is not False:
+            return {
+                "detail": "Produto criado com sucesso.",
+                "status": 201,
+            }
+        return JSONResponse(
+            content={
+                "detail": "Verefique se todos os campos foram preenchido.",
+                "status": status.HTTP_400_BAD_REQUEST,
+            },
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     except Exception as err:
         raise handlerErr("seller -> create_product -> %s" % err)
 
