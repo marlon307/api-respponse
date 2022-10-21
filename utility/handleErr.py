@@ -1,6 +1,7 @@
 import logging
 from fastapi import status, HTTPException
 from time import gmtime, strftime
+from fastapi.responses import JSONResponse
 
 logging.basicConfig(
     filename="log.log",

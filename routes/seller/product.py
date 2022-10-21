@@ -6,7 +6,7 @@ from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
 from .models import Default, ProductId, ListProduct, OptionProduct
 
-router = APIRouter(tags=["SELLER"])
+router = APIRouter(tags=["SELLER"], dependencies=[])
 
 format_str = {
     "categorys_id": 0,
@@ -45,6 +45,7 @@ def create_product(
 ):
     try:
         # validar informações do
+
         serialize_json = json.loads(data)
         serialize_json["id_user"] = current_user.id_user
         n_data = m_create_product(**serialize_json)
@@ -65,5 +66,5 @@ def get_product_id(id: int):
 
 
 @router.get("/list_options", response_model=OptionProduct)
-def list_options(current_user: User = Depends(get_current_adm)):
+def list_options(current_user: User):
     return c_product.options()
