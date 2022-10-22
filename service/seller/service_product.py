@@ -9,10 +9,7 @@ import json
 def create_product(data, files_list):
     # Para cada item da "list_qtd" deve ter 6 imagens
     mImg = 6  # max image for options
-    if (
-        len(files_list) % mImg == 0
-        and (len(data["list_qtd"]) * len(files_list)) % mImg == 0
-    ):
+    if len(files_list) % mImg == 0 and len(data["list_qtd"]) * mImg == len(files_list):
         uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
 
         if len(uploaded_image) % mImg == 0:  # Checar se o upload foi feito corretamente
