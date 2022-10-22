@@ -8,49 +8,64 @@ import json
 
 def create_product(data, files_list):
     # Para cada item da "list_qtd" deve ter 6 imagens
-    if len(files_list) % 6 == 0 and (len(data["list_qtd"]) * len(files_list)) % 6 == 0:
+    mImg = 6  # max image for options
+    if (
+        len(files_list) % mImg == 0
+        and (len(data["list_qtd"]) * len(files_list)) % mImg == 0
+    ):
         uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
 
-        list_options = data["list_qtd"]
-        del data["list_qtd"]
+        if len(uploaded_image) % mImg == 0:  # Checar se o upload foi feito corretamente
 
-        product_id = execut_query(model_product.q_insert_product).insert(data)
+            list_options = data["list_qtd"]
+            del data["list_qtd"]
 
-        def map_function(object_opt):
-            object_opt["products_id"] = product_id
-            return object_opt
+            product_id = execut_query(model_product.q_insert_product).insert(data)
 
-        format_option = map(map_function, list_options)
+            def map_function(object_opt):
+                object_opt["products_id"] = product_id
+                return object_opt
 
-        list_options_ids = execut_query(
-            model_product.q_insert_product_option
-        ).insertMany(list(format_option))
+            format_option = map(map_function, list_options)
 
-        def map_has_sizes(id_option, option):
-            new_opt = dict()
-            new_opt["options_product_id"] = id_option
-            new_opt["quantity"] = option["quantity"]
-            new_opt["sizes_id"] = option["sizes_id"]
-            return new_opt
+            list_options_ids = execut_query(
+                model_product.q_insert_product_option
+            ).insertMany(list(format_option))
 
-        format_has_size = map(map_has_sizes, list_options_ids, list_options)
+            def map_has_sizes(id_option, option):
+                new_opt = dict()
+                new_opt["options_product_id"] = id_option
+                new_opt["quantity"] = option["quantity"]
+                new_opt["sizes_id"] = option["sizes_id"]
+                return new_opt
 
-        execut_query(model_product.q_insert_option_has_sizes).insertMany(
-            list(format_has_size)
-        )
+            format_has_size = map(map_has_sizes, list_options_ids, list_options)
 
-        def map_img_function(l_img, option_id):
-            return {
-                "option_id": option_id,
-                "url_image": l_img["link"],
-                "key_img": l_img["deletehash"],
-                "upload_id": l_img["id"],
-            }
+            execut_query(model_product.q_insert_option_has_sizes).insertMany(
+                list(format_has_size)
+            )
+            #
+            splited = [
+                uploaded_image[i : i + mImg]
+                for i in range(0, len(uploaded_image), mImg)
+            ]
 
-        format_list_img = map(map_img_function, uploaded_image, list_options_ids)
-        execut_query(model_product.q_insert_image).insertMany(list(format_list_img))
+            def map_img_function(l_img, option_id):
+                for obj_img in l_img:
+                    obj_img["option_id"] = option_id
 
-        return product_id
+                return l_img
+
+            format_list_img = map(map_img_function, splited, list_options_ids)
+
+            unique_list = list()
+            for l in list(format_list_img):
+                unique_list.extend(l)
+
+            execut_query(model_product.q_insert_image).insertMany(unique_list)
+
+            return product_id
+        return False
     return False
 
 

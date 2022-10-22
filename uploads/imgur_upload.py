@@ -22,11 +22,10 @@ def upload_image_imgur(files_list: list[bytes], title: str, details: str):
 
         info_files.append(
             {
-                "id": response["id"],
+                "upload_id": response["id"],
                 "ref_color": index,  # "file.filename",
-                "link": response["link"],
-                "deletehash": response["deletehash"],
+                "url_image": response["link"],
+                "key_img": response["deletehash"],
             }
         )
-
     return info_files
