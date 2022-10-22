@@ -45,7 +45,6 @@ def create_product(
 ):
     try:
         # validar informações do
-
         serialize_json = json.loads(data)
         serialize_json["id_user"] = current_user.id_user
         n_data = m_create_product(**serialize_json)

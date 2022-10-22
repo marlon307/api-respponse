@@ -1,5 +1,6 @@
 import requests
 import os
+from utility.handleErr import handlerErr
 
 
 def upload_image_imgur(files_list: list[bytes], title: str, details: str):
@@ -20,6 +21,9 @@ def upload_image_imgur(files_list: list[bytes], title: str, details: str):
             data=payload,
         ).json()["data"]
 
+        if "error" in response:
+            handlerErr("imgur -> %s" % response["error"]["message"])
+
         info_files.append(
             {
                 "upload_id": response["id"],
@@ -28,4 +32,5 @@ def upload_image_imgur(files_list: list[bytes], title: str, details: str):
                 "key_img": response["deletehash"],
             }
         )
+
     return info_files

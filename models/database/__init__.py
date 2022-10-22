@@ -14,22 +14,20 @@ config_connection = {
 class execut_query:
     def __init__(self, query: str):
         try:
-            self.connection = connection.MySQLConnection(**config_connection)
-            self.cursor = self.connection.cursor(dictionary=True, buffered=True)
-            self.execute = self.cursor.execute
-            self.executemany = self.cursor.executemany
-            self.callProc = self.cursor.callproc
-            self.commit = self.connection.commit
-            self.closeCursor = self.cursor.close
-            self.closeConnection = self.connection.close
-            self.stored_results = self.cursor._stored_results
+            cnx = connection.MySQLConnection(**config_connection)
+            cursor = cnx.cursor(dictionary=True, buffered=True)
+            self.cursor = cursor
+            self.execute = cursor.execute
+            self.executemany = cursor.executemany
+            self.callProc = cursor.callproc
+            self.commit = cnx.commit
+            self.closeCursor = cursor.close
+            self.closeConnection = cnx.close
+            self.stored_results = cursor._stored_results
             self.query = query
         except mysql.connector.Error as errno:
-            if errno.errno == 1045:  # Access denied
-                raise errno
-
-            self.cursor.close()
-            self.connection.close()
+            # self.cursor.close()
+            # self.connection.close()
             raise errno
 
     def insert(self, data: dict) -> int:
