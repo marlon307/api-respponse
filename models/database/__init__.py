@@ -25,12 +25,14 @@ class execut_query:
             self.stored_results = self.cursor._stored_results
             self.query = query
         except mysql.connector.Error as errno:
-            print("MySQL connector: -> ", errno)
+            if errno.errno == 1045:  # Access denied
+                raise errno
+
             self.cursor.close()
             self.connection.close()
             raise errno
 
-    def insert(self, data:dict) -> int:
+    def insert(self, data: dict) -> int:
         self.execute(self.query, data)
         id_insert = self.cursor.lastrowid
         self.closeCursor()
