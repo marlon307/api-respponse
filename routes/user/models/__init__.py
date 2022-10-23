@@ -4,7 +4,7 @@ from middleware.user.m_user import ModelEmail
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
 from .md_bag import ListBag
-from .md_order import r_orderid, r_order
+from .md_order import r_orderid, r_order, RgOrder
 
 
 class Default(BaseModel):
@@ -18,6 +18,7 @@ ListAdd = ListAdd
 ListBag = ListBag
 r_orderid = r_orderid
 r_order = r_order
+RgOrder = RgOrder
 
 
 class inf_uAuth(ModelEmail):

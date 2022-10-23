@@ -7,3 +7,9 @@ class r_orderid(BaseModel):
 
 class r_order(BaseModel):
     pass
+
+
+class RgOrder(BaseModel):
+    detail: str
+    status: int
+    order: int

@@ -23,7 +23,7 @@ class execut_query:
             self.commit = cnx.commit
             self.closeCursor = cursor.close
             self.closeConnection = cnx.close
-            self.stored_results = cursor._stored_results
+            self.stored_results = cursor.stored_results
             self.query = query
         except mysql.connector.Error as errno:
             # self.cursor.close()
@@ -78,7 +78,7 @@ class execut_query:
     def callProcedure(self, data):
         self.callProc(self.query, data)
         result = list()
-        for obj in self.stored_results:
+        for obj in self.stored_results():
             result = obj.fetchall()
         self.closeCursor()
         self.closeConnection()
