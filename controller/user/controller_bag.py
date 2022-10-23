@@ -55,12 +55,12 @@ def c_bag_delete(json, c_user):
 
 def c_bag_register_order(json, c_user):
     try:
-        json["p_userid"] = c_user["id_user"]
-        order = service_bag.s_register_order(json)
+        json["p_userid"] = c_user.id_user
+        order = service_bag.register_order(json)
         return {
-            "detail": "Produto removido da sacola.",
+            "detail": "Pedido realizado.",
             "status": 200,
-            "order": order,
+            "order": order["number_order"],
         }
     except Exception as err:
         raise handlerErr("bag -> c_bag_register_order -> %s" % err)

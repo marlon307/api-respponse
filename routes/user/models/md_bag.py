@@ -1,19 +1,11 @@
 from pydantic import BaseModel
 from .md_address import AddressProps
+from .md_order import ClsItemOrder
 
 
-class ItemBag(BaseModel):
-    id: int
-    size: str
-    color: str
-    price: float
-    title: str
-    opt_id: int
+class ItemBag(ClsItemOrder):
     discount: int
-    quantity: int
-    url_image: str
-    color_name: str
-    category_name: str
+    opt_id: int
     oldPrice: float
 
 

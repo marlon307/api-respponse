@@ -35,7 +35,7 @@ def s_delete_item_bag(json):
     return True
 
 
-def s_register_order(data_json):
+def register_order(data_json):
     json_for_tuple = (
         data_json["p_userid"],
         data_json["address"],

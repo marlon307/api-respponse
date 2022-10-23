@@ -18,7 +18,7 @@ q_get_order_id = (
     "'color_name', cl.color_name, 'price', op.price "
     ")) AS list_products "
     "FROM orders AS o "
-    "INNER JOIN user_address AS uadd ON uadd.id = o.user_id "
+    "INNER JOIN user_address AS uadd ON uadd.id = o.address_id "
     "INNER JOIN carrier AS crr ON crr.id = o.carrier_id "
     "INNER JOIN bag AS b ON b.orders_id = o.id "
     "INNER JOIN options_product AS op ON op.id = b.option_product_id "
