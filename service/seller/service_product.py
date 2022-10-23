@@ -12,7 +12,7 @@ def create_product(data, files_list):
     if len(files_list) % mImg == 0 and len(data["list_qtd"]) * mImg == len(files_list):
         uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
 
-        if len(files_list) % mImg == 0:  # Checar se o upload foi feito corretamente
+        if len(uploaded_image) % mImg == 0:  # Checar se o upload foi feito corretamente
 
             list_options = data["list_qtd"]
             del data["list_qtd"]
