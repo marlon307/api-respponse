@@ -4,12 +4,12 @@ from utility.calca_discount import calc_discount
 import json
 
 
-def s_add_bag(json):
+def add_bag(json):
     id_insert = execut_query(model_bag.q_insert_bag).insert(json)
     return id_insert
 
 
-def s_list_bag(user_id):
+def list_bag(user_id):
     list_bag = execut_query(model_bag.q_list_bag).selectOne({"user_id": user_id})
     list_bag["list_add"] = json.loads(list_bag["list_add"])
     list_bag["list_b"] = json.loads(list_bag["list_b"])
@@ -25,7 +25,7 @@ def s_list_bag(user_id):
     return list_bag
 
 
-def s_update_quantity_bag(json):
+def update_quantity_bag(json):
     execut_query(model_bag.q_bag_update_quantity).update(json)
     return True
 

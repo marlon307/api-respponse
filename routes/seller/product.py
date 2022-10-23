@@ -44,7 +44,7 @@ def create_product(
     file: list[bytes] = File(description="Multiple files as UploadFile"),
     data: str = Form(
         default=json.dumps(format_str),
-        description="Copie as informaçoes do input e altere os valores mantendo o formato (JSON)",
+        description="Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
     ),
     current_user: User = Depends(get_current_adm),
 ):

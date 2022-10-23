@@ -4,12 +4,12 @@ from utility.handleErr import handlerErr
 
 def c_add_bag(json, c_user):
     try:
-        json["user_id"] = c_user["id_user"]
-        product = service_bag.s_add_bag(json)
+        json["user_id"] = c_user.id_user
+        product_id = service_bag.add_bag(json)
 
         return {
             "detail": "Produto adicionado a sacola.",
-            "item_bag": product,
+            "item_bag": product_id,
             "status": 201,
         }
     except Exception as err:
@@ -18,7 +18,7 @@ def c_add_bag(json, c_user):
 
 def c_list_bag(c_user):
     try:
-        list_items = service_bag.s_list_bag(c_user["id_user"])
+        list_items = service_bag.list_bag(c_user.id_user)
         return {
             "detail": "Lista da sacola.",
             "infobag": list_items,
@@ -30,8 +30,8 @@ def c_list_bag(c_user):
 
 def c_bag_update_quantity(json, c_user):
     try:
-        json["user_id"] = c_user["id_user"]
-        service_bag.s_update_quantity_bag(json)
+        json["user_id"] = c_user.id_user
+        service_bag.update_quantity_bag(json)
 
         return {
             "detail": "Quantidade atualizada.",
@@ -43,7 +43,7 @@ def c_bag_update_quantity(json, c_user):
 
 def c_bag_delete(json, c_user):
     try:
-        json["user_id"] = c_user["id_user"]
+        json["user_id"] = c_user.id_user
         service_bag.s_delete_item_bag(json)
         return {
             "detail": "Produto removido da sacola.",
