@@ -13,8 +13,8 @@ class del_bag(BaseModel):
 
 
 class up_bag(BaseModel):
-    qunatity: int
-    option_id: int
+    quantity: int
+    product_option: int
     size: str
 
 

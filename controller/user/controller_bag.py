@@ -30,8 +30,8 @@ def c_list_bag(c_user):
 
 def c_bag_update_quantity(json, c_user):
     try:
-        json["user_id"] = c_user["id_user"]
-        service_bag.s_update_quantity_bag(json)
+        json["user_id"] = c_user.id_user
+        service_bag.update_quantity_bag(json)
 
         return {
             "detail": "Quantidade atualizada.",

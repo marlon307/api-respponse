@@ -25,7 +25,7 @@ def list_bag(user_id):
     return list_bag
 
 
-def s_update_quantity_bag(json):
+def update_quantity_bag(json):
     execut_query(model_bag.q_bag_update_quantity).update(json)
     return True
 
