@@ -6,8 +6,8 @@ q_insert_product = (
 
 q_insert_product_option = (
     "INSERT INTO options_product "
-    "(colors_id, products_id, price, discount, sku) "
-    "VALUES (%(colors_id)s, %(products_id)s, %(price)s, %(discount)s, %(sku)s)"
+    "(colors_id, price, discount, sku, products_id) "
+    "VALUES (%(colors_id)s, %(price)s, %(discount)s, %(sku)s, %(products_id)s)"
 )
 
 q_insert_option_has_sizes = (

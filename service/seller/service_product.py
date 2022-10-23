@@ -20,28 +20,36 @@ def create_product(data, files_list):
             product_id = execut_query(model_product.q_insert_product).insert(data)
 
             def map_function(object_opt):
-                object_opt["products_id"] = product_id
-                return object_opt
+                return {
+                    "products_id": product_id,
+                    "price": object_opt["price"],
+                    "discount": object_opt["discount"],
+                    "sku": object_opt["sku"],
+                    "colors_id": object_opt["id"],
+                }
 
             format_option = map(map_function, list_options)
-
             list_options_ids = execut_query(
                 model_product.q_insert_product_option
-            ).insertMany(list(format_option))
+            ).insertMany(format_option)
 
             def map_has_sizes(id_option, option):
-                new_opt = dict()
-                new_opt["options_product_id"] = id_option
-                new_opt["quantity"] = option["quantity"]
-                new_opt["sizes_id"] = option["sizes_id"]
-                return new_opt
+                list_s = list()
+                for obj_opt in option["sizes_id"]:
+                    list_s.append(
+                        {
+                            "options_product_id": id_option,
+                            "sizes_id": obj_opt["id"],
+                            "quantity": obj_opt["quantity"],
+                        }
+                    )
+                return list_s
 
             format_has_size = map(map_has_sizes, list_options_ids, list_options)
-
             execut_query(model_product.q_insert_option_has_sizes).insertMany(
-                list(format_has_size)
+                sum(list(format_has_size), [])
             )
-            #
+
             splited = [
                 uploaded_image[i : i + mImg]
                 for i in range(0, len(uploaded_image), mImg)

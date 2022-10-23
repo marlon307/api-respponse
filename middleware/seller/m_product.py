@@ -1,13 +1,18 @@
 from pydantic import BaseModel, validator, UUID4
 
 
-class obj_size(BaseModel):
-    colors_id: int
-    sizes_id: int
+class sizes(BaseModel):
+    id: int
     quantity: int
+
+
+class obj_option(BaseModel):
+    id: int
+    color: str
     price: float
     discount: int
     sku: str
+    sizes_id: list[sizes]
 
 
 class m_create_product(BaseModel):
@@ -19,7 +24,7 @@ class m_create_product(BaseModel):
     warranty: int
     details: str
     specifications: str
-    list_qtd: list[obj_size]
+    list_qtd: list[obj_option]
 
     @validator("id_user")
     def valid_uuid(cls, v):

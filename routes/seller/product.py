@@ -18,9 +18,14 @@ format_str = {
     "specifications": "Specifications ...",
     "list_qtd": [
         {
-            "colors_id": 0,
-            "sizes_id": 0,
-            "quantity": 0,
+            "id": 0,
+            "color": "#EXA",
+            "sizes_id": [
+                {
+                    "id": 0,
+                    "quantity": 0,
+                }
+            ],
             "price": 0,
             "discount": 0,
             "sku": "SKU",
@@ -45,7 +50,6 @@ def create_product(
 ):
     try:
         # validar informações do
-
         serialize_json = json.loads(data)
         serialize_json["id_user"] = current_user.id_user
         n_data = m_create_product(**serialize_json)
@@ -65,6 +69,8 @@ def get_product_id(id: int):
     return c_product.get_product_id(id)
 
 
-@router.get("/list_options", response_model=OptionProduct)
-def list_options(current_user: User):
-    return c_product.options()
+@router.get("/list_options")
+def list_options():
+    result = c_product.options()
+    print(result)
+    return result
