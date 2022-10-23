@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 from middleware.m_auth import User, get_current_user
 from controller.user import controller_order
-from ..user.models import r_order, r_orderid
+from ..user.models import RListOrder, r_orderid
 
 router = APIRouter(tags=["USER"])
 
 
-@router.get("/order", response_model=r_order)
+@router.get("/order", response_model=RListOrder)
 def get_orders(current_user: User = Depends(get_current_user)):
     return controller_order.get_orders(current_user)
 
