@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from controller.user import controller_bag
 from middleware.m_auth import User, get_current_user
 from middleware.user.m_bag import add_bag, del_bag, up_bag, r_order
-from ..user.models import Default, rListBag
+from ..user.models import Default, ListBag
 
 
 router = APIRouter(tags=["USER"])
@@ -13,7 +13,7 @@ def additembag(data: add_bag, current_user: User = Depends(get_current_user)):
     return controller_bag.c_add_bag(data.dict(), current_user)
 
 
-@router.get("/bag")
+@router.get("/bag", response_model=ListBag)
 def listbag(current_user: User = Depends(get_current_user)):
     return controller_bag.c_list_bag(current_user)
 

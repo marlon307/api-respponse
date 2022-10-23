@@ -10,7 +10,7 @@ q_list_bag = (
     "'title', lb.title, 'category_name', lb.category_name, 'color', lb.color, 'color_name', lb.color_name, 'url_image', lb.url_image"
     ")),']') AS list_b, "
     "JSON_ARRAYAGG(JSON_OBJECT( "
-    "'add_id', la.id, 'name_delivery', la.name_delivery, 'city', la.city, 'district', la.district, "
+    "'id', la.id, 'name_delivery', la.name_delivery, 'city', la.city, 'district', la.district, "
     "'uf', la.uf, 'cep', la.cep, 'road', la.road, 'number_home', la.number_home"
     ")) AS list_add "
     "FROM "

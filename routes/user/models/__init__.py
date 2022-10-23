@@ -3,7 +3,7 @@ from pydantic import BaseModel, UUID4
 from middleware.user.m_user import ModelEmail
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
-from .md_bag import rListBag
+from .md_bag import ListBag
 from .md_order import r_orderid, r_order
 
 
@@ -15,7 +15,7 @@ class Default(BaseModel):
 resp_user = resp_user
 resp_cUser = resp_cUser
 ListAdd = ListAdd
-rListBag = rListBag
+ListBag = ListBag
 r_orderid = r_orderid
 r_order = r_order
 
