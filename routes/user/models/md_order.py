@@ -15,7 +15,7 @@ class ClsItemOrder(BaseModel):
 
 
 class ClsCarrier(BaseModel):
-    code: str | None
+    code: str = None
     name_carrier: str
     delivery_value: float
 
