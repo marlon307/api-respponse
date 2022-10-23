@@ -1,13 +1,16 @@
 from datetime import datetime
-from wsgiref.validate import validator
 from pydantic import BaseModel, UUID4
 from middleware.user.m_user import ModelEmail
-
-from utility.credentials import valid_email
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
 from .md_bag import rListBag
 from .md_order import r_orderid, r_order
+
+
+class Default(BaseModel):
+    detail: str
+    status: int
+
 
 resp_user = resp_user
 resp_cUser = resp_cUser
@@ -15,11 +18,6 @@ ListAdd = ListAdd
 rListBag = rListBag
 r_orderid = r_orderid
 r_order = r_order
-
-
-class Default(BaseModel):
-    detail: str
-    status: int
 
 
 class inf_uAuth(ModelEmail):
