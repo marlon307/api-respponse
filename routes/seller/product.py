@@ -23,7 +23,7 @@ format_str = {
             "sizes_id": [
                 {
                     "id": 0,
-                    "qunatity": 0,
+                    "quantity": 0,
                 }
             ],
             "price": 0,

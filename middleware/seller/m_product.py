@@ -8,11 +8,11 @@ class sizes(BaseModel):
 
 class obj_option(BaseModel):
     id: int
-    sizes_id: list[sizes]
     color: str
     price: float
     discount: int
     sku: str
+    sizes_id: list[sizes]
 
 
 class m_create_product(BaseModel):
