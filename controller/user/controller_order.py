@@ -31,9 +31,9 @@ def get_order_id(id, c_user):
         return JSONResponse(
             content={
                 "detail": "Não encontramos este pedido.",
-                "status": 200,
+                "status": status.HTTP_400_BAD_REQUEST,
             },
-            status_code=200,
+            status_code=status.HTTP_400_BAD_REQUEST,
         )
     except Exception as err:
         raise handlerErr("bag -> c_get_order -> %s" % err)
