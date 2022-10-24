@@ -20,10 +20,10 @@ q_list_bag = (
     "INNER JOIN products AS p ON p.id = o.products_id "
     "INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id "
     "INNER JOIN products_images AS pi ON pi.option_id = o.id "
-    "WHERE b.user_id = (SELECT id FROM user WHERE id = 35 LIMIT 1) "
+    "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) "
     "AND b.orders_id IS NULL GROUP BY o.id, s.id) AS lb, "
     "(SELECT ad.id, ad.name_delivery, ad.city, ad.district, ad.uf, ad.cep, ad.road, ad.number_home, ad.deleted "
-    "FROM user_address AS ad WHERE user_id = (SELECT id FROM user WHERE id = 35 LIMIT 1) AND main = 1) AS la"
+    "FROM user_address AS ad WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) AND main = 1) AS la"
 )
 
 q_bag_update_quantity = (
