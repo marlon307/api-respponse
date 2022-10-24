@@ -13,17 +13,20 @@ from utility.u_user import send_mail_confirm_user
 
 
 def register_user(data):
-    key = Fernet.generate_key()
-    new_obj = {
-        "id_user": generate_id(),
-        "name": data.name,
-        "email": data.email,
-        "password": encrypt(data.password),
-        "user_token": key,
-    }
-    execut_query(model_user.q_register_user).insert(new_obj)
-    send_mail_confirm_user(key, new_obj)
-    return True
+    info_email = execut_query(model_user.q_login_user).selectOne({"email": data.email})
+    if "email" not in info_email:
+        key = Fernet.generate_key()
+        new_obj = {
+            "id_user": generate_id(),
+            "name": data.name,
+            "email": data.email,
+            "password": encrypt(data.password),
+            "user_token": key,
+        }
+        execut_query(model_user.q_register_user).insert(new_obj)
+        send_mail_confirm_user(key, new_obj)
+        return True
+    return False
 
 
 def login_user(data):
