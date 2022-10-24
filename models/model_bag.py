@@ -8,12 +8,11 @@ q_list_bag = (
     "'id', lb.id,  'opt_id', lb.opt_id,  'quantity', lb.quantity, 'size', lb.size, 'price', lb.price, 'discount', lb.discount, "
     "'title', lb.title, 'category_name', lb.category_name, 'color', lb.color, 'color_name', lb.color_name, 'url_image', lb.url_image"
     ")) AS list_b, "
-    "JSON_OBJECT( "
+    "IF (la.deleted IS NULL,JSON_OBJECT( "
     "'id', la.id, 'name_delivery', la.name_delivery, 'city', la.city, 'district', la.district, "
     "'uf', la.uf, 'cep', la.cep, 'road', la.road, 'number_home', la.number_home"
-    ") AS main_add "
-    "FROM "
-    "(SELECT p.id, o.id AS opt_id,  b.quantity, s.size, o.price, o.discount, p.title, ctg.category_name, cl.color, cl.color_name, pi.url_image, b.user_id "
+    "), NULL) AS main_add "
+    "FROM (SELECT p.id, o.id AS opt_id,  b.quantity, s.size, o.price, o.discount, p.title, ctg.category_name, cl.color, cl.color_name, pi.url_image, b.user_id "
     "FROM bag AS b "
     "INNER JOIN sizes AS s ON s.id = b.sizes_id "
     "INNER JOIN options_product AS o ON o.id = b.option_product_id "
@@ -23,7 +22,8 @@ q_list_bag = (
     "INNER JOIN products_images AS pi ON pi.option_id = o.id "
     "WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) "
     "AND b.orders_id IS NULL GROUP BY o.id, s.id) AS lb, "
-    "(SELECT ad.id, ad.name_delivery, ad.city, ad.district, ad.uf, ad.cep, ad.road, ad.number_home FROM user_address AS ad WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) AND ad.deleted IS NULL AND main = 1) AS la"
+    "(SELECT ad.id, ad.name_delivery, ad.city, ad.district, ad.uf, ad.cep, ad.road, ad.number_home, ad.deleted "
+    "FROM user_address AS ad WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) AND main = 1) AS la"
 )
 
 q_bag_update_quantity = (
