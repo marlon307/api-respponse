@@ -12,9 +12,9 @@ def add_bag(json):
 def list_bag(user_id):
     list_bag = execut_query(model_bag.q_list_bag).selectOne({"user_id": user_id})
     if list_bag != {}:
-        print(list_bag)
-        list_bag["main_add"] = json.loads(list_bag["main_add"])
-        list_bag["list_b"] = json.loads(list_bag["list_b"])
+        
+        list_bag["main_add"] = json.loads(list_bag["main_add"] or "{}")
+        list_bag["list_b"] = json.loads(list_bag["list_b"] or "[]")
 
         def calc_dicount(object_calc):
             old_price = calc_discount(object_calc["discount"], object_calc["price"])
