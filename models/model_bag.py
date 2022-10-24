@@ -4,11 +4,10 @@ q_insert_bag = (
 )
 
 q_list_bag = (
-    "SELECT CONCAT( "
-    "'[',GROUP_CONCAT(DISTINCT JSON_OBJECT ( "
+    "SELECT JSON_ARRAYAGG(JSON_OBJECT( "
     "'id', lb.id,  'opt_id', lb.opt_id,  'quantity', lb.quantity, 'size', lb.size, 'price', lb.price, 'discount', lb.discount, "
     "'title', lb.title, 'category_name', lb.category_name, 'color', lb.color, 'color_name', lb.color_name, 'url_image', lb.url_image"
-    ")),']') AS list_b, "
+    ")) AS list_b, "
     "JSON_OBJECT( "
     "'id', la.id, 'name_delivery', la.name_delivery, 'city', la.city, 'district', la.district, "
     "'uf', la.uf, 'cep', la.cep, 'road', la.road, 'number_home', la.number_home"
