@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from fastapi import status, HTTPException
 from service.user import service_user
-from utility.handleErr import handlerErr
+from utility.handleErr import handlerErr, JSONResponse
 
 
 def user_register(body):
@@ -9,9 +9,12 @@ def user_register(body):
         result = service_user.register_user(body)
         if result is True:
             return {"detail": "Confime sua conta.", "status": 201}
-        raise HTTPException(
+        return JSONResponse(
+            content={
+                "detail": "Este usuário já possui cadastro.",
+                "status": status.HTTP_409_CONFLICT,
+            },
             status_code=status.HTTP_409_CONFLICT,
-            detail="Este usuário já possui cadastro.",
         )
     except Exception as err:
         raise handlerErr("user -> c_user_register -> %s" % err)
