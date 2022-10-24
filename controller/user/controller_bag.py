@@ -1,5 +1,5 @@
 from service.user import service_bag
-from utility.handleErr import handlerErr
+from utility.handleErr import handlerErr, JSONResponse, status
 
 
 def c_add_bag(json, c_user):
@@ -19,11 +19,19 @@ def c_add_bag(json, c_user):
 def c_list_bag(c_user):
     try:
         list_items = service_bag.list_bag(c_user.id_user)
-        return {
-            "detail": "Lista da sacola.",
-            "infobag": list_items,
-            "status": 200,
-        }
+        if list_items is not False:
+            return {
+                "detail": "Lista da sacola.",
+                "infobag": list_items,
+                "status": 200,
+            }
+        return JSONResponse(
+            content={
+                "detail": "Sacola vazia.",
+                "status": status.HTTP_200_OK,
+            },
+            status_code=status.HTTP_200_OK,
+        )
     except Exception as err:
         raise handlerErr("bag -> c_list_bag -> %s" % err)
 

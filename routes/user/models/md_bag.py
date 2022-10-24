@@ -11,7 +11,7 @@ class ItemBag(ClsItemOrder):
 
 class InfoBag(BaseModel):
     list_b: list[ItemBag]
-    list_add: list[AddressProps]
+    main_add: AddressProps
 
 
 class ListBag(BaseModel):
