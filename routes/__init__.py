@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from routes.user import user, address, bag, orders
 from routes.cms import category, color, gender, size, status
-from routes.seller import product, orders
+from routes.seller import product, orders_seller
 
 # ROUTERS CMS
 # blue_print_cms(app)
@@ -14,7 +14,7 @@ from routes.seller import product, orders
 def routers(app: FastAPI):
     # ROUTERS SELLERS
     app.include_router(product.router)
-    app.include_router(orders.router)
+    app.include_router(orders_seller.router)
 
     # ROUTERS CMS
     app.include_router(category.router)
