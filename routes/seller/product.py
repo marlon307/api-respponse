@@ -69,8 +69,6 @@ def get_product_id(id: int):
     return c_product.get_product_id(id)
 
 
-@router.get("/list_options")
-def list_options():
-    result = c_product.options()
-    print(result)
-    return result
+@router.get("/product/list_options")
+def list_options(current_user: User = Depends(get_current_adm)):
+    return c_product.options()
