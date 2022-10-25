@@ -32,7 +32,9 @@ q_list_prod = (
     "INNER JOIN categorys AS c ON c.id = p.categorys_id "
     "INNER JOIN options_product AS op ON op.products_id = p.id "
     "INNER JOIN colors AS cl ON cl.id = op.colors_id "
-    "INNER JOIN (SELECT option_id, url_image FROM products_images GROUP BY id) as i ON i.option_id = op.id "
+    "INNER JOIN LATERAL "
+    "(SELECT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id GROUP BY option_id LIMIT 1) "
+    "AS i ON i.option_id = op.id "
     "GROUP BY p.id "
     "LIMIT 20"
 )
