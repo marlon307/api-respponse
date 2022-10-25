@@ -6,7 +6,10 @@ from pydantic import BaseModel
 
 
 app = FastAPI(
-    title="API Respponse", swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+    title="API Respponse",
+    swagger_ui_parameters={
+        "defaultModelsExpandDepth": -1,
+    },
 )
 
 origins = [

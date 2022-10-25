@@ -6,7 +6,7 @@ from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
 from .models import Default, ProductId, ListProduct, OptionProduct
 
-router = APIRouter(tags=["SELLER"], dependencies=[])
+router = APIRouter(tags=["SELLER"])
 
 format_str = {
     "categorys_id": 0,
