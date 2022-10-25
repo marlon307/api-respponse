@@ -6,7 +6,7 @@ from middleware.m_auth import User, get_current_adm
 from middleware.seller.m_product import m_create_product
 from .models import Default, ProductId, ListProduct, OptionProduct
 
-router = APIRouter(tags=["SELLER"], dependencies=[])
+router = APIRouter(tags=["SELLER"])
 
 format_str = {
     "categorys_id": 0,
@@ -69,8 +69,6 @@ def get_product_id(id: int):
     return c_product.get_product_id(id)
 
 
-@router.get("/list_options")
-def list_options():
-    result = c_product.options()
-    print(result)
-    return result
+@router.get("/product/list_options")
+def list_options(current_user: User = Depends(get_current_adm)):
+    return c_product.options()

@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class ClsItemOrder(BaseModel):
-    id: int 
+    id: int
     size: str
     color: str
     price: float
