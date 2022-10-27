@@ -1,6 +1,7 @@
 from datetime import datetime
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, validator, UUID4
 from middleware.user.m_user import ModelEmail
+from utility.format_doc import format_email
 from .md_user import resp_user, resp_cUser
 from .md_address import ListAdd
 from .md_bag import ListBag
@@ -21,15 +22,9 @@ RgOrder = RgOrder
 ROrderId = ROrderId
 
 
-class inf_uAuth(ModelEmail):
-    id_user: UUID4
-    name: str
-
-
 class resp_auth(BaseModel):
     access_token: str
     token_type: str
-    user: inf_uAuth
     detail: str
     exp: datetime
     status: int
