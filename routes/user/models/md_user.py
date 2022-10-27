@@ -10,6 +10,7 @@ class props_user(ModelEmail):
     gender_id: int
     tel: str
     cel: str
+    umail: str
 
 
 class resp_user(BaseModel):

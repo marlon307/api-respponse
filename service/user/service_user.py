@@ -3,7 +3,7 @@ from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models import model_user
 from utility.encrypt import encrypt, checkcrypt, fernetEncrypt, fernetDecrypt
-from utility.format_doc import format_cel, format_cpf
+from utility.format_doc import format_cel, format_cpf, format_email
 from utility.generat_id import generate_id
 from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
@@ -55,13 +55,7 @@ def login_user(data):
 
             token = generate_token(info_login, 6, 0)
 
-            if "mix" in info_login:
-                del info_login["mix"]
-
-            return {
-                "info_login": info_login,
-                "token": token,
-            }
+            return  token
         return False
     return False
 
@@ -159,6 +153,7 @@ def user_resetpsw(data):
 
 def get_info_user(id_user):
     result = execut_query(model_user.q_select_info_user).selectOne({"user_id": id_user})
+    result["umail"] = result["email"]
     return result
 
 

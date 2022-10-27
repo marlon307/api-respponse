@@ -44,13 +44,12 @@ def request_new_confirm_acc(data):
 
 
 def user_login(data):
-    result = service_user.login_user(data)
-    if result is not False:
+    token = service_user.login_user(data)
+    if token is not False:
         date_time = datetime.now() + timedelta(hours=6 + 3)
         new_json = {
-            "access_token": result["token"],
+            "access_token": token,
             "token_type": "bearer",
-            "user": result["info_login"],
             "detail": "Usuário logado com sucesso.",
             "exp": date_time,
             "status": 200,

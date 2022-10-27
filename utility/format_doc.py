@@ -22,8 +22,9 @@ def format_cel(cel: str):
 
 
 def format_email(mail: str):
-    gp = re.search(r"(?<=^[A-Za-z0-9]{2}).*?(?=@)", mail)
-    if gp is not None:
-        new_mail = mail.replace(gp.group(0), "****")
-        return new_mail
+    # regex = r"(?<=).(?=[^@]*?@)|(?:(?<=@.)|(?!^)\G(?=[^@]*$))(.)(?=.*\.)"
+    # result = re.sub(regex, "*", mail, 0, re.MULTILINE)
+
+    if mail is not None:
+        return mail
     return None
