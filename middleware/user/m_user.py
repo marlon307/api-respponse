@@ -1,3 +1,4 @@
+from fastapi import Form
 from pydantic import BaseModel, validator
 from datetime import date
 from utility.credentials import valid_email, valid_psw, valid_name
@@ -21,7 +22,11 @@ class ModelEmail(BaseModel):
     def validator_email(cls, v):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return v
+        return
+
+    @classmethod
+    def form_email(cls, email: str = Form()):
+        return cls(email=email)
 
 
 class ModelPsw(BaseModel):
@@ -35,7 +40,7 @@ class ModelPsw(BaseModel):
 
 
 class ModelRegister(ModelUsrName):
-    email: str
+    username: str
     password: str
 
 

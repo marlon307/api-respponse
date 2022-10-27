@@ -32,7 +32,7 @@ def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/solicitation_reset_psw_user", response_model=Default)
-def solicitation_reset_psw_user(data: ModelEmail):
+def solicitation_reset_psw_user(data: ModelEmail = Depends(ModelEmail.form_email)):
     return controller_user.solicitation_user_resetpsw(data)
 
 
