@@ -3,14 +3,13 @@ from utility.handleErr import handlerErr
 
 
 def add_address(json, c_user):
-    print(type(json))
     try:
         json["user_id"] = c_user.id_user
         id_addres = service_address.s_add_address(json)
 
         return {
             "detail": "Endereço adicionado.",
-            "address": id_addres,
+            "id": id_addres,
             "status": 201,
         }
     except Exception as err:

@@ -16,3 +16,9 @@ class ListAdd(BaseModel):
     detail: str
     status: int
     address: list[AddressProps]
+
+
+class AddAddress(BaseModel):
+    id: int
+    detail: str
+    status: int
