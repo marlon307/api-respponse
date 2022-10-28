@@ -55,7 +55,7 @@ def login_user(data):
 
             token = generate_token(info_login, 6, 0)
 
-            return  token
+            return token
         return False
     return False
 

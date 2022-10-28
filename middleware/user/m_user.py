@@ -22,7 +22,7 @@ class ModelEmail(BaseModel):
     def validator_email(cls, v):
         if valid_email(v) is not True:
             raise ValueError("Email inválido.")
-        return
+        return v
 
     @classmethod
     def form_email(cls, email: str = Form()):
@@ -39,9 +39,15 @@ class ModelPsw(BaseModel):
         return v
 
 
-class ModelRegister(ModelUsrName):
-    username: str
-    password: str
+class ModelRegister(ModelUsrName, ModelEmail, ModelPsw):
+    @classmethod
+    def fields_register(
+        cls,
+        name: str = Form(),
+        email: str = Form(),
+        password: str = Form(),
+    ):
+        return cls(name=name, email=email, password=password)
 
 
 class ModelUpUser(ModelUsrName):
