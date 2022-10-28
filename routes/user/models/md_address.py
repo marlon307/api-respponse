@@ -1,15 +1,9 @@
 from pydantic import BaseModel
+from middleware.user.m_address import m_addAddress
 
 
-class AddressProps(BaseModel):
+class AddressProps(m_addAddress):
     id: int
-    name_delivery: str
-    city: str
-    district: str
-    uf: str
-    cep: str
-    road: str
-    number_home: str
 
 
 class ListAdd(BaseModel):

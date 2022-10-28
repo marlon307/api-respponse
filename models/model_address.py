@@ -6,7 +6,7 @@ q_insert_address = (
 )
 
 q_get_address = (
-    "SELECT ad.id, ad.name_delivery, ad.city, ad.district, ad.uf, ad.cep, ad.road, ad.number_home "
+    "SELECT ad.id, ad.name_delivery AS namedest, ad.city, ad.district, ad.uf AS state, ad.cep AS zipcode, ad.road AS street, ad.number_home AS number "
     "FROM user_address AS ad "
     "WHERE ad.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
     "AND ad.deleted IS NULL"
