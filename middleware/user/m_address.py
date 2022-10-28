@@ -31,7 +31,3 @@ class m_addAddress(BaseModel):
             street=street,
             number=number,
         )
-
-
-class m_delAddress(BaseModel):
-    id: int

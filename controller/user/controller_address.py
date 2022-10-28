@@ -28,9 +28,9 @@ def get_address(data):
         raise handlerErr("address -> get_address -> %s" % err)
 
 
-def delete_address(json, id_user):
+def delete_address(id_address, id_user):
     try:
-        service_address.s_delete_address(id_user, json["id"])
+        service_address.s_delete_address(id_user, id_address)
         return {
             "detail": "Endereço excluído.",
             "status": 200,
