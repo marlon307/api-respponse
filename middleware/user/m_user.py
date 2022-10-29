@@ -1,4 +1,4 @@
-from fastapi import Form
+from fastapi import Form, HTTPException
 from pydantic import BaseModel, validator
 from datetime import date
 from utility.credentials import valid_email, valid_psw, valid_name
@@ -11,7 +11,10 @@ class ModelUsrName(BaseModel):
     @validator("name")
     def validator_name(cls, v):
         if valid_name(v) is not True:
-            raise ValueError("Nome inválido.")
+            raise HTTPException(
+                detail={"detail": "Nome inválido.", "status": 400},
+                status_code=400,
+            )
         return v.title()
 
 
@@ -21,8 +24,11 @@ class ModelEmail(BaseModel):
     @validator("email")
     def validator_email(cls, v):
         if valid_email(v) is not True:
-            raise ValueError("Email inválido.")
-        return
+            raise HTTPException(
+                detail={"detail": "Email inválido.", "status": 400},
+                status_code=400,
+            )
+        return v
 
     @classmethod
     def form_email(cls, email: str = Form()):
@@ -35,13 +41,22 @@ class ModelPsw(BaseModel):
     @validator("password")
     def validator_password(cls, v):
         if valid_psw(v) is not True:
-            raise ValueError("Senha inválida.")
+            raise HTTPException(
+                detail={"detail": "Senha inválida.", "status": 400},
+                status_code=400,
+            )
         return v
 
 
-class ModelRegister(ModelUsrName):
-    username: str
-    password: str
+class ModelRegister(ModelUsrName, ModelEmail, ModelPsw):
+    @classmethod
+    def fields_register(
+        cls,
+        name: str = Form(),
+        email: str = Form(),
+        password: str = Form(),
+    ):
+        return cls(name=name, email=email, password=password)
 
 
 class ModelUpUser(ModelUsrName):

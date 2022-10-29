@@ -16,8 +16,8 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
 
 # @3dFt53As
 @router.post("/createuser", response_model=resp_cUser, status_code=201)
-def create_user(body: ModelRegister):
-    return controller_user.user_register(body)
+def create_user(form: ModelRegister = Depends(ModelRegister.fields_register)):
+    return controller_user.user_register(form)
 
 
 @router.patch("/confirm_acc", response_model=Default)

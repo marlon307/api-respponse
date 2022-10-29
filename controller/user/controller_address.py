@@ -3,14 +3,13 @@ from utility.handleErr import handlerErr
 
 
 def add_address(json, c_user):
-    print(type(json))
     try:
         json["user_id"] = c_user.id_user
         id_addres = service_address.s_add_address(json)
 
         return {
             "detail": "Endereço adicionado.",
-            "address": id_addres,
+            "id": id_addres,
             "status": 201,
         }
     except Exception as err:
@@ -29,9 +28,9 @@ def get_address(data):
         raise handlerErr("address -> get_address -> %s" % err)
 
 
-def delete_address(json, id_user):
+def delete_address(id_address, id_user):
     try:
-        service_address.s_delete_address(id_user, json["id"])
+        service_address.s_delete_address(id_user, id_address)
         return {
             "detail": "Endereço excluído.",
             "status": 200,

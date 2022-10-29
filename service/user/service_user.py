@@ -33,8 +33,7 @@ def login_user(data):
     info_login = execut_query(model_user.q_login_user).selectOne(
         {"email": data.username}
     )
-
-    if info_login is not None:
+    if "password" in info_login:
         valid_psw = checkcrypt(data.password, info_login["password"])
         if valid_psw is True:
             # Token valido por 6 horas
@@ -55,7 +54,7 @@ def login_user(data):
 
             token = generate_token(info_login, 6, 0)
 
-            return  token
+            return token
         return False
     return False
 

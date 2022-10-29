@@ -4,7 +4,7 @@ from models import model_address
 
 
 def s_add_address(json):
-    json["cep"] = json["cep"].replace("-", "")
+    json["zipcode"] = json["zipcode"].replace("-", "")
     id_insert = execut_query(model_address.q_insert_address).insert(json)
     return id_insert
 
