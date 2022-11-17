@@ -25,7 +25,7 @@ def list_product():
     try:
         list_product = service_product.list_product()
         return {
-            "list": list_product,
+            **list_product,
             "detail": "Produto listado.",
             "status": 200,
         }
