@@ -75,22 +75,22 @@ def create_product(data, files_list):
 
 
 def list_product():
-    list_product = execut_query(model_product.q_list_prod).select({})
+    list_product = execut_query(model_product.q_list_prod).selectOne({})
     new_list = list()
 
-    for list_obj in list_product:
-        conver_str_for_json = json.loads(list_obj["color_list"])
-        conver_str_for_json.sort(
+    for list_obj in json.loads(list_product["prod_list"]):
+        list_obj["color_list"].sort(
             key=lambda color_list: color_list["discount"], reverse=True
         )
         new_list.append(
             {
                 **list_obj,
-                "color_list": conver_str_for_json,
+                "color_list": list_obj["color_list"],
             }
         )
-
-    return new_list
+    list_product["prod_list"] = new_list
+    list_product["categorys"] = json.loads(list_product["categorys"])
+    return list_product
 
 
 def get_product_id(id):
