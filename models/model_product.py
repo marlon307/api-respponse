@@ -16,9 +16,9 @@ q_insert_image = """INSERT INTO products_images
 
 q_list_prod = """SELECT JSON_ARRAYAGG(
 JSON_OBJECT('id', ob_lp.id, 'title', ob_lp.title, 'category_name', ob_lp.category_name, 'color_list', ob_lp.color_list)
-) AS prod_list, 
+) AS list_product, 
 JSON_ARRAYAGG(
-JSON_OBJECT('ctg_name', ctg.category_name, 'path', ctg.path, 'color', ctg.color, 'sub_title', ctg.sub_title)
+JSON_OBJECT('ctgID', ctg.id, 'categoryName', ctg.category_name, 'path', ctg.path, 'color', ctg.color, 'sub_title', ctg.sub_title, 'imgCategory', ctg.url_image)
 ) AS categorys 
 FROM 
 (SELECT p.id, p.title, c.category_name, 

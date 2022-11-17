@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 
 class ListImage(BaseModel):
@@ -52,14 +52,16 @@ class MinInfoProductList(BaseModel):
 
 
 class CategoryHome(BaseModel):
+    ctgID: int
     path: str
     color: str
-    ctg_name: str
+    categoryName: str
     sub_title: str
+    imgCategory: HttpUrl
 
 
 class ListProduct(BaseModel):
-    prod_list: list[MinInfoProductList]
+    list_product: list[MinInfoProductList]
     categorys: list[CategoryHome]
     detail: str
     status: int

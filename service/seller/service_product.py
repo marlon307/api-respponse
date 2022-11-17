@@ -78,7 +78,7 @@ def list_product():
     list_product = execut_query(model_product.q_list_prod).selectOne({})
     new_list = list()
 
-    for list_obj in json.loads(list_product["prod_list"]):
+    for list_obj in json.loads(list_product["list_product"]):
         list_obj["color_list"].sort(
             key=lambda color_list: color_list["discount"], reverse=True
         )
@@ -88,7 +88,7 @@ def list_product():
                 "color_list": list_obj["color_list"],
             }
         )
-    list_product["prod_list"] = new_list
+    list_product["list_product"] = new_list
     list_product["categorys"] = json.loads(list_product["categorys"])
     return list_product
 
