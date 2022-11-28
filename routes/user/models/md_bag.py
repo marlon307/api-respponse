@@ -18,7 +18,7 @@ class ItemBag(ClsItemOrder):
 
 class InfoBag(BaseModel):
     list_b: list[ItemBag]
-    main_add: AddressProps | dict
+    main_add: AddressProps
     shipping_company: list[Shipping]
 
 
