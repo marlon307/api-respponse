@@ -29,3 +29,7 @@ class resp_auth(BaseModel):
     detail: str
     exp: datetime
     status: int
+
+
+class GetToken(BaseModel):
+    authorization: str
