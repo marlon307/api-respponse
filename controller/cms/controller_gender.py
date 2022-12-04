@@ -1,15 +1,15 @@
-from flask import request
-from service.cms.service_gender import sGender
+from service.cms import service_gender
+from utility.handleErr import handlerErr, HTTPException, status
 
 
-class cGender:
-    def c_gender():
-        try:
-            json = request.get_json()
-            sGender.s_create_gender(json)
-            return {"msg": "Género criado.", "status": 201}, 201
-        except Exception as err:
-            if err.errno == 1062:
-                return {"msg": "Género já existe.", "status": 409}, 409
-            print("cms -> c_category ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+def c_gender(json):
+    try:
+        service_gender.s_create_gender(json)
+        return {"detail": "Género criado.", "status": 201}
+    except Exception as err:
+        if err.errno == 1062:
+            raise HTTPException(
+                datail="Género já existe.",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+        raise handlerErr("cms -> c_category -> %s" % err)

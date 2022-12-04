@@ -1,13 +1,12 @@
-from flask import Blueprint
+from fastapi import APIRouter, Depends
 from middleware.cms.m_size import m_add_size
-from controller.cms.controller_size import cSize
-from middleware.m_auth import m_auth_adm
+from controller.cms import controller_size
+from middleware.m_auth import User, get_current_adm
+from ..cms.models import Default
 
-size_cms_blueprint = Blueprint("route_product_size_cms", __name__)
+router = APIRouter(tags=["CMS"])
 
 
-@size_cms_blueprint.route("/add_size", methods=["POST"])
-@m_auth_adm
-@m_add_size
-def add_size():
-    return cSize.c_size()
+@router.post("/add_size", response_model=Default, status_code=201)
+def add_size(data: m_add_size, current_user: User = Depends(get_current_adm)):
+    return controller_size.c_size(data.dict())

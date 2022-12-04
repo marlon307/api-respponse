@@ -1,45 +1,39 @@
-from flask import request
-from service.user.service_address import sAddress
+from service.user import service_address
+from utility.handleErr import handlerErr
 
 
-class cAddress:
-    def c_add_address():
-        try:
-            json = request.get_json()
-            json["user_id"] = request.headers["user"]["id_user"]
-            id_addres = sAddress.s_add_address(json)
+def add_address(json, c_user):
+    try:
+        json["user_id"] = c_user.id_user
+        id_addres = service_address.s_add_address(json)
 
-            return {
-                "msg": "Endereço adicionado.",
-                "address": id_addres,
-                "status": 201,
-            }, 201
-        except Exception as err:
-            print("address -> c_add_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+        return {
+            "detail": "Endereço adicionado.",
+            "id": id_addres,
+            "status": 201,
+        }
+    except Exception as err:
+        raise handlerErr("address -> add_address -> %s" % err)
 
-    def c_get_address():
-        try:
-            list_address = sAddress.s_get_address(request.headers["user"]["id_user"])
-            return {
-                "msg": "Lista de endereço.",
-                "address": list_address,
-                "status": 200,
-            }, 200
-        except Exception as err:
-            print("address -> c_get_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
 
-    def c_delete_address():
-        try:
-            id_user = request.headers["user"]["id_user"]
-            json = request.get_json()
+def get_address(data):
+    try:
+        list_address = service_address.s_get_address(data.id_user)
+        return {
+            "detail": "Lista de endereço.",
+            "address": list_address,
+            "status": 200,
+        }
+    except Exception as err:
+        raise handlerErr("address -> get_address -> %s" % err)
 
-            sAddress.s_delete_address(id_user, json["address"])
-            return {
-                "msg": "Endereço excluído.",
-                "status": 200,
-            }, 200
-        except Exception as err:
-            print("address -> c_delete_address ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+
+def delete_address(id_address, id_user):
+    try:
+        service_address.s_delete_address(id_user, id_address)
+        return {
+            "detail": "Endereço excluído.",
+            "status": 200,
+        }
+    except Exception as err:
+        raise handlerErr("address -> delete_address -> %s" % err)

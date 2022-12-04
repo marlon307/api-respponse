@@ -1,15 +1,15 @@
-from flask import request
-from service.cms.service_size import sSize
+from service.cms import service_size
+from utility.handleErr import handlerErr, status, HTTPException
 
 
-class cSize:
-    def c_size():
-        try:
-            json = request.get_json()
-            sSize.s_create_size(json)
-            return {"msg": "Tamanho criado.", "status": 201}, 201
-        except Exception as err:
-            if err.errno == 1062:
-                return {"msg": "Este tamnho já existe.", "status": 409}, 409
-            print("cms -> c_size ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+def c_size(json):
+    try:
+        service_size.s_create_size(json)
+        return {"detail": "Tamanho criado.", "status": 201}
+    except Exception as err:
+        if err.errno == 1062:
+            raise HTTPException(
+                datail="Tamanho já existe.",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+        raise handlerErr("cms -> c_size -> %s" % err)

@@ -1,23 +1,9 @@
-from functools import wraps
-from flask import request
-
-msgErr = {
-    "msg": "Não foi possivel inserir este tamanho.",
-    "status": 400,
-}
+from pydantic import BaseModel, validator
 
 
-def m_add_size(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
-            if "value_size" not in data:
-                return msgErr
-            return f(*args, **kwargs)
+class m_add_size(BaseModel):
+    value_size: str
 
-        except Exception as err:
-            print(f"[Middleware add size] ( %s )" % (err))
-            return msgErr
-
-    return decorated
+    @validator("value_size")
+    def valid_size(cls, v):
+        return v.title()

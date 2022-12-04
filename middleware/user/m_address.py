@@ -1,31 +1,33 @@
-from functools import wraps
-from flask import request
-
-msgErr = {
-    "msg": "Dados enviados inválidos.",
-    "status": 400,
-}, 400
+from fastapi import Form
+from pydantic import BaseModel
 
 
-def m_address(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
-            if (
-                "name_delivery" not in data
-                or "city" not in data
-                or "district" not in data
-                or "uf" not in data
-                or "cep" not in data
-                or "road" not in data
-                or "number_home" not in data
-            ):
-                return msgErr
-            return f(*args, **kwargs)
+class m_addAddress(BaseModel):
+    namedest: str
+    city: str
+    district: str
+    state: str
+    zipcode: str
+    street: str
+    number: str
 
-        except Exception as err:
-            print(f"[Middleware address] ( %s ) [%s]" % (data, err))
-            return msgErr
-
-    return decorated
+    @classmethod
+    def form_address(
+        cls,
+        namedest: str = Form(),
+        city: str = Form(),
+        district: str = Form(),
+        state: str = Form(max_length=2),
+        zipcode: str = Form(),
+        street: str = Form(),
+        number: str = Form(),
+    ):
+        return cls(
+            namedest=namedest,
+            city=city,
+            district=district,
+            state=state,
+            zipcode=zipcode,
+            street=street,
+            number=number,
+        )

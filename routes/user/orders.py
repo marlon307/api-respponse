@@ -1,17 +1,16 @@
-from flask import Blueprint
-from middleware.m_auth import m_auth
-from controller.user.controller_order import cOrders
+from fastapi import APIRouter, Depends
+from middleware.m_auth import User, get_current_user
+from controller.user import controller_order
+from ..user.models import RListOrder, ROrderId
 
-orders_blueprint = Blueprint("routes_orders", __name__)
-
-
-@orders_blueprint.route("/order", methods=["GET"])
-@m_auth
-def get_orders():
-    return cOrders.c_get_orders()
+router = APIRouter(tags=["USER"])
 
 
-@orders_blueprint.route("/order/<id>", methods=["GET"])
-@m_auth
-def get_order_id(id):
-    return cOrders.c_get_order_id(id)
+@router.get("/order", response_model=RListOrder)
+def get_orders(current_user: User = Depends(get_current_user)):
+    return controller_order.get_orders(current_user)
+
+
+@router.get("/order/{id}", response_model=ROrderId)
+def get_order_id(id: int, current_user: User = Depends(get_current_user)):
+    return controller_order.get_order_id(id, current_user)

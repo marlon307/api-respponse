@@ -1,18 +1,21 @@
 from models.database import execut_query
-from models.model_bag import qBag
+from models import model_bag
 from utility.calca_discount import calc_discount
 import json
 
 
-class sBag:
-    def s_add_bag(json):
-        id_insert = execut_query.insert(qBag.q_insert_bag(), json)
-        return id_insert
+def add_bag(json):
+    id_insert = execut_query(model_bag.q_insert_bag).insert(json)
+    return id_insert
 
-    def s_list_bag(user_id):
-        list_bag = execut_query.selectOne(qBag.q_list_bag(), {"user_id": user_id})
-        list_bag["list_add"] = json.loads(list_bag["list_add"] or "[]")
+
+def list_bag(user_id):
+    list_bag = execut_query(model_bag.q_list_bag).selectOne({"user_id": user_id})
+    if list_bag != {}:
+
+        list_bag["main_add"] = json.loads(list_bag["main_add"] or "{}")
         list_bag["list_b"] = json.loads(list_bag["list_b"] or "[]")
+        list_bag["shipping_company"] = json.loads(list_bag["shipping_company"] or "[]")
 
         def calc_dicount(object_calc):
             old_price = calc_discount(object_calc["discount"], object_calc["price"])
@@ -23,21 +26,25 @@ class sBag:
 
         list_bag["list_b"] = list(map(calc_dicount, list_bag["list_b"]))
         return list_bag
+    return False
 
-    def s_update_quantity_bag(json):
-        execut_query.update(qBag.q_bag_update_quantity(), json)
-        return True
 
-    def s_delete_item_bag(json):
-        execut_query.delete(qBag.q_bag_delete_item(), json)
-        return True
+def update_quantity_bag(json):
+    execut_query(model_bag.q_bag_update_quantity).update(json)
+    return True
 
-    def s_register_order(data_json):
-        json_for_tuple = (
-            data_json["p_userid"],
-            data_json["address"],
-            data_json["carrie"],
-            16.65,
-        )
-        order = execut_query.callProcedure("register_order", json_for_tuple)
-        return order[0]
+
+def s_delete_item_bag(json):
+    execut_query(model_bag.q_bag_delete_item).delete(json)
+    return True
+
+
+def register_order(data_json):
+    json_for_tuple = (
+        data_json["p_userid"],
+        data_json["address"],
+        data_json["carrie"],
+        16.65,
+    )
+    order = execut_query("register_order").callProcedure(json_for_tuple)
+    return order[0]

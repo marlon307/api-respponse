@@ -1,23 +1,10 @@
-from functools import wraps
-from flask import request
-
-msgErr = {
-    "msg": "Não foi possivel inserir essa cor.",
-    "status": 400,
-}
+from pydantic import BaseModel, validator
 
 
-def m_add_color(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            data = request.get_json()
-            if "color_name" not in data or "color" not in data:
-                return msgErr
-            return f(*args, **kwargs)
+class m_add_color(BaseModel):
+    color_name: str
+    color: str
 
-        except Exception as err:
-            print(f"[Middleware add color] ( %s )" % (err))
-            return msgErr
-
-    return decorated
+    @validator("color_name")
+    def valid_color_name(cls, v):
+        return v.title()

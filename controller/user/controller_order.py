@@ -1,35 +1,39 @@
-from flask import request
-from service.user.service_order import sOrders
-
-msgErr500 = {"msg": "Server error.", "status": 500}, 500
+from service.user import service_order
+from utility.handleErr import handlerErr, JSONResponse, status
 
 
-class cOrders:
-    def c_get_orders():
-        try:
-            json = {"user_id": request.headers["user"]["id_user"]}
-            orders = sOrders.s_get_orders(json)
+def get_orders(c_user):
+    try:
+        json = {"user_id": c_user.id_user}
+        orders = service_order.get_orders(json)
+        return {
+            "detail": "Lista de pedidos.",
+            "status": 200,
+            "orders": orders,
+        }
+    except Exception as err:
+        raise handlerErr("bag -> c_get_list_orders -> %s" % err)
+
+
+def get_order_id(id, c_user):
+    try:
+        json = {
+            "user_id": c_user.id_user,
+            "order_id": int(id),
+        }
+        order = service_order.get_orderid(json)
+        if order is not False:
             return {
-                "msg": "Lista de pedidos.",
-                "status": 200,
-                "orders": orders,
-            }, 200
-        except Exception as err:
-            print("bag -> c_get_list_orders ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
-
-    def c_get_order_id(id):
-        try:
-            json = {
-                "user_id": request.headers["user"]["id_user"],
-                "order_id": int(id),
-            }
-            order = sOrders.s_get_orderid(json)
-            return {
-                "msg": "Pedido listado.",
+                "detail": "Pedido listado.",
                 "status": 200,
                 "order": order,
-            }, 200
-        except Exception as err:
-            print("bag -> c_get_order ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+            }
+        return JSONResponse(
+            content={
+                "detail": "Não encontramos este pedido.",
+                "status": status.HTTP_400_BAD_REQUEST,
+            },
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+    except Exception as err:
+        raise handlerErr("bag -> c_get_order -> %s" % err)

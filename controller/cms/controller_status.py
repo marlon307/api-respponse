@@ -1,15 +1,15 @@
-from flask import request
-from service.cms.service_status import sStatus
+from service.cms import service_status
+from utility.handleErr import handlerErr, status, HTTPException
 
 
-class cStatus:
-    def c_status():
-        try:
-            json = request.get_json()
-            sStatus.s_create_status(json)
-            return {"msg": "Status criado.", "status": 201}, 201
-        except Exception as err:
-            if err.errno == 1062:
-                return {"msg": "Este status já existe.", "status": 409}, 409
-            print("cms -> c_size ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+def c_status(json):
+    try:
+        service_status.s_create_status(json)
+        return {"detail": "Status criado.", "status": 201}
+    except Exception as err:
+        if err.errno == 1062:
+            raise HTTPException(
+                datail="Status já existe.",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+        raise handlerErr("cms -> c_size -> %s" % err)

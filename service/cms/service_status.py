@@ -1,8 +1,7 @@
 from models.database import execut_query
-from models.model_status import qStatus
+from models import model_status
 
 
-class sStatus:
-    def s_create_status(json):
-        execut_query.insert(qStatus.q_insert_status(), json)
-        return True
+def s_create_status(json):
+    execut_query(model_status.q_insert_status).insert(json)
+    return True

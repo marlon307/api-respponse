@@ -1,8 +1,10 @@
-flask
+fastapi
 mysql-connector-python
 bcrypt
-flask-cors
-gunicorn
+uvicorn
 pyjwt
 requests
 cryptography
+pydantic
+# 
+python-multipart

@@ -1,39 +1,51 @@
-from functools import wraps
+from fastapi import status, Depends, HTTPException
+from pydantic import validator, UUID4
+from fastapi.security import OAuth2PasswordBearer
 from auth.auth_jwt import valid_auth
-from flask import abort, request
-
-msgErr = {
-    "msg": "Unauthorized.",
-    "status": 401,
-}, 401
+from middleware.user.m_user import ModelEmail
 
 
-def m_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            if valid_auth() is not None:
-                abort(401)
+class User(ModelEmail):
+    id_user: UUID4
+    name: str
+    seller: bool = False
+    admin: bool = False
 
-        except Exception as err:
-            print(f"[AUTH] %s" % (err))
-            return msgErr
-
-        return f(*args, **kwargs)
-
-    return decorated
+    @validator("id_user")
+    def valid_uuid(cls, v):
+        return str(v)
 
 
-def m_auth_adm(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        try:
-            if valid_auth() is not None or "admin" not in request.headers["user"]:
-                abort(401)
-        except Exception as err:
-            print(f"[AUTH] %s" % (err))
-            return msgErr
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login_user")
 
-        return f(*args, **kwargs)
 
-    return decorated
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        return User(**valid_auth(token))
+    except Exception as err:
+        print("get_current_user -> ", err)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized!",
+        )
+
+
+def m_auth(token: str):
+    return valid_auth(token)
+
+
+def get_current_adm(token: str = Depends(oauth2_scheme)):
+    try:
+        c_adm = valid_auth(token)
+        if c_adm is None or "admin" not in c_adm:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Unauthorized!",
+            )
+        return User(**c_adm)
+    except Exception as err:
+        print("get_current_user -> ", err)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized!",
+        )

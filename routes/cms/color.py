@@ -1,13 +1,13 @@
-from flask import Blueprint
+from fastapi import APIRouter, Depends
 from middleware.cms.m_color import m_add_color
-from controller.cms.controller_color import cColor
-from middleware.m_auth import m_auth_adm
+from controller.cms import controller_color
+from middleware.m_auth import User, get_current_adm
+from .models import Default
 
-color_cms_blueprint = Blueprint("route_product_color_cms", __name__)
+
+router = APIRouter(tags=["CMS"])
 
 
-@color_cms_blueprint.route("/add_color", methods=["POST"])
-@m_auth_adm
-@m_add_color
-def add_color():
-    return cColor.c_color()
+@router.post("/add_color", response_model=Default, status_code=201)
+def add_color(data: m_add_color, current_user: User = Depends(get_current_adm)):
+    return controller_color.c_color(data.dict())

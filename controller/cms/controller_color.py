@@ -1,15 +1,15 @@
-from flask import request
-from service.cms.service_color import sColor
+from service.cms import service_color
+from utility.handleErr import handlerErr,status,HTTPException
 
 
-class cColor:
-    def c_color():
-        try:
-            json = request.get_json()
-            sColor.s_create_color(json)
-            return {"msg": "Cor criada.", "status": 201}, 201
-        except Exception as err:
-            if err.errno == 1062:
-                return {"msg": "Esta cor já existe.", "status": 409}, 409
-            print("cms -> c_color ->", err)
-            return {"msg": "Falha nossa.", "status": 500}, 500
+def c_color(json):
+    try:
+        service_color.s_create_color(json)
+        return {"detail": "Cor criada.", "status": 201}
+    except Exception as err:
+        if err.errno == 1062:
+            raise HTTPException(
+                datail="Cor já existe.",
+                status_code=status.HTTP_409_CONFLICT,
+            )
+        raise handlerErr("cms -> c_color -> %s" % err)

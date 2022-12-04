@@ -1,58 +1,53 @@
-from flask import Blueprint
-from middleware.user.m_user import m_login, m_register, m_email, m_psw, m_update_user
-from middleware.m_auth import m_auth
-from controller.user.controller_user import cUser
-
-user_blueprint = Blueprint("routes_user", __name__)
-
-
-@user_blueprint.route("/createuser", methods=["POST"])
-@m_register
-def createuser():
-    return cUser.c_user_register()
+from fastapi import APIRouter, Header, Depends
+from middleware.user.m_user import ModelEmail, ModelPsw, ModelRegister, ModelUpUser
+from middleware.m_auth import get_current_user, m_auth, User
+from controller.user import controller_user
+from ..user.models import resp_auth, resp_user, resp_cUser, Default
+from fastapi.security import OAuth2PasswordRequestForm
 
 
-# Need Authorization
-@user_blueprint.route("/confirm_acc", methods=["PATCH"])
-@m_auth
-def confirm_acc():
-    return cUser.c_user_confirmacc()
+router = APIRouter(tags=["USER"])
 
 
-@user_blueprint.route("/request_new_confirm_acc", methods=["POST"])
-@m_email
-def request_new_confirm_acc():
-    return cUser.c_request_new_confirm_acc()
+@router.post("/login_user", response_model=resp_auth)
+def login_user(form_data: OAuth2PasswordRequestForm = Depends()):
+    return controller_user.user_login(form_data)
 
 
-@user_blueprint.route("/login_user", methods=["POST"])
-@m_login
-def login_user():
-    return cUser.c_user_login()
+@router.post("/createuser", response_model=resp_cUser, status_code=201)
+def create_user(form: ModelRegister = Depends(ModelRegister.fields_register)):
+    return controller_user.user_register(form)
 
 
-@user_blueprint.route("/solicitation_reset_psw_user", methods=["POST"])
-@m_email
-def solicitation_reset_psw_user():
-    return cUser.c_solicitation_user_resetpsw()
+@router.patch("/confirm_acc", response_model=Default)
+def confirm_acc(token: str = Header(default="Token")):
+    dict = m_auth(token)
+    return controller_user.user_confirmacc(dict)
 
 
-# Need Authorization
-@user_blueprint.route("/reset_psw_user", methods=["PATCH"])
-@m_auth
-@m_psw
-def reset_psw_user():
-    return cUser.c_user_resetpsw()
+@router.post("/request_new_confirm_acc", response_model=Default)
+def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
+    return controller_user.request_new_confirm_acc(current_user)
 
 
-@user_blueprint.route("/user", methods=["GET"])
-@m_auth
-def get_info_user():
-    return cUser.c_get_info_user()
+@router.post("/solicitation_reset_psw_user", response_model=Default)
+def solicitation_reset_psw_user(data: ModelEmail = Depends(ModelEmail.form_email)):
+    return controller_user.solicitation_user_resetpsw(data)
 
 
-@user_blueprint.route("/user", methods=["PATCH"])
-@m_auth
-@m_update_user
-def update_info_user():
-    return cUser.c_update_info_user()
+@router.patch("/reset_psw_user", response_model=Default)
+def reset_psw_user(data: ModelPsw, token: str = Header(default="Token")):
+    dict = m_auth(token)
+    dict["password"] = data.password
+    return controller_user.user_resetpsw(dict)
+
+
+@router.get("/user", response_model=resp_user)
+def get_info_user(current_user: User = Depends(get_current_user)):
+    return controller_user.get_info_user(current_user)
+
+
+@router.patch("/user", response_model=Default)
+def update_info_user(data: ModelUpUser, current_user: User = Depends(get_current_user)):
+    new_json = {**current_user.dict(), **data.dict()}
+    return controller_user.update_info_user(new_json)
