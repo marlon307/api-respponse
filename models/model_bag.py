@@ -47,12 +47,14 @@ class qBag:
             "UPDATE bag SET quantity = %(quantity)s WHERE "
             "user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
             "AND option_product_id = %(product_option)s "
-            "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"
+            "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) "
+            "AND orders_id IS NULL"
         )
 
     def q_bag_delete_item():
         return (
             "DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) "
             "AND option_product_id = %(product_option)s "
-            "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"
+            "AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) "
+            "AND orders_id IS NULL"
         )
