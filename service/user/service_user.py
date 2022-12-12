@@ -1,10 +1,10 @@
 import os
+from uuid import uuid4
 from auth.auth_jwt import generate_token
 from models.database import execut_query
 from models import model_user
 from utility.encrypt import encrypt, checkcrypt, fernetEncrypt, fernetDecrypt
 from utility.format_doc import format_cel, format_cpf, format_email
-from utility.generat_id import generate_id
 from utility.conpare_date import conpare_date
 from cryptography.fernet import Fernet
 from datetime import datetime, timedelta
@@ -17,7 +17,7 @@ def register_user(data):
     if "email" not in info_email:
         key = Fernet.generate_key()
         new_obj = {
-            "id_user": generate_id(),
+            "id_user": uuid4(),
             "name": data.name,
             "email": data.email,
             "password": encrypt(data.password),
