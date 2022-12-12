@@ -152,7 +152,6 @@ def user_resetpsw(data):
 
 def get_info_user(id_user):
     result = execut_query(model_user.q_select_info_user).selectOne({"user_id": id_user})
-    result["umail"] = result["email"]
     return result
 
 
