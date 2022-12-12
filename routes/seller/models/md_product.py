@@ -61,8 +61,8 @@ class CategoryHome(BaseModel):
 
 
 class ListProduct(BaseModel):
-    list_product: list[MinInfoProductList]
-    categorys: list[CategoryHome]
+    list_product: list[MinInfoProductList] |dict
+    categorys: list[CategoryHome]|dict
     detail: str
     status: int
 

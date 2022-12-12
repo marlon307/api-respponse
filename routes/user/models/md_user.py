@@ -5,12 +5,12 @@ from middleware.user.m_user import ModelEmail
 
 class props_user(ModelEmail):
     name: str
-    birthday: date
-    cpf_cnpj: str
-    gender_id: int
-    tel: str
-    cel: str
-    umail: str
+    birthday: date | None
+    cpf_cnpj: str | None
+    gender_id: int | None
+    tel: str | None
+    cel: str | None
+    email: str
 
 
 class resp_user(BaseModel):

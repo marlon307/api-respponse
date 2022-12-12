@@ -48,6 +48,9 @@ def get_info_user(current_user: User = Depends(get_current_user)):
 
 
 @router.patch("/user", response_model=Default)
-def update_info_user(data: ModelUpUser, current_user: User = Depends(get_current_user)):
-    new_json = {**current_user.dict(), **data.dict()}
+def update_info_user(
+    form: ModelUpUser = Depends(ModelUpUser.fields_update),
+    current_user: User = Depends(get_current_user),
+):
+    new_json = {**current_user.dict(), **form.dict()}
     return controller_user.update_info_user(new_json)

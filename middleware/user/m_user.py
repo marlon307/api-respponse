@@ -48,6 +48,16 @@ class ModelPsw(BaseModel):
         return v
 
 
+class ModelDOC(BaseModel):
+    doc: str
+
+    @validator("doc")
+    def validator_doc(cls, v):
+        if cpf_validate(v) is not True:
+            raise ValueError("Documento inválido.")
+        return v
+
+
 class ModelRegister(ModelUsrName, ModelEmail, ModelPsw):
     @classmethod
     def fields_register(
@@ -59,15 +69,20 @@ class ModelRegister(ModelUsrName, ModelEmail, ModelPsw):
         return cls(name=name, email=email, password=password)
 
 
-class ModelUpUser(ModelUsrName):
+class ModelUpUser(ModelUsrName, ModelDOC):
+    date: date
     cel: str
     tel: str
-    date: date
-    doc: str
     gender: int
 
-    @validator("doc")
-    def validator_doc(cls, v):
-        if cpf_validate(v) is not True:
-            raise ValueError("Documento inválido.")
-        return v
+    @classmethod
+    def fields_update(
+        cls,
+        name: str = Form(),
+        date: date = Form(),
+        doc: str = Form(),
+        gender: int = Form(),
+        cel: str = Form(),
+        tel: str = Form(),
+    ):
+        return cls(name=name, cel=cel, tel=tel, date=date, doc=doc, gender=gender)

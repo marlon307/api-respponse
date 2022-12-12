@@ -3,7 +3,7 @@ q_insert_bag = """INSERT INTO bag (user_id, quantity, option_product_id, sizes_i
 
 
 q_list_bag = """SELECT JSON_ARRAYAGG(JSON_OBJECT( 
-    'id', lb.id,  'opt_id', lb.opt_id,  'quantity', lb.quantity, 'size', lb.size, 'price', lb.price, 'discount', lb.discount, 
+    'id', lb.id,  'opt_id', lb.opt_id, 'quantity', lb.quantity, 'size', lb.size, 'price', lb.price, 'discount', lb.discount, 
     'title', lb.title, 'category_name', lb.category_name, 'color', lb.color, 'color_name', lb.color_name, 'url_image', lb.url_image
     )) AS list_b, 
     IF (la.deleted IS NULL,JSON_OBJECT( 
@@ -11,7 +11,7 @@ q_list_bag = """SELECT JSON_ARRAYAGG(JSON_OBJECT(
     'state', la.uf, 'zipcode', la.cep, 'street', la.road, 'number', la.number_home
     ), NULL) AS main_add, 
     JSON_ARRAYAGG(JSON_OBJECT('id', c.id, 'name_carrie', c.name_carrier, 'price', 15.65,'toDate', 6)) AS shipping_company 
-    FROM (SELECT p.id, o.id AS opt_id,  b.quantity, s.size, o.price, o.discount, p.title, ctg.category_name, cl.color, cl.color_name, pi.url_image, b.user_id 
+    FROM (SELECT p.id, o.id AS opt_id, b.quantity, s.size, o.price, o.discount, p.title, ctg.category_name, cl.color, cl.color_name, pi.url_image, b.user_id 
     FROM bag AS b 
     INNER JOIN sizes AS s ON s.id = b.sizes_id 
     INNER JOIN options_product AS o ON o.id = b.option_product_id 

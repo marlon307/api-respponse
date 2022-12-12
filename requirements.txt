@@ -1,7 +1,7 @@
-fastapi
+fastapi[all]
 mysql-connector-python
 bcrypt
-uvicorn
+# uvicorn
 pyjwt
 requests
 cryptography
