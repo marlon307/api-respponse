@@ -1,7 +1,6 @@
 from uploads.imgur_upload import upload_image_imgur
 from models.database import execut_query
 from models import model_product, model_seller
-from utility.calca_discount import calc_discount
 from utility.unique import unique
 import json
 
@@ -98,6 +97,8 @@ def get_product_id(id):
     # ***************Favor montar uma query mais decente*****************
     # *******************************************************************
     list_product = execut_query(model_product.q_get_product_id).selectOne({"id": id})
+    execut_query.finishExecution
+
     list_product["list_options"] = unique(json.loads(list_product["list_options"]))
     list_product["list_images"] = unique(json.loads(list_product["list_images"]))
     list_product["list_sizes"] = unique(json.loads(list_product["list_sizes"]))
@@ -112,11 +113,9 @@ def get_product_id(id):
         return size_obj
 
     def fomat_option(object_option):
-        old_price = calc_discount(object_option["discount"], object_option["price"])
         return {
             **object_option,
             "discount": object_option["discount"],
-            "oldPrice": old_price,
             "sizes": mount_obj_size(object_option["option_id"]),
             "images": list(
                 filter(
@@ -139,6 +138,8 @@ def get_product_id(id):
 
 def list_option():
     object_lists = execut_query(model_seller.q_list_options).selectOne({"info": None})
+    execut_query.finishExecution
+
     object_lists["list_colors"] = json.loads(object_lists["list_colors"] or "[]")
     object_lists["list_ctg"] = json.loads(object_lists["list_ctg"] or "[]")
     object_lists["list_gender"] = json.loads(object_lists["list_gender"] or "[]")

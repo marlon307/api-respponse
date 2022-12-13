@@ -6,6 +6,7 @@ from models import model_address
 def s_add_address(json):
     json["zipcode"] = json["zipcode"].replace("-", "")
     id_insert = execut_query(model_address.q_insert_address).insert(json)
+    execut_query.finishExecution
     return id_insert
 
 
@@ -13,6 +14,7 @@ def s_get_address(user_id):
     list_address = execut_query(model_address.q_get_address).select(
         {"user_id": user_id}
     )
+    execut_query.finishExecution
     return list_address
 
 
@@ -24,4 +26,5 @@ def s_delete_address(user_id, id_address):
             "address_id": id_address,
         }
     )
+    execut_query.finishExecution
     return True

@@ -16,6 +16,7 @@ class execut_query:
         try:
             cnx = connection.MySQLConnection(**config_connection)
             cursor = cnx.cursor(dictionary=True, buffered=True)
+
             self.cursor = cursor
             self.execute = cursor.execute
             self.executemany = cursor.executemany
@@ -28,15 +29,27 @@ class execut_query:
         except mysql.connector.Error as errno:
             # self.cursor.close()
             # self.connection.close()
+            cnx.rollback()
             raise errno
 
     def insert(self, data: dict) -> int:
         self.execute(self.query, data)
         id_insert = self.cursor.lastrowid
-        self.closeCursor()
-        self.commit()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.commit()
+        # self.closeConnection()
         return id_insert or 0
+
+    def insertMany(self, data: list[dict]) -> list[int]:
+        self.executemany(self.query, data)
+        # l_id last id
+        l_id = self.cursor.lastrowid or 0
+        id_insert = [l_id - v for v in range(self.cursor.rowcount)]
+        # self.closeCursor()
+        # self.commit()
+        # self.closeConnection()
+        id_insert.sort()
+        return id_insert
 
     def delete(self, condition: dict) -> None:
         self.execute(self.query, condition)
@@ -44,35 +57,24 @@ class execut_query:
         self.commit()
         self.closeConnection()
 
-    def insertMany(self, data: list[dict]) -> list[int]:
-        self.executemany(self.query, data)
-        # l_id last id
-        l_id = self.cursor.lastrowid or 0
-        id_insert = [l_id - v for v in range(self.cursor.rowcount)]
-        self.closeCursor()
-        self.commit()
-        self.closeConnection()
-        id_insert.sort()
-        return id_insert
-
     def update(self, condition: dict) -> None:
         self.execute(self.query, condition)
-        self.closeCursor()
-        self.commit()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.commit()
+        # self.closeConnection()
 
     def select(self, condition: dict = {}) -> list:
         self.execute(self.query, condition)
         result = self.cursor.fetchall()
-        self.closeCursor()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.closeConnection()
         return result or list()
 
     def selectOne(self, condition: dict = {}) -> dict:
         self.execute(self.query, condition)
         result = self.cursor.fetchone()
-        self.closeCursor()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.closeConnection()
         return result or dict()
 
     def callProcedure(self, data):
@@ -80,6 +82,11 @@ class execut_query:
         result = list()
         for obj in self.stored_results():
             result = obj.fetchall()
-        self.closeCursor()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.closeConnection()
         return result
+
+    def finishExecution(self):
+        self.closeCursor()
+        self.commit()
+        self.closeConnection()

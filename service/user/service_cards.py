@@ -4,4 +4,5 @@ from models import model_cards
 
 def s_add_cards(json):
     execut_query(model_cards.q_insert_card).insert(json)
+    execut_query.finishExecution
     return True

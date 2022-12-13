@@ -13,7 +13,7 @@ class Shipping(BaseModel):
 class ItemBag(ClsItemOrder):
     discount: int
     opt_id: int
-    oldPrice: float
+    discount: float
 
 
 class InfoBag(BaseModel):

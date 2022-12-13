@@ -24,6 +24,7 @@ def register_user(data):
             "user_token": key,
         }
         execut_query(model_user.q_register_user).insert(new_obj)
+        execut_query.finishExecution
         send_mail_confirm_user(key, new_obj)
         return True
     return False
@@ -33,6 +34,7 @@ def login_user(data):
     info_login = execut_query(model_user.q_login_user).selectOne(
         {"email": data.username}
     )
+    execut_query.finishExecution
     if "password" in info_login:
         valid_psw = checkcrypt(data.password, info_login["password"])
         if valid_psw is True:
@@ -77,9 +79,13 @@ def user_confirmacc(json: dict):
                         "user_token": json["rtx"],
                     }
                 )
+                execut_query.finishExecution
                 return True
+            execut_query.finishExecution
             return False
+        execut_query.finishExecution
         return False
+    execut_query.finishExecution
     return False
 
 
