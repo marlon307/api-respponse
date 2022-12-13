@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Header, Depends
+from fastapi import APIRouter, BackgroundTasks, Header, Depends
 from middleware.user.m_user import ModelEmail, ModelPsw, ModelRegister, ModelUpUser
 from middleware.m_auth import get_current_user, m_auth, User
 from controller.user import controller_user
@@ -31,8 +31,11 @@ def request_new_confirm_acc(current_user: User = Depends(get_current_user)):
 
 
 @router.post("/solicitation_reset_psw_user", response_model=Default)
-def solicitation_reset_psw_user(data: ModelEmail = Depends(ModelEmail.form_email)):
-    return controller_user.solicitation_user_resetpsw(data)
+def solicitation_reset_psw_user(
+    tasks: BackgroundTasks,
+    data: ModelEmail = Depends(ModelEmail.form_email),
+):
+    return controller_user.solicitation_user_resetpsw(data, tasks)
 
 
 @router.patch("/reset_psw_user", response_model=Default)
