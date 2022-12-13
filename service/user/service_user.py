@@ -95,7 +95,7 @@ def request_new_confirm_acc(email):
     return False
 
 
-def solicitation_user_resetpsw(email):
+def solicitation_user_resetpsw(email, tasks):
     result = execut_query(model_user.q_select_emailuser).selectOne({"email": email})
     if result is not None:
         key = Fernet.generate_key()
@@ -111,17 +111,18 @@ def solicitation_user_resetpsw(email):
         fernet_token = fernetEncrypt(key, info_for_crypt)
         info_token = {"rtx": fernet_token["crypt_hash"], "email": result["email"]}
         token = generate_token(info_token, 0, 15)
-        print(token)
-        params = {
-            "url_reset_psw": "%sreset_psw/%s"
-            % (os.getenv("WEB_APPLICATION_URL"), token),
-        }
-        send_mail(
+
+        tasks.add_task(
+            send_mail,
             "[respponse.com] Solicitção para trocar senha.",
             result["email"],
             "reset_psw.html",
-            params,
+            {
+                "url_reset_psw": "%sreset_psw/%s"
+                % (os.getenv("WEB_APPLICATION_URL"), token),
+            },
         )
+
         return True
     return False
 

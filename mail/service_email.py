@@ -8,7 +8,7 @@ def send_mail(
     title: str,
     destinatary: str or list[str],
     template_name: str,
-    params: object,
+    params: dict,
 ) -> None:
     # Email Address using to send from
     from_addr = os.getenv("EMAIL_TESTE")

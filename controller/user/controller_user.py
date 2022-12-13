@@ -63,9 +63,9 @@ def user_login(data):
         )
 
 
-def solicitation_user_resetpsw(data):
+def solicitation_user_resetpsw(data, tasks):
     try:
-        result = service_user.solicitation_user_resetpsw(data.email)
+        result = service_user.solicitation_user_resetpsw(data.email, tasks)
         if result is True:
             return {
                 "detail": "Email enviado com sucesso.",
