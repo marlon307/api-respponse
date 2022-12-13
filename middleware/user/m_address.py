@@ -3,31 +3,31 @@ from pydantic import BaseModel
 
 
 class m_addAddress(BaseModel):
-    namedest: str
+    name_delivery: str
     city: str
     district: str
     state: str
     zipcode: str
     street: str
-    number: str
+    number_home: str
 
     @classmethod
     def form_address(
         cls,
-        namedest: str = Form(),
+        name_delivery: str = Form(),
         city: str = Form(),
         district: str = Form(),
         state: str = Form(max_length=2),
         zipcode: str = Form(),
         street: str = Form(),
-        number: str = Form(),
+        number_home: str = Form(),
     ):
         return cls(
-            namedest=namedest,
+            name_delivery=name_delivery,
             city=city,
             district=district,
             state=state,
             zipcode=zipcode,
             street=street,
-            number=number,
+            number_home=number_home,
         )

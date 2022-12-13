@@ -1,41 +1,51 @@
-from models.database import execut_query
+from models.database import MySQLCnn
 from models import model_bag
-from utility.calca_discount import calc_discount
-import json
 
 
 def add_bag(json):
-    id_insert = execut_query(model_bag.q_insert_bag).insert(json)
+    execut_query = MySQLCnn()
+    id_insert = execut_query.insert(model_bag.q_insert_bag, json)
+    execut_query.finishExecution
     return id_insert
 
 
 def list_bag(user_id):
-    list_bag = execut_query(model_bag.q_list_bag).selectOne({"user_id": user_id})
+    execut_query = MySQLCnn()
+    list_bag = execut_query.select(model_bag.q_list_bag, {"user_id": user_id})
+    main_address = execut_query.selectOne(
+        model_bag.q_main_add_bag, {"user_id": user_id}
+    )
+    carrier = execut_query.select(model_bag.q_carrie_bag)
+    execut_query.finishExecution
+
+    def calcCarrie(carrieOpt):
+        carrieOpt["price"] = 12.0
+        carrieOpt["toDate"] = 3
+        return carrieOpt
+
+    carrier = map(calcCarrie, carrier)
+
     if list_bag != {}:
 
-        list_bag["main_add"] = json.loads(list_bag["main_add"] or "{}")
-        list_bag["list_b"] = json.loads(list_bag["list_b"] or "[]")
-        list_bag["shipping_company"] = json.loads(list_bag["shipping_company"] or "[]")
-
-        def calc_dicount(object_calc):
-            old_price = calc_discount(object_calc["discount"], object_calc["price"])
-            return {
-                **object_calc,
-                "oldPrice": old_price,
-            }
-
-        list_bag["list_b"] = list(map(calc_dicount, list_bag["list_b"]))
-        return list_bag
+        return {
+            "list_b": list_bag,
+            "main_add": main_address,
+            "shipping_company": list(carrier),
+        }
     return False
 
 
 def update_quantity_bag(json):
-    execut_query(model_bag.q_bag_update_quantity).update(json)
+    execut_query = MySQLCnn()
+    execut_query.update(model_bag.q_bag_update_quantity, json)
+    execut_query.finishExecution
     return True
 
 
 def s_delete_item_bag(json):
-    execut_query(model_bag.q_bag_delete_item).delete(json)
+    execut_query = MySQLCnn()
+    execut_query.delete(model_bag.q_bag_delete_item, json)
+    execut_query.finishExecution
     return True
 
 
@@ -46,5 +56,7 @@ def register_order(data_json):
         data_json["carrie"],
         16.65,
     )
-    order = execut_query("register_order").callProcedure(json_for_tuple)
+    execut_query = MySQLCnn()
+    order = execut_query.callProcedure("register_order", json_for_tuple)
+    execut_query.finishExecution
     return order[0]
