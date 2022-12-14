@@ -7,7 +7,7 @@ q_get_orders = """SELECT o.id, date_order, s.status
 
 q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order, 
     JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, 
-    'uf', uadd.uf, 'zipcode', uadd.cep, 'number_home', uadd.number_home, 'road', uadd.road) AS address, 
+    'uf', uadd.state, 'zipcode', uadd.zipcode, 'number_home', uadd.number_home, 'road', uadd.street) AS address, 
     JSON_OBJECT('name_carrier', crr.name_carrier, 'code', o.tracking_code, 'delivery_value', o.delivery_value) AS carrier, 
     JSON_ARRAYAGG(JSON_OBJECT( 
     'title', p.title, 'category_name', ctg.category_name, 'id', p.id, 

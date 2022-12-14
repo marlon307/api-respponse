@@ -12,22 +12,23 @@ from mail.service_email import send_mail
 from utility.u_user import send_mail_confirm_user
 
 
-def register_user(data):
+def register_user(data, task):
     execut_query = MySQLCnn()
     info_email = execut_query.selectOne(model_user.q_login_user, {"email": data.email})
     if "email" not in info_email:
         key = Fernet.generate_key()
         new_obj = {
-            "id_user": uuid4(),
+            "id_user": str(uuid4()),
             "name": data.name,
             "email": data.email,
             "password": encrypt(data.password),
             "user_token": key,
         }
-        execut_query(model_user.q_register_user).insert(new_obj)
+        execut_query.insert(model_user.q_register_user, new_obj)
         execut_query.finishExecution()
-        send_mail_confirm_user(key, new_obj)
+        task.add_task(send_mail_confirm_user, key, new_obj)
         return True
+    execut_query.finishExecution()
     return False
 
 
