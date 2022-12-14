@@ -52,17 +52,17 @@ class MinInfoProductList(BaseModel):
 
 
 class CategoryHome(BaseModel):
-    ctgID: int
+    id: int
     path: str
     color: str
-    categoryName: str
+    category_name: str
     sub_title: str
-    imgCategory: HttpUrl
+    url_image: HttpUrl
 
 
 class ListProduct(BaseModel):
-    list_product: list[MinInfoProductList] |dict
-    categorys: list[CategoryHome]|dict
+    list_products: list[MinInfoProductList] | dict
+    categorys: list[CategoryHome] | dict
     detail: str
     status: int
 

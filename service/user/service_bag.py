@@ -5,7 +5,7 @@ from models import model_bag
 def add_bag(json):
     execut_query = MySQLCnn()
     id_insert = execut_query.insert(model_bag.q_insert_bag, json)
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return id_insert
 
 
@@ -16,7 +16,7 @@ def list_bag(user_id):
         model_bag.q_main_add_bag, {"user_id": user_id}
     )
     carrier = execut_query.select(model_bag.q_carrie_bag)
-    execut_query.finishExecution
+    execut_query.finishExecution()
 
     def calcCarrie(carrieOpt):
         carrieOpt["price"] = 12.0
@@ -38,14 +38,14 @@ def list_bag(user_id):
 def update_quantity_bag(json):
     execut_query = MySQLCnn()
     execut_query.update(model_bag.q_bag_update_quantity, json)
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return True
 
 
 def s_delete_item_bag(json):
     execut_query = MySQLCnn()
     execut_query.delete(model_bag.q_bag_delete_item, json)
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return True
 
 
@@ -58,5 +58,5 @@ def register_order(data_json):
     )
     execut_query = MySQLCnn()
     order = execut_query.callProcedure("register_order", json_for_tuple)
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return order[0]
