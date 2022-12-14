@@ -13,9 +13,7 @@ def additembag(data: add_bag, current_user: User = Depends(get_current_user)):
     return controller_bag.c_add_bag(data.dict(), current_user)
 
 
-@router.get(
-    "/bag",
-)
+@router.get("/bag", response_model=ListBag)
 def listbag(current_user: User = Depends(get_current_user)):
     return controller_bag.c_list_bag(current_user)
 

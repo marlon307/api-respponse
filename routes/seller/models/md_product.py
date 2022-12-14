@@ -14,7 +14,6 @@ class ListOption(BaseModel):
     discount: int
     colorName: str
     option_id: int
-    oldPrice: float
     sizes: dict
     images: list[ListImage]
 
