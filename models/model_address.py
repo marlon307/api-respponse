@@ -3,7 +3,7 @@ q_insert_address = """INSERT INTO user_address (user_id, name_delivery, city, di
     (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1),
     %(namedest)s, %(city)s, %(district)s, %(state)s, %(zipcode)s, %(street)s, %(number)s)"""
 
-q_get_address = """SELECT ad.id, ad.name_delivery AS namedest, ad.city, ad.district, ad.uf AS state, ad.cep AS zipcode, ad.road AS street, ad.number_home AS number 
+q_get_address = """SELECT ad.id, ad.name_delivery, ad.city, ad.district, ad.state, ad.zipcode, ad.street, ad.number_home 
     FROM user_address AS ad 
     WHERE ad.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND ad.deleted IS NULL"""

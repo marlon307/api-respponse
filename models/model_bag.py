@@ -10,7 +10,7 @@ q_list_bag = """SELECT p.id, o.id AS opt_id, b.quantity, s.size, o.price, o.disc
     INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id 
     INNER JOIN products_images AS pi ON pi.option_id = o.id 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) 
-    AND b.orders_id IS NULL GROUP BY o.id, s.id"""
+    AND b.orders_id IS NULL"""
 
 q_main_add_bag = """SELECT DISTINCT ad.id, ad.name_delivery, ad.city, ad.district, ad.state, ad.zipcode, ad.street, ad.number_home, ad.deleted 
     FROM user_address AS ad 

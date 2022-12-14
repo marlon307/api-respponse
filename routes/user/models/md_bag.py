@@ -5,13 +5,12 @@ from .md_order import ClsItemOrder
 
 class Shipping(BaseModel):
     id: int
-    name_carrie: str
+    name_carrier: str
     price: float
     toDate: int
 
 
 class ItemBag(ClsItemOrder):
-    discount: int
     opt_id: int
     discount: float
 
