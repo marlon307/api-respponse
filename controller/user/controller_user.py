@@ -4,9 +4,9 @@ from service.user import service_user
 from utility.handleErr import handlerErr, JSONResponse
 
 
-def user_register(body):
+def user_register(body, task):
     try:
-        result = service_user.register_user(body)
+        result = service_user.register_user(body, task)
         if result is True:
             return {"detail": "Confime sua conta.", "status": 201}
         return JSONResponse(
