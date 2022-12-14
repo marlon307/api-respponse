@@ -14,14 +14,10 @@ q_insert_image = """INSERT INTO products_images
     (option_id, url_image, key_img, upload_id) 
     VALUES (%(option_id)s, %(url_image)s, %(key_img)s, %(upload_id)s)"""
 
-q_list_prod = """SELECT JSON_ARRAYAGG(
-JSON_OBJECT('id', ob_lp.id, 'title', ob_lp.title, 'category_name', ob_lp.category_name, 'color_list', ob_lp.color_list)
-) AS list_product, 
-JSON_ARRAYAGG(
-JSON_OBJECT('ctgID', ctg.id, 'categoryName', ctg.category_name, 'path', ctg.path, 'color', ctg.color, 'sub_title', ctg.sub_title, 'imgCategory', ctg.url_image)
-) AS categorys 
-FROM 
-(SELECT p.id, p.title, c.category_name, 
+
+q_categorys = """SELECT * FROM categorys"""
+
+q_list_prod_home = """SELECT p.id, p.title, c.category_name, 
 JSON_ARRAYAGG(JSON_OBJECT( 
 'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', i.url_image, 
 'color_name', cl.color_name, 'color', cl.color 
@@ -32,12 +28,35 @@ INNER JOIN options_product AS op ON op.products_id = p.id
 INNER JOIN colors AS cl ON cl.id = op.colors_id 
 INNER JOIN LATERAL 
 (SELECT DISTINCT option_id, url_image FROM products_images AS im 
-WHERE im.option_id = op.id GROUP BY option_id LIMIT 1) 
+WHERE im.option_id = op.id LIMIT 1) 
 AS i ON i.option_id = op.id 
 GROUP BY p.id 
-LIMIT 20) AS ob_lp,
-(SELECT DISTINCT * FROM categorys) AS ctg
-WHERE ob_lp.id = ob_lp.id"""
+LIMIT 20"""
+
+# q_list_prod = """SELECT JSON_ARRAYAGG(
+# JSON_OBJECT('id', ob_lp.id, 'title', ob_lp.title, 'category_name', ob_lp.category_name, 'color_list', ob_lp.color_list)
+# ) AS list_product,
+# JSON_ARRAYAGG(
+# JSON_OBJECT('ctgID', ctg.id, 'categoryName', ctg.category_name, 'path', ctg.path, 'color', ctg.color, 'sub_title', ctg.sub_title, 'imgCategory', ctg.url_image)
+# ) AS categorys
+# FROM
+# (SELECT p.id, p.title, c.category_name,
+# JSON_ARRAYAGG(JSON_OBJECT(
+# 'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', i.url_image,
+# 'color_name', cl.color_name, 'color', cl.color
+# )) AS color_list
+# FROM products AS p
+# INNER JOIN categorys AS c ON c.id = p.categorys_id
+# INNER JOIN options_product AS op ON op.products_id = p.id
+# INNER JOIN colors AS cl ON cl.id = op.colors_id
+# INNER JOIN LATERAL
+# (SELECT DISTINCT option_id, url_image FROM products_images AS im
+# WHERE im.option_id = op.id GROUP BY option_id LIMIT 1)
+# AS i ON i.option_id = op.id
+# GROUP BY p.id
+# LIMIT 20) AS ob_lp,
+# (SELECT DISTINCT * FROM categorys) AS ctg
+# WHERE ob_lp.id = ob_lp.id"""
 
 q_get_product_id = """SELECT p.id, p.title, p.details, p.specifications, c.category_name, 
     JSON_ARRAYAGG(JSON_OBJECT('option_id', op.id, 'price', op.price, 'discount', op.discount, 'idc', cl.id, 'colorName', cl.color_name, 'color', cl.color)) AS list_options, 

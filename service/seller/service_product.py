@@ -67,33 +67,37 @@ def create_product(data, files_list):
                 unique_list.extend(l)
 
             execut_query.insertMany(model_product.q_insert_image, unique_list)
-            execut_query.finishExecution
+            execut_query.finishExecution()
             return product_id
-        execut_query.finishExecution
+        execut_query.finishExecution()
         return False
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return False
 
 
 def list_product():
     execut_query = MySQLCnn()
-    list_product = execut_query.selectOne(model_product.q_list_prod, {})
-    execut_query.finishExecution
+    list_categorys = execut_query.select(model_product.q_categorys, {})
+    list_products = execut_query.select(model_product.q_list_prod_home, {})
+
+    execut_query.finishExecution()
     new_list = list()
 
-    for list_obj in json.loads(list_product["list_product"]):
-        list_obj["color_list"].sort(
-            key=lambda color_list: color_list["discount"], reverse=True
-        )
+    for list_obj in list_products:
+        list_color = json.loads(list_obj["color_list"])
+        list_color.sort(key=lambda color_list: color_list["discount"], reverse=True)
         new_list.append(
             {
                 **list_obj,
-                "color_list": list_obj["color_list"],
+                "color_list": list_color,
             }
         )
-    list_product["list_product"] = new_list
-    list_product["categorys"] = json.loads(list_product["categorys"])
-    return list_product
+
+    list_products = new_list
+    return {
+        "categorys": list_categorys,
+        "list_products": list_products,
+    }
 
 
 def get_product_id(id):
@@ -102,7 +106,7 @@ def get_product_id(id):
     # *******************************************************************
     execut_query = MySQLCnn()
     list_product = execut_query.selectOne(model_product.q_get_product_id, {"id": id})
-    execut_query.finishExecution
+    execut_query.finishExecution()
 
     list_product["list_options"] = unique(json.loads(list_product["list_options"]))
     list_product["list_images"] = unique(json.loads(list_product["list_images"]))
@@ -144,7 +148,7 @@ def get_product_id(id):
 def list_option():
     execut_query = MySQLCnn()
     object_lists = execut_query.selectOne(model_seller.q_list_options, {"info": None})
-    execut_query.finishExecution
+    execut_query.finishExecution()
 
     object_lists["list_colors"] = json.loads(object_lists["list_colors"] or "[]")
     object_lists["list_ctg"] = json.loads(object_lists["list_ctg"] or "[]")

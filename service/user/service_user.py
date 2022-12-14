@@ -25,7 +25,7 @@ def register_user(data):
             "user_token": key,
         }
         execut_query(model_user.q_register_user).insert(new_obj)
-        execut_query.finishExecution
+        execut_query.finishExecution()
         send_mail_confirm_user(key, new_obj)
         return True
     return False
@@ -36,7 +36,7 @@ def login_user(data):
     info_login = execut_query.selectOne(
         model_user.q_login_user, {"email": data.username}
     )
-    execut_query.finishExecution
+    execut_query.finishExecution()
     if "password" in info_login:
         valid_psw = checkcrypt(data.password, info_login["password"])
         if valid_psw is True:
@@ -83,13 +83,13 @@ def user_confirmacc(json: dict):
                         "user_token": json["rtx"],
                     },
                 )
-                execut_query.finishExecution
+                execut_query.finishExecution()
                 return True
-            execut_query.finishExecution
+            execut_query.finishExecution()
             return False
-        execut_query.finishExecution
+        execut_query.finishExecution()
         return False
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return False
 
 
@@ -102,9 +102,9 @@ def request_new_confirm_acc(email):
             model_user.q_request_update_token, {"email": json["email"], "key": key}
         )
         send_mail_confirm_user(key, json)
-        execut_query.finishExecution
+        execut_query.finishExecution()
         return True
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return False
 
 
@@ -136,9 +136,9 @@ def solicitation_user_resetpsw(email, tasks):
                 % (os.getenv("WEB_APPLICATION_URL"), token),
             },
         )
-        execut_query.finishExecution
+        execut_query.finishExecution()
         return True
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return False
 
 
@@ -162,20 +162,20 @@ def user_resetpsw(data):
                         "email": data["email"],
                     },
                 )
-                execut_query.finishExecution
+                execut_query.finishExecution()
                 return True
-            execut_query.finishExecution
+            execut_query.finishExecution()
             return False
-        execut_query.finishExecution
+        execut_query.finishExecution()
         return False
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return False
 
 
 def get_info_user(id_user):
     execut_query = MySQLCnn()
     result = execut_query.selectOne(model_user.q_select_info_user, {"user_id": id_user})
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return result
 
 
@@ -185,5 +185,5 @@ def update_info_user(json):
     json["tel"] = format_cel(json["tel"])
     execut_query = MySQLCnn()
     execut_query.update(model_user.q_update_user, json)
-    execut_query.finishExecution
+    execut_query.finishExecution()
     return True
