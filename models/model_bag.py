@@ -1,3 +1,5 @@
+q_check_prod_bag = """SELECT * FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) AND option_product_id = %(product_option)s AND orders_id IS NULL"""
+
 q_insert_bag = """INSERT INTO bag (user_id, quantity, option_product_id, sizes_id) 
     VALUES ((SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1), %(quantity)s, %(product_option)s, (SELECT id FROM sizes WHERE size = %(size)s))"""
 
@@ -47,7 +49,8 @@ q_carrie_bag = """SELECT id, name_carrier FROM carrier"""
 q_bag_update_quantity = """UPDATE bag SET quantity = %(quantity)s WHERE 
     user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND option_product_id = %(product_option)s 
-    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"""
+    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) 
+    AND orders_id IS NULL"""
 
 
 q_bag_delete_item = """DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 

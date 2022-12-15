@@ -24,11 +24,10 @@ q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order,
     INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id 
     INNER JOIN sizes AS sz ON sz.id = b.sizes_id 
     INNER JOIN LATERAL 
-    (SELECT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id GROUP BY option_id LIMIT 1) 
+    (SELECT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id LIMIT 1) 
     AS img ON img.option_id = b.option_product_id 
     INNER JOIN colors AS cl ON cl.id = op.colors_id 
-    WHERE o.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) AND o.id = %(order_id)s 
-    GROUP BY o.id"""
+    WHERE o.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) AND o.id = %(order_id)s"""
 
 
 q_order_seller = """SELECT DISTINCT o.id, s.status, o.date_order 
