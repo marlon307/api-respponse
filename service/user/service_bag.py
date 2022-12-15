@@ -4,9 +4,30 @@ from models import model_bag
 
 def add_bag(json):
     execut_query = MySQLCnn()
-    id_insert = execut_query.insert(model_bag.q_insert_bag, json)
+    existBag = execut_query.selectOne(model_bag.q_check_prod_bag, json)
+
+    if "sizes_id" in existBag:
+        json["quantity"] = existBag["quantity"] + 1
+        execut_query.update(model_bag.q_bag_update_quantity, json)
+    else:
+        execut_query.insert(model_bag.q_insert_bag, json)
+
     execut_query.finishExecution()
-    return id_insert
+    return True
+
+
+def update_quantity_bag(json):
+    execut_query = MySQLCnn()
+    execut_query.update(model_bag.q_bag_update_quantity, json)
+    execut_query.finishExecution()
+    return True
+
+
+def s_delete_item_bag(json):
+    execut_query = MySQLCnn()
+    execut_query.delete(model_bag.q_bag_delete_item, json)
+    execut_query.finishExecution()
+    return True
 
 
 def list_bag(user_id):
@@ -33,20 +54,6 @@ def list_bag(user_id):
             "shipping_company": list(carrier),
         }
     return False
-
-
-def update_quantity_bag(json):
-    execut_query = MySQLCnn()
-    execut_query.update(model_bag.q_bag_update_quantity, json)
-    execut_query.finishExecution()
-    return True
-
-
-def s_delete_item_bag(json):
-    execut_query = MySQLCnn()
-    execut_query.delete(model_bag.q_bag_delete_item, json)
-    execut_query.finishExecution()
-    return True
 
 
 def register_order(data_json):

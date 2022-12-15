@@ -86,6 +86,6 @@ class MySQLCnn:
         return result
 
     def finishExecution(self):
-        self.closeCursor()
         self.commit()
+        self.closeCursor()
         self.closeConnection()
