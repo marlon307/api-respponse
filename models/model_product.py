@@ -17,6 +17,8 @@ q_insert_image = """INSERT INTO products_images
 
 q_categorys = """SELECT * FROM categorys"""
 
+q_slides = """SELECT id, url_image, title, background, description FROM banner"""
+
 q_list_prod_home = """SELECT p.id, p.title, c.category_name, 
 JSON_ARRAYAGG(JSON_OBJECT( 
 'id', cl.id, 'price', op.price, 'discount', op.discount, 'url_image', i.url_image, 
