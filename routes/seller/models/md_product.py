@@ -59,7 +59,16 @@ class CategoryHome(BaseModel):
     url_image: HttpUrl
 
 
+class Slides(BaseModel):
+    id: int
+    url_image: str
+    title: str
+    background: str
+    description: str
+
+
 class ListProduct(BaseModel):
+    slides: list[Slides]
     list_products: list[MinInfoProductList] | dict
     categorys: list[CategoryHome] | dict
     detail: str

@@ -77,6 +77,7 @@ def create_product(data, files_list):
 
 def list_product():
     execut_query = MySQLCnn()
+    list_slides = execut_query.select(model_product.q_slides, {})
     list_categorys = execut_query.select(model_product.q_categorys, {})
     list_products = execut_query.select(model_product.q_list_prod_home, {})
 
@@ -95,6 +96,7 @@ def list_product():
 
     list_products = new_list
     return {
+        "slides": list_slides,
         "categorys": list_categorys,
         "list_products": list_products,
     }
