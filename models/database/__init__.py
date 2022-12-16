@@ -52,9 +52,9 @@ class MySQLCnn:
 
     def delete(self, query: str, condition: dict) -> None:
         self.execute(query, condition)
-        self.closeCursor()
-        self.commit()
-        self.closeConnection()
+        # self.closeCursor()
+        # self.commit()
+        # self.closeConnection()
 
     def update(self, query: str, condition: dict) -> None:
         self.execute(query, condition)
