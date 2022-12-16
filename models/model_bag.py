@@ -11,7 +11,7 @@ q_list_bag = """SELECT DISTINCT p.id, op.id AS opt_id, op.products_id, p.title, 
     INNER JOIN products AS p ON p.id = op.products_id
     INNER JOIN colors AS c ON c.id = op.colors_id
     INNER JOIN categorys As ctg ON ctg.id = p.categorys_id
-    INNER JOIN LATERAL (SELECT DISTINCT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id) AS img ON img.option_id = op.id 
+    INNER JOIN LATERAL (SELECT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id LIMIT 1) AS img ON img.option_id = op.id 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) 
     AND b.orders_id IS NULL"""
 
