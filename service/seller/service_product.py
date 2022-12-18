@@ -5,17 +5,92 @@ from utility.unique import unique
 import json
 
 
-def create_product(data, files_list):
-    # Para cada item da "list_qtd" deve ter 6 imagens
+def create_product(data, files_list: list[bytes]):
+
     mImg = 6  # max image for options
     if len(files_list) % mImg == 0 and len(data["list_qtd"]) * mImg == len(files_list):
-        uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
+        # uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
+
+        uploaded_image = [
+            {
+                "upload_id": "Rt4RsQo",
+                "ref_color": 0,
+                "url_image": "https://i.imgur.com/Rt4RsQo.png",
+                "key_img": "rgnSBzfKw1TGj9v",
+            },
+            {
+                "upload_id": "CQ4ZsyK",
+                "ref_color": 1,
+                "url_image": "https://i.imgur.com/CQ4ZsyK.png",
+                "key_img": "lqxcJbloLGUZb7j",
+            },
+            {
+                "upload_id": "D7pVKnW",
+                "ref_color": 2,
+                "url_image": "https://i.imgur.com/D7pVKnW.png",
+                "key_img": "ulxj2pz0lwmMusy",
+            },
+            {
+                "upload_id": "nw7SkzC",
+                "ref_color": 3,
+                "url_image": "https://i.imgur.com/nw7SkzC.png",
+                "key_img": "fppdtXEH3sbAWvZ",
+            },
+            {
+                "upload_id": "22CsLAA",
+                "ref_color": 4,
+                "url_image": "https://i.imgur.com/22CsLAA.png",
+                "key_img": "Dl3A0tSJoyLslKT",
+            },
+            {
+                "upload_id": "qRTre0l",
+                "ref_color": 5,
+                "url_image": "https://i.imgur.com/qRTre0l.png",
+                "key_img": "ZHuZow8X2qTiO9Q",
+            },
+            {
+                "upload_id": "r6HNvF8",
+                "ref_color": 6,
+                "url_image": "https://i.imgur.com/r6HNvF8.png",
+                "key_img": "ZsRLgF3205J1Cdp",
+            },
+            {
+                "upload_id": "9WyeGrD",
+                "ref_color": 7,
+                "url_image": "https://i.imgur.com/9WyeGrD.png",
+                "key_img": "uNcb0qbCxttVfTt",
+            },
+            {
+                "upload_id": "cL2Wg8c",
+                "ref_color": 8,
+                "url_image": "https://i.imgur.com/cL2Wg8c.png",
+                "key_img": "d9B3nxdaxrlPKpz",
+            },
+            {
+                "upload_id": "26kwAmd",
+                "ref_color": 9,
+                "url_image": "https://i.imgur.com/26kwAmd.png",
+                "key_img": "IIrLVrkcZMlinZw",
+            },
+            {
+                "upload_id": "9NJkJGm",
+                "ref_color": 10,
+                "url_image": "https://i.imgur.com/9NJkJGm.png",
+                "key_img": "F21kcYXPupSJcqQ",
+            },
+            {
+                "upload_id": "U5dyCce",
+                "ref_color": 11,
+                "url_image": "https://i.imgur.com/U5dyCce.png",
+                "key_img": "DPKRNHjFy4dfdHy",
+            },
+        ]
 
         if len(uploaded_image) % mImg == 0:  # Checar se o upload foi feito corretamente
 
+            execut_query = MySQLCnn()
             list_options = data["list_qtd"]
             del data["list_qtd"]
-            execut_query = MySQLCnn()
             product_id = execut_query.insert(model_product.q_insert_product, data)
 
             def map_function(object_opt):
@@ -34,7 +109,7 @@ def create_product(data, files_list):
 
             def map_has_sizes(id_option, option):
                 list_s = list()
-                for obj_opt in option["sizes_id"]:
+                for obj_opt in option["sizes"]:
                     list_s.append(
                         {
                             "options_product_id": id_option,
@@ -69,9 +144,7 @@ def create_product(data, files_list):
             execut_query.insertMany(model_product.q_insert_image, unique_list)
             execut_query.finishExecution()
             return product_id
-        execut_query.finishExecution()
         return False
-    execut_query.finishExecution()
     return False
 
 

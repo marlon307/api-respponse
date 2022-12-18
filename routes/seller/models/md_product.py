@@ -1,4 +1,98 @@
-from pydantic import BaseModel, HttpUrl
+import json
+from fastapi import Form
+from pydantic import BaseModel, HttpUrl, validator
+
+format_str = (
+    [
+        {
+            "id": 0,
+            "color": "#EXA",
+            "sizes": [
+                {
+                    "id": 0,
+                    "quantity": 0,
+                }
+            ],
+            "price": 0,
+            "discount": 0,
+            "sku": "SKU",
+        }
+    ],
+)
+
+
+class OptionSizes(BaseModel):
+    id: int
+    quantity: int
+
+
+class Options(BaseModel):
+    id: int
+    color: str
+    price: float
+    discount: float
+    sku: str
+    sizes: list[OptionSizes]
+
+
+class OptionTypeProduct(BaseModel):
+    options: list[Options]
+
+
+class CreateProduct(BaseModel):
+    categorys_id: int
+    title: str
+    width: float
+    height: float
+    length: float
+    weight: float
+    warranty: int
+    insurance_value: float
+    gender_id: int
+    details: str
+    specifications: str
+    list_qtd: str
+
+    @validator("list_qtd")
+    def convert_json_options(cls, v):
+        data = json.loads(v)
+        OptionTypeProduct(options=data)
+        return data
+
+    @classmethod
+    def fields_product(
+        cls,
+        list_qtd: str = Form(
+            default=str(format_str[0]),
+            description="* Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
+        ),
+        categorys_id: int = Form(),
+        title: str = Form(),
+        width: float = Form(),
+        height: float = Form(),
+        length: float = Form(),
+        weight: float = Form(),
+        warranty: int = Form(),
+        insurance_value: float = Form(),
+        gender_id: int = Form(),
+        details: str = Form(),
+        specifications: str = Form(),
+    ):
+
+        return cls(
+            categorys_id=categorys_id,
+            title=title,
+            width=width,
+            height=height,
+            length=length,
+            weight=weight,
+            warranty=warranty,
+            insurance_value=insurance_value,
+            gender_id=gender_id,
+            details=details,
+            specifications=specifications,
+            list_qtd=list_qtd,
+        )
 
 
 class ListImage(BaseModel):

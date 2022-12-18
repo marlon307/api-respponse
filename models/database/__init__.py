@@ -29,6 +29,9 @@ class MySQLCnn:
             # self.cursor.close()
             # self.connection.close()
             cnx.rollback()
+            self.commit()
+            self.closeCursor()
+            self.closeConnection()
             raise errno
 
     def insert(self, query: str, data: dict) -> int:
