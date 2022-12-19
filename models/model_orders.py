@@ -13,7 +13,7 @@ q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order,
     'title', p.title, 'category_name', ctg.category_name, 'id', p.id, 
     'size', sz.size, 'quantity', b.quantity, 
     'url_image', img.url_image, 'color', cl.color, 
-    'color_name', cl.color_name, 'price', op.price 
+    'color_name', cl.color_name, 'price', b.price 
     )) AS list_products 
     FROM orders AS o 
     INNER JOIN user_address AS uadd ON uadd.id = o.address_id 

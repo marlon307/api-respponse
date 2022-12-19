@@ -35,7 +35,8 @@ BEGIN
 			
 			UPDATE bag AS b 
 			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
-			SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity 
+			INNER JOIN options_product AS op ON op.id = b.option_product_id
+			SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity, b.price = op.price 
 			WHERE b.user_id = iduser AND b.orders_id IS NULL;
 		COMMIT;
         
