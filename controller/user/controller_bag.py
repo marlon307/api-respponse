@@ -65,10 +65,23 @@ def c_bag_register_order(json, c_user):
     try:
         json["p_userid"] = c_user.id_user
         order = service_bag.register_order(json)
-        return {
-            "detail": "Pedido realizado.",
-            "status": 200,
-            "order": order["number_order"],
-        }
+
+        if "number_order" in order:
+            return {
+                "detail": "Pedido realizado.",
+                "order": order["number_order"],
+                "status": 200,
+            }
+        return JSONResponse(
+            content={
+                "detail": "Um item da sacola não está disponível nessa quantidade.",
+                "status": status.HTTP_409_CONFLICT,
+                "order": {
+                    "product_id": order["product_id"],
+                    "options_product": order["options_product_id"],
+                },
+            },
+            status_code=status.HTTP_409_CONFLICT,
+        )
     except Exception as err:
         raise handlerErr("bag -> c_bag_register_order -> %s" % err)

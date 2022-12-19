@@ -58,7 +58,12 @@ class RListOrder(BaseModel):
     orders: list[Order]
 
 
+class ErrOder(BaseModel):
+    product_id: int
+    options_product: int
+
+
 class RgOrder(BaseModel):
     detail: str
     status: int
-    order: int
+    order: int | ErrOder

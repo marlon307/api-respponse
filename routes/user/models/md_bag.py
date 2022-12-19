@@ -12,6 +12,7 @@ class Shipping(BaseModel):
 
 class ItemBag(ClsItemOrder):
     opt_id: int
+    max_quantity: int
     discount: float
 
 
