@@ -1,25 +1,31 @@
--- https://stackoverflow.com/questions/26338033/mysql-stored-procedure-print-error-message-and-rollback
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_order`(
 p_userid CHAR(36), p_addressid INT, p_carriesid INT, p_deliveryvalue FLOAT)
 BEGIN
-	DECLARE iduser INT;
-	DECLARE idaddres INT;
+		DECLARE iduser INT;
+		DECLARE idaddres INT;
     DECLARE price INT;
     DECLARE quantityvols INT;
     DECLARE idorder INT;
     
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
-        SHOW ERRORS;
-        ROLLBACK;   
+		ROLLBACK;
+        
+        GET DIAGNOSTICS CONDITION 1
+		@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+        
+        SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
+			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
+            INNER JOIN options_product AS op ON op.id = opsz.options_product_id
+			WHERE b.user_id = iduser AND b.orders_id IS NULL LIMIT 1;
     END; 
     
     SET iduser = (SELECT id FROM user WHERE id_user = p_userid);
     SET idaddres = (SELECT id FROM user_address WHERE user_id = iduser AND id = p_addressid);
-    SET price = (SELECT SUM(op.price) FROM bag AS b
+    SET price = (SELECT SUM(b.quantity * op.price) FROM bag AS b
 				 INNER JOIN options_product AS op ON op.id = b.option_product_id
 				 WHERE b.user_id = iduser AND b.orders_id IS NULL);
-	SET quantityvols = (SELECT SUM(quantity) FROM bag AS b WHERE b.user_id = iduser AND b.orders_id IS NULL); 
+		SET quantityvols = (SELECT SUM(quantity) FROM bag AS b WHERE b.user_id = iduser AND b.orders_id IS NULL); 
     
     IF price IS NOT NULL AND idaddres IS NOT NULL AND iduser IS NOT NULL THEN
 		START TRANSACTION;
@@ -36,5 +42,6 @@ BEGIN
         SELECT idorder AS 'number_order';
 	ELSE
 		SELECT '400 - Não possui informações o suficiente para registrar um pedido.' AS MSG;
+        ROLLBACK;
 	END IF;
 END

@@ -6,7 +6,6 @@ import json
 
 
 def create_product(data, files_list: list[bytes]):
-
     mImg = 6  # max image for options
     if len(files_list) % mImg == 0 and len(data["list_qtd"]) * mImg == len(files_list):
         uploaded_image = upload_image_imgur(files_list, data["title"], data["details"])
