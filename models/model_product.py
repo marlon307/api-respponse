@@ -3,8 +3,8 @@ q_insert_product = """INSERT INTO products
     VALUES (%(categorys_id)s, %(gender_id)s, (SELECT id FROM respponse_db.user WHERE id_user = %(id_user)s), %(title)s, %(warranty)s, %(details)s, %(specifications)s)"""
 
 q_insert_product_option = """INSERT INTO options_product 
-    (colors_id, price, discount, sku, products_id) 
-    VALUES (%(colors_id)s, %(price)s, %(discount)s, %(sku)s, %(products_id)s)"""
+    (colors_id, price, discount, sku, products_id, width, height, length, weight) 
+    VALUES (%(colors_id)s, %(price)s, %(discount)s, %(sku)s, %(products_id)s, %(width)s, %(height)s, %(length)s, %(weight)s)"""
 
 q_insert_option_has_sizes = """INSERT INTO options_product_has_sizes 
     (options_product_id, sizes_id, quantity) 
@@ -13,7 +13,6 @@ q_insert_option_has_sizes = """INSERT INTO options_product_has_sizes
 q_insert_image = """INSERT INTO products_images 
     (option_id, url_image, key_img, upload_id) 
     VALUES (%(option_id)s, %(url_image)s, %(key_img)s, %(upload_id)s)"""
-
 
 q_categorys = """SELECT * FROM categorys"""
 

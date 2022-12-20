@@ -85,3 +85,16 @@ def c_bag_register_order(json, c_user):
         )
     except Exception as err:
         raise handlerErr("bag -> c_bag_register_order -> %s" % err)
+
+
+def c_bag_calc_shipping(json, c_user):
+    try:
+        json["user_id"] = c_user.id_user
+        carriers = service_bag.s_calc_shipping(json)
+        return {
+            "carriers": carriers,
+            "detail": "Tranportadora disponíveis.",
+            "status": 200,
+        }
+    except Exception as err:
+        raise handlerErr("bag -> c_calc_shipping -> %s" % err)

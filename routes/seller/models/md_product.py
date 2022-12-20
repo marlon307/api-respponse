@@ -16,6 +16,10 @@ format_str = (
             "price": 0,
             "discount": 0,
             "sku": "SKU",
+            "width": 0,
+            "height": 0,
+            "length": 0,
+            "weight": 0,
         }
     ],
 )
@@ -33,6 +37,10 @@ class Options(BaseModel):
     discount: float
     sku: str
     sizes: list[OptionSizes]
+    width: float
+    height: float
+    length: float
+    weight: float
 
 
 class OptionTypeProduct(BaseModel):
@@ -42,12 +50,7 @@ class OptionTypeProduct(BaseModel):
 class CreateProduct(BaseModel):
     categorys_id: int
     title: str
-    width: float
-    height: float
-    length: float
-    weight: float
     warranty: int
-    insurance_value: float
     gender_id: int
     details: str
     specifications: str
@@ -68,26 +71,15 @@ class CreateProduct(BaseModel):
         ),
         categorys_id: int = Form(),
         title: str = Form(),
-        width: float = Form(),
-        height: float = Form(),
-        length: float = Form(),
-        weight: float = Form(),
         warranty: int = Form(),
-        insurance_value: float = Form(),
         gender_id: int = Form(),
         details: str = Form(),
         specifications: str = Form(),
     ):
-
         return cls(
             categorys_id=categorys_id,
             title=title,
-            width=width,
-            height=height,
-            length=length,
-            weight=weight,
             warranty=warranty,
-            insurance_value=insurance_value,
             gender_id=gender_id,
             details=details,
             specifications=specifications,

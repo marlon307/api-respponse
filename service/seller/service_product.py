@@ -24,6 +24,10 @@ def create_product(data, files_list: list[bytes]):
                     "discount": object_opt["discount"],
                     "sku": object_opt["sku"],
                     "colors_id": object_opt["id"],
+                    "width": object_opt["width"],
+                    "height": object_opt["height"],
+                    "length": object_opt["length"],
+                    "weight": object_opt["weight"],
                 }
 
             format_option = map(map_function, list_options)

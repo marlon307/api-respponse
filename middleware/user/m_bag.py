@@ -21,3 +21,7 @@ class up_bag(BaseModel):
 class r_order(BaseModel):
     address: int
     carrie: int
+
+
+class Carriers(BaseModel):
+    zipcode: str = "12345678"
