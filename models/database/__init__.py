@@ -45,6 +45,7 @@ class MySQLCnn:
     def insertMany(self, query: str, data: list[dict]) -> list[int]:
         self.executemany(query, data)
         # l_id last id
+        # l_id = self.cursor.lastrowid or 0
         l_id = self.cursor.lastrowid + 1
         id_insert = [l_id - v for v in range(self.cursor.rowcount)]
         # self.closeCursor()

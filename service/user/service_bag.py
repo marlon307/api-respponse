@@ -1,33 +1,80 @@
+import json
+import os
+import requests
 from models.database import MySQLCnn
 from models import model_bag
 
 
-def add_bag(json):
+def add_bag(data):
     execut_query = MySQLCnn()
-    existBag = execut_query.selectOne(model_bag.q_check_prod_bag, json)
+    existBag = execut_query.selectOne(model_bag.q_check_prod_bag, data)
 
     if "sizes_id" in existBag:
-        json["quantity"] = existBag["quantity"] + 1
-        execut_query.update(model_bag.q_bag_update_quantity, json)
+        data["quantity"] = existBag["quantity"] + 1
+        execut_query.update(model_bag.q_bag_update_quantity, data)
     else:
-        execut_query.insert(model_bag.q_insert_bag, json)
+        execut_query.insert(model_bag.q_insert_bag, data)
 
     execut_query.finishExecution()
     return True
 
 
-def update_quantity_bag(json):
+def update_quantity_bag(data):
     execut_query = MySQLCnn()
-    execut_query.update(model_bag.q_bag_update_quantity, json)
+    execut_query.update(model_bag.q_bag_update_quantity, data)
     execut_query.finishExecution()
     return True
 
 
-def s_delete_item_bag(json):
+def s_delete_item_bag(data):
     execut_query = MySQLCnn()
-    execut_query.delete(model_bag.q_bag_delete_item, json)
+    execut_query.delete(model_bag.q_bag_delete_item, data)
     execut_query.finishExecution()
     return True
+
+
+def s_calc_shipping(data):
+    execut_query = MySQLCnn()
+    list_products = execut_query.select(
+        """SELECT op.price AS insurance_value, op.products_id AS id, op.width, op.height, op.length, op.weight, b.quantity 
+        FROM options_product AS op 
+        INNER JOIN bag AS b ON b.option_product_id = op.id 
+        WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s)""",
+        {"user_id": data["user_id"]},
+    )
+    execut_query.finishExecution()
+
+    url = os.getenv("MELHORENVIO_API") + "api/v2/me/shipment/calculate"
+    payload = json.dumps(
+        {
+            "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
+            "to": {"postal_code": data["zipcode"]},
+            "products": list_products,
+        }
+    )
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer %s" % (os.getenv("MELHORENVIO_TOKEN")),
+        "User-Agent": os.getenv("MELHORENVIO_EMAIL_SUPORTE"),
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    data = response.json()
+
+    new_list = list()
+    for carrier in data:
+        if "error" not in carrier:
+            new_list.append(
+                {
+                    "id": carrier["id"],
+                    "name_carrier": carrier["company"]["name"],
+                    "toDate": carrier["custom_delivery_time"],
+                    "price": float(carrier["price"]),
+                }
+            )
+
+    return new_list
 
 
 def list_bag(user_id):
