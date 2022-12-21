@@ -76,25 +76,12 @@ def s_calc_shipping(data):
 def list_bag(user_id):
     execut_query = MySQLCnn()
     list_bag = execut_query.select(model_bag.q_list_bag, {"user_id": user_id})
-    main_address = execut_query.selectOne(
-        model_bag.q_main_add_bag, {"user_id": user_id}
-    )
-    carrier = execut_query.select(model_bag.q_carrie_bag)
     execut_query.finishExecution()
-
-    def calcCarrie(carrieOpt):
-        carrieOpt["price"] = 12.0
-        carrieOpt["toDate"] = 3
-        return carrieOpt
-
-    carrier = map(calcCarrie, carrier)
 
     if list_bag != {}:
 
         return {
             "list_b": list_bag,
-            "main_add": main_address,
-            "shipping_company": list(carrier),
         }
     return False
 
