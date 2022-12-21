@@ -36,11 +36,7 @@ def s_delete_item_bag(data):
 def s_calc_shipping(data):
     execut_query = MySQLCnn()
     list_products = execut_query.select(
-        """SELECT op.price AS insurance_value, op.products_id AS id, op.width, op.height, op.length, op.weight, b.quantity 
-        FROM options_product AS op 
-        INNER JOIN bag AS b ON b.option_product_id = op.id 
-        WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s)""",
-        {"user_id": data["user_id"]},
+        model_bag.q_get_producs_carrier, {"user_id": data["user_id"]}
     )
     execut_query.finishExecution()
 
