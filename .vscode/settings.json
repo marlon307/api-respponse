@@ -2,5 +2,5 @@
   "python.analysis.extraPaths": [
     "./routes"
   ],
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "off"
 }

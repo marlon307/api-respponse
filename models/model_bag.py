@@ -36,4 +36,5 @@ q_bag_update_quantity = """UPDATE bag SET quantity = %(quantity)s WHERE
 
 q_bag_delete_item = """DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND option_product_id = %(product_option)s 
-    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"""
+    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) 
+    AND orders_id IS NULL"""
