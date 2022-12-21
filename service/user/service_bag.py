@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from models.database import MySQLCnn
-from models import model_bag
+from models import model_bag, model_carrier
 
 
 def add_bag(data):
@@ -36,7 +36,11 @@ def s_delete_item_bag(data):
 def s_calc_shipping(data):
     execut_query = MySQLCnn()
     list_products = execut_query.select(
-        model_bag.q_get_producs_carrier, {"user_id": data["user_id"]}
+        model_bag.q_get_producs_carrier,
+        {
+            "user_id": data["user_id"],
+            "id_order": data["order_id"] if "order_id" in data else None,
+        },
     )
     execut_query.finishExecution()
 
@@ -46,6 +50,7 @@ def s_calc_shipping(data):
             "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
             "to": {"postal_code": data["zipcode"]},
             "products": list_products,
+            "services": str(data["services"]) if "services" in data else "",
         }
     )
     headers = {
@@ -58,19 +63,20 @@ def s_calc_shipping(data):
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
 
-    new_list = list()
-    for carrier in data:
-        if "error" not in carrier:
-            new_list.append(
-                {
-                    "id": carrier["id"],
-                    "name_carrier": carrier["company"]["name"],
-                    "toDate": carrier["custom_delivery_time"],
-                    "price": float(carrier["price"]),
-                }
-            )
-
-    return new_list
+    if type(data) is list:
+        new_list = list()
+        for carrier in data:
+            if "error" not in carrier:
+                new_list.append(
+                    {
+                        "id": carrier["id"],
+                        "name_carrier": carrier["company"]["name"],
+                        "toDate": carrier["custom_delivery_time"],
+                        "price": float(carrier["price"]),
+                    }
+                )
+        return new_list
+    return data
 
 
 def list_bag(user_id):
@@ -86,12 +92,32 @@ def list_bag(user_id):
     return False
 
 
+def recalc_carrier(data, order):
+    new_data = {
+        "services": data["carrie"],
+        "user_id": data["p_userid"],
+        "zipcode": order["zipcode"],
+        "order_id": order["number_order"],
+    }
+    value_shipping = s_calc_shipping(new_data)
+
+    execut_query = MySQLCnn()
+    execut_query.update(
+        model_carrier.q_update_value_shipping,
+        {
+            "order_id": order["number_order"],
+            "delivery_value": float(value_shipping["price"]),
+            "p_userid": data["p_userid"],
+        },
+    )
+    execut_query.finishExecution()
+
+
 def register_order(data_json):
     json_for_tuple = (
         data_json["p_userid"],
         data_json["address"],
         data_json["carrie"],
-        16.65,
     )
     execut_query = MySQLCnn()
     order = execut_query.callProcedure("register_order", json_for_tuple)

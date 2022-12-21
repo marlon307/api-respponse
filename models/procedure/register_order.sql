@@ -1,5 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `register_order`(
-p_userid CHAR(36), p_addressid INT, p_carriesid INT, p_deliveryvalue FLOAT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `register_order`(p_userid CHAR(36), p_addressid INT, p_carriesid INT)
 BEGIN
 		DECLARE iduser INT;
 		DECLARE idaddres INT;
@@ -11,10 +10,10 @@ BEGIN
     BEGIN
 		ROLLBACK;
         
-        GET DIAGNOSTICS CONDITION 1
-		@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
+			GET DIAGNOSTICS CONDITION 1
+			@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
         
-        SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
+			SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
 			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
             INNER JOIN options_product AS op ON op.id = opsz.options_product_id
 			WHERE b.user_id = iduser AND b.orders_id IS NULL LIMIT 1;
@@ -29,18 +28,18 @@ BEGIN
     
     IF price IS NOT NULL AND idaddres IS NOT NULL AND iduser IS NOT NULL THEN
 		START TRANSACTION;
-			INSERT INTO orders (user_id, address_id, carrier_id, status_id, value_order, quantity_vol, delivery_value) 
-			VALUES (iduser, idaddres, p_carriesid, 1, price, quantityvols, p_deliveryvalue);
+			INSERT INTO orders (user_id, address_id, carrier_id, status_id, value_order, quantity_vol) 
+			VALUES (iduser, idaddres, p_carriesid, 1, price, quantityvols);
 			SET idorder = (SELECT LAST_INSERT_ID() FROM orders AS o WHERE o.user_id = iduser LIMIT 1);
 			
 			UPDATE bag AS b 
 			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
-			INNER JOIN options_product AS op ON op.id = b.option_product_id
+            INNER JOIN options_product AS op ON op.id = b.option_product_id
 			SET b.orders_id = idorder, opsz.quantity = opsz.quantity - b.quantity, b.price = op.price 
 			WHERE b.user_id = iduser AND b.orders_id IS NULL;
 		COMMIT;
         
-        SELECT idorder AS 'number_order';
+		SELECT idorder AS 'number_order', zipcode FROM user_address WHERE user_id = iduser AND id = idaddres;
 	ELSE
 		SELECT '400 - Não possui informações o suficiente para registrar um pedido.' AS MSG;
         ROLLBACK;

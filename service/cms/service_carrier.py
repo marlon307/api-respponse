@@ -1,4 +1,3 @@
-import json
 import os
 import requests
 from models.database import MySQLCnn
@@ -25,18 +24,4 @@ def s_refresh_carries():
     execut_query = MySQLCnn()
     execut_query.insertMany(model_carrier.q_isert_carries, new_carries_format)
     execut_query.finishExecution()
-
-    url = "https://sandbox.melhorenvio.com.br/api/v2/me/companies/f5b6b7a4-cee2-4e1f-a967-352666f9f76c/addresses"
-
-    headers = {
-        "Accept": "application/json",
-        "Content-type": "application/json",
-        "Authorization": "Bearer %s" % os.getenv("MELHORENVIO_TOKEN"),
-        "User-Agent": "Aplicação (email para contato técnico)",
-    }
-
-    response = requests.get(url, headers=headers)
-
-    print(response.json())
-
     return True

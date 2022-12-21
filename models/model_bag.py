@@ -20,7 +20,7 @@ q_get_producs_carrier = """SELECT op.price AS insurance_value, op.products_id AS
     FROM options_product AS op 
     INNER JOIN bag AS b ON b.option_product_id = op.id 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
-    AND b.orders_id IS NULL"""
+    AND b.orders_id IS NULL OR b.orders_id = %(id_order)s"""
 
 q_main_add_bag = """SELECT DISTINCT ad.id, ad.name_delivery, ad.city, ad.district, ad.state, ad.zipcode, ad.street, ad.number_home, ad.deleted 
     FROM user_address AS ad 
