@@ -16,6 +16,12 @@ q_list_bag = """SELECT DISTINCT p.id, op.id AS opt_id, op.products_id, p.title, 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) 
     AND b.orders_id IS NULL"""
 
+q_get_producs_carrier = """SELECT op.price AS insurance_value, op.products_id AS id, op.width, op.height, op.length, op.weight, b.quantity 
+    FROM options_product AS op 
+    INNER JOIN bag AS b ON b.option_product_id = op.id 
+    WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
+    AND b.orders_id IS NULL OR b.orders_id = %(id_order)s"""
+
 q_main_add_bag = """SELECT DISTINCT ad.id, ad.name_delivery, ad.city, ad.district, ad.state, ad.zipcode, ad.street, ad.number_home, ad.deleted 
     FROM user_address AS ad 
     WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) AND main = 1 LIMIT 1"""
@@ -30,4 +36,5 @@ q_bag_update_quantity = """UPDATE bag SET quantity = %(quantity)s WHERE
 
 q_bag_delete_item = """DELETE FROM bag WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND option_product_id = %(product_option)s 
-    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s)"""
+    AND sizes_id = (SELECT id FROM sizes WHERE size = %(size)s) 
+    AND orders_id IS NULL"""

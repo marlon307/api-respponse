@@ -24,4 +24,4 @@ class r_order(BaseModel):
 
 
 class Carriers(BaseModel):
-    zipcode: str = "12345678"
+    zipcode: str = "Exemplo: 12345678"

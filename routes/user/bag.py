@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends
 from controller.user import controller_bag
 from middleware.m_auth import User, get_current_user
 from middleware.user.m_bag import Carriers, add_bag, del_bag, up_bag, r_order
@@ -29,8 +29,10 @@ def deleteitembag(data: del_bag, current_user: User = Depends(get_current_user))
 
 
 @router.post("/register_order", response_model=RgOrder, status_code=201)
-def registerorder(data: r_order, current_user: User = Depends(get_current_user)):
-    return controller_bag.c_bag_register_order(data.dict(), current_user)
+def registerorder(
+    data: r_order, task: BackgroundTasks, current_user: User = Depends(get_current_user)
+):
+    return controller_bag.c_bag_register_order(data.dict(), current_user, task)
 
 
 @router.post("/calc", status_code=200)
