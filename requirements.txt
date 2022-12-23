@@ -8,3 +8,4 @@ cryptography
 pydantic
 # 
 python-multipart
+mercadopago
