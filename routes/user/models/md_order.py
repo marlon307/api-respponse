@@ -35,6 +35,7 @@ class ClsOrder(BaseModel):
     status_id: int
     date_order: datetime
     value_order: float
+    payment: str
     address: ClsAddress
     carrier: ClsCarrier
     list_products: list[ClsItemOrder]

@@ -5,7 +5,7 @@ q_get_orders = """SELECT o.id, date_order, s.status
     ORDER BY o.id DESC"""
 
 
-q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order, 
+q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order, pay.name AS payment, 
     JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, 
     'uf', uadd.state, 'zipcode', uadd.zipcode, 'number_home', uadd.number_home, 'road', uadd.street) AS address, 
     JSON_OBJECT('name_carrier', crr.name_carrier, 'code', o.tracking_code, 'delivery_value', o.delivery_value) AS carrier, 
@@ -23,6 +23,7 @@ q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order,
     INNER JOIN products AS p ON p.id = op.products_id 
     INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id 
     INNER JOIN sizes AS sz ON sz.id = b.sizes_id 
+    INNER JOIN payment AS pay ON pay.id = o.payment_id 
     INNER JOIN LATERAL 
     (SELECT option_id, url_image FROM products_images AS im WHERE im.option_id = op.id LIMIT 1) 
     AS img ON img.option_id = b.option_product_id 
