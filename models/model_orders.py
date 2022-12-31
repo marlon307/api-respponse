@@ -4,7 +4,6 @@ q_get_orders = """SELECT o.id, date_order, s.status
     WHERE user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     ORDER BY o.id DESC"""
 
-
 q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order, pay.name AS payment, 
     JSON_OBJECT('name_delivery', uadd.name_delivery, 'city', uadd.city, 'district', uadd.district, 
     'uf', uadd.state, 'zipcode', uadd.zipcode, 'number_home', uadd.number_home, 'road', uadd.street) AS address, 
@@ -29,7 +28,6 @@ q_get_order_id = """SELECT o.id, o.status_id, o.date_order, o.value_order, pay.n
     AS img ON img.option_id = b.option_product_id 
     INNER JOIN colors AS cl ON cl.id = op.colors_id 
     WHERE o.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) AND o.id = %(order_id)s"""
-
 
 q_order_seller = """SELECT DISTINCT o.id, s.status, o.date_order 
     FROM orders AS o 
