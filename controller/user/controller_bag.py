@@ -70,7 +70,7 @@ def c_bag_register_order(json, c_user, task):
         if "number_order" in order:
             return {
                 "detail": "Pedido realizado.",
-                "order": order["number_order"],
+                "order": order,
                 "status": 200,
             }
         return JSONResponse(
