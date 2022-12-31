@@ -63,7 +63,15 @@ class ErrOder(BaseModel):
     options_product: int
 
 
+class OrderPix(BaseModel):
+    number_order: int
+    date_of_expiration: datetime
+    qr_code: str
+    transaction_amount: float
+    qr_code_base64: str
+
+
 class RgOrder(BaseModel):
     detail: str
     status: int
-    order: int | ErrOder
+    order: OrderPix | ErrOder

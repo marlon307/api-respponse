@@ -21,6 +21,7 @@ class up_bag(BaseModel):
 class r_order(BaseModel):
     address: int
     carrie: int
+    method_pay: str
 
 
 class Carriers(BaseModel):
