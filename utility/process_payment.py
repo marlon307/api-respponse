@@ -25,7 +25,7 @@ def process_payment(payment_method: str, iOrder: dict):
     split = iOrder["name"].split()
 
     payment_data = {
-        "transaction_amount": iOrder["price"],
+        "transaction_amount": round(iOrder["price"], 2),
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "payment_method_id": payment_method,
         "payer": {
