@@ -93,25 +93,25 @@ def list_bag(user_id):
     return False
 
 
-def recalc_carrier(data, order):
-    new_data = {
-        "services": data["carrie"],
-        "user_id": data["p_userid"],
-        "zipcode": order["zipcode"],
-        "order_id": order["number_order"],
-    }
-    value_shipping = s_calc_shipping(new_data)
+# def recalc_carrier(data, order):
+#     new_data = {
+#         "services": data["carrie"],
+#         "user_id": data["p_userid"],
+#         "zipcode": order["zipcode"],
+#         "order_id": order["number_order"],
+#     }
+#     value_shipping = s_calc_shipping(new_data)
 
-    execut_query = MySQLCnn()
-    execut_query.update(
-        model_carrier.q_update_value_shipping,
-        {
-            "order_id": order["number_order"],
-            "delivery_value": float(value_shipping["price"]),
-            "p_userid": data["p_userid"],
-        },
-    )
-    execut_query.finishExecution()
+#     execut_query = MySQLCnn()
+#     execut_query.update(
+#         model_carrier.q_update_value_shipping,
+#         {
+#             "order_id": order["number_order"],
+#             "delivery_value": float(value_shipping["price"]),
+#             "p_userid": data["p_userid"],
+#         },
+#     )
+#     execut_query.finishExecution()
 
 
 def register_order(data_json):
@@ -120,10 +120,12 @@ def register_order(data_json):
         data_json["address"],
         data_json["carrie"],
         data_json["method_pay"],
+        data_json["shipping"],
     )
     execut_query = MySQLCnn()
     order = execut_query.callProcedure("register_order", json_for_tuple)
     execut_query.finishExecution()
+
     payment = process_payment(data_json["method_pay"], order[0])
 
     new_dict = {
