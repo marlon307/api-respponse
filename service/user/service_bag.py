@@ -114,6 +114,29 @@ def list_bag(user_id):
 #     execut_query.finishExecution()
 
 
+teste = {
+    "number_order": 144,
+    "cpf_cnpj": "02190634601",
+    "name": "Marlon Ramos",
+    "city": "Coronel Fabriciano",
+    "id": 3,
+    "user_id": 1,
+    "name_delivery": "Marlon Ramos Teste",
+    "district": "Córrego Alto",
+    "state": "MG",
+    "zipcode": "35170526",
+    "street": "Rua Seis",
+    "number_home": "128",
+    "main": 0.0,
+    "deleted": None,
+    "token": "cee82ede2ee6304afb360f698a967804",
+    "email": "email@email.com",
+    "cpf": "12345678909",
+    "installments": 4,
+    "payment_method_id": "master",
+}
+
+
 def register_order(data_json):
     json_for_tuple = (
         data_json["p_userid"],
@@ -126,7 +149,9 @@ def register_order(data_json):
     order = execut_query.callProcedure("register_order", json_for_tuple)
     execut_query.finishExecution()
 
-    payment = process_payment(data_json["method_pay"], order[0])
+    payment = process_payment(data_json["method_pay"], {**order[0], **data_json})
+
+    print(payment)
 
     new_dict = {
         "number_order": order[0]["number_order"],

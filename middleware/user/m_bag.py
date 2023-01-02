@@ -23,6 +23,7 @@ class r_order(BaseModel):
     carrie: int
     shipping: float
     method_pay: str
+    card: dict | None
 
 
 class Carriers(BaseModel):
