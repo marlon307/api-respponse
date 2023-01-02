@@ -7,19 +7,20 @@ router = APIRouter(tags=["TESTE"])
 
 @router.post("/teste")
 def rota_para_teste_rapido(data: dict):
+    print(data)
 
-    payment = {}
+    # payment = {}
     # process_payment(data_json["method_pay"], order[0])
-    order = {"number_order": 232}
-    new_dict = {
-        "number_order": order["number_order"],
-        "date_of_expiration": payment["date_of_expiration"],
-        "qr_code": payment["point_of_interaction"]["transaction_data"]["qr_code"],
-        "qr_code_base64": payment["point_of_interaction"]["transaction_data"][
-            "qr_code_base64"
-        ],
-    }
-    return new_dict
+    # order = {"number_order": 232}
+    # new_dict = {
+    #     "number_order": order["number_order"],
+    #     "date_of_expiration": payment["date_of_expiration"],
+    #     "qr_code": payment["point_of_interaction"]["transaction_data"]["qr_code"],
+    #     "qr_code_base64": payment["point_of_interaction"]["transaction_data"][
+    #         "qr_code_base64"
+    #     ],
+    # }
+    return "new_dict"
     # sdk = mercadopago.SDK(os.getenv("MP_ACCESS_TOKEN"))
 
     # payment_data = {

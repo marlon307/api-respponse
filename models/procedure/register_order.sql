@@ -14,7 +14,7 @@ BEGIN
 		GET DIAGNOSTICS CONDITION 1
 		@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
         
-        SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
+			SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
 			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
             INNER JOIN options_product AS op ON op.id = opsz.options_product_id
 			WHERE b.user_id = iduser AND b.orders_id IS NULL LIMIT 1;
@@ -41,7 +41,7 @@ BEGIN
 			WHERE b.user_id = iduser AND b.orders_id IS NULL;
 		COMMIT;
         
-		SELECT idorder AS 'number_order', price + delivery_value AS 'price', u.email, u.cpf_cnpj, u.name, ad.city, ad.* FROM user AS u
+		SELECT idorder AS 'number_order', price + delivery_value AS 'price', u.email, u.cpf_cnpj AS 'cpf', u.name, ad.city, ad.* FROM user AS u
         INNER JOIN user_address AS ad ON user_id = iduser AND ad.id = idaddres
         WHERE u.id = iduser;
         
