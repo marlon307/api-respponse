@@ -127,7 +127,7 @@ def register_order(data_json, task):
     execut_query.finishExecution()
 
     new_dict = dict()
-    if data_json["method_pay"] == "pix":
+    if data_json["method_pay"] == "pix" and "number_order" in order[0]:
         payment = process_payment_pix(data_json["method_pay"], order[0])
         new_dict = {
             "number_order": order[0]["number_order"],
@@ -140,7 +140,7 @@ def register_order(data_json, task):
             ],
         }
         return new_dict
-    else:
+    elif "number_order" in order[0]:
         task.add_task(
             process_payment_card, data_json["method_pay"], {**order[0], **data_json}
         )
@@ -148,3 +148,4 @@ def register_order(data_json, task):
             "number_order": order[0]["number_order"],
         }
         return new_dict
+    return False
