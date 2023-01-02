@@ -64,6 +64,10 @@ class ErrOder(BaseModel):
     options_product: int
 
 
+class OrderCard(BaseModel):
+    number_order: int
+
+
 class OrderPix(BaseModel):
     number_order: int
     date_of_expiration: datetime
@@ -75,4 +79,4 @@ class OrderPix(BaseModel):
 class RgOrder(BaseModel):
     detail: str
     status: int
-    order: OrderPix | ErrOder
+    order: OrderPix | OrderCard | ErrOder

@@ -3,7 +3,7 @@ import os
 import requests
 from models.database import MySQLCnn
 from models import model_bag, model_carrier
-from utility.process_payment import process_payment
+from utility.process_payment import process_payment_card, process_payment_pix
 
 
 def add_bag(data):
@@ -114,30 +114,7 @@ def list_bag(user_id):
 #     execut_query.finishExecution()
 
 
-teste = {
-    "number_order": 144,
-    "cpf_cnpj": "02190634601",
-    "name": "Marlon Ramos",
-    "city": "Coronel Fabriciano",
-    "id": 3,
-    "user_id": 1,
-    "name_delivery": "Marlon Ramos Teste",
-    "district": "Córrego Alto",
-    "state": "MG",
-    "zipcode": "35170526",
-    "street": "Rua Seis",
-    "number_home": "128",
-    "main": 0.0,
-    "deleted": None,
-    "token": "cee82ede2ee6304afb360f698a967804",
-    "email": "email@email.com",
-    "cpf": "12345678909",
-    "installments": 4,
-    "payment_method_id": "master",
-}
-
-
-def register_order(data_json):
+def register_order(data_json, task):
     json_for_tuple = (
         data_json["p_userid"],
         data_json["address"],
@@ -149,19 +126,25 @@ def register_order(data_json):
     order = execut_query.callProcedure("register_order", json_for_tuple)
     execut_query.finishExecution()
 
-    payment = process_payment(data_json["method_pay"], {**order[0], **data_json})
-
-    print(payment)
-
-    new_dict = {
-        "number_order": order[0]["number_order"],
-        "zipcode": order[0]["zipcode"],
-        "date_of_expiration": payment["date_of_expiration"].replace(" ", ""),
-        "qr_code": payment["point_of_interaction"]["transaction_data"]["qr_code"],
-        "transaction_amount": payment["transaction_amount"],
-        "qr_code_base64": payment["point_of_interaction"]["transaction_data"][
-            "qr_code_base64"
-        ],
-    }
-
-    return new_dict
+    new_dict = dict()
+    if data_json["method_pay"] == "pix":
+        payment = process_payment_pix(data_json["method_pay"], order[0])
+        new_dict = {
+            "number_order": order[0]["number_order"],
+            "zipcode": order[0]["zipcode"],
+            "date_of_expiration": payment["date_of_expiration"].replace(" ", ""),
+            "qr_code": payment["point_of_interaction"]["transaction_data"]["qr_code"],
+            "transaction_amount": payment["transaction_amount"],
+            "qr_code_base64": payment["point_of_interaction"]["transaction_data"][
+                "qr_code_base64"
+            ],
+        }
+        return new_dict
+    else:
+        task.add_task(
+            process_payment_card, data_json["method_pay"], {**order[0], **data_json}
+        )
+        new_dict = {
+            "number_order": order[0]["number_order"],
+        }
+        return new_dict

@@ -61,10 +61,10 @@ def c_bag_delete(json, c_user):
         raise handlerErr("bag -> c_delete_bag -> %s" % err)
 
 
-def c_bag_register_order(json, c_user):
+def c_bag_register_order(json, c_user, task):
     try:
         json["p_userid"] = c_user.id_user
-        order = service_bag.register_order(json)
+        order = service_bag.register_order(json, task)
 
         if "number_order" in order:
             return {
