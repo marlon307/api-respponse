@@ -45,6 +45,18 @@ def get_product_id(id_product):
         raise handlerErr("seller -> get_product_id -> %s" % err)
 
 
+def get_products_seller(id_user):
+    try:
+        list_products = service_product.s_list_products_seller(id_user)
+        return {
+            "product": list_products,
+            "detail": "Produto listado.",
+            "status": 200,
+        }
+    except Exception as err:
+        raise handlerErr("seller -> get_products_seller -> %s" % err)
+
+
 def options():
     try:
         list_options = service_product.list_option()
