@@ -7,7 +7,7 @@ router = APIRouter(tags=["SELLER"])
 
 
 @router.get(
-    "/panel/seller/",
+    "/panel/seller",
     # response_model=RListOrder,
 )
 def panel_seller(current_user: User = Depends(get_current_adm)):

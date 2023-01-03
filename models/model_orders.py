@@ -44,6 +44,7 @@ INNER JOIN bag AS b ON orders_id = o.id
 INNER JOIN options_product AS op ON op.id = b.option_product_id
 INNER JOIN products AS p ON p.id = op.products_id
 WHERE p.user_id = (SELECT id FROM user WHERE id_user = %(id_user)s)  
-GROUP BY o.status_id"""
+GROUP BY o.status_id 
+ORDER BY s.id ASC"""
 
 q_products_seller = """SELECT COUNT(*) AS 'quantity' FROM products WHERE user_id = (SELECT id FROM user WHERE id_user = %(id_user)s)"""

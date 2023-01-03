@@ -9,6 +9,7 @@ def service_panel_seller(json):
         model_orders.q_products_seller, json
     )
     execut_query.finishExecution()
+
     return {
         "order": order_info,
         "products": qunatity_product_seller,
