@@ -35,4 +35,15 @@ q_order_seller = """SELECT DISTINCT o.id, s.status, o.date_order
     INNER JOIN bag AS b ON b.orders_id = o.id 
     INNER JOIN options_product AS op On op.id = b.option_product_id 
     INNER JOIN products AS p ON p.id = op.products_id 
-    WHERE p.user_id = (SELECT id FROm user WHERE id_user =%(id_user)s) AND s.id = %(status_id)s"""
+    WHERE p.user_id = (SELECT id FROM user WHERE id_user =%(id_user)s) AND s.id = %(status_id)s"""
+
+q_panel_order_seller = """SELECT s.status, COUNT(*) AS 'quantity' 
+FROM orders AS o
+INNER JOIN status AS s ON s.id = o.status_id
+INNER JOIN bag AS b ON orders_id = o.id
+INNER JOIN options_product AS op ON op.id = b.option_product_id
+INNER JOIN products AS p ON p.id = op.products_id
+WHERE p.user_id = (SELECT id FROM user WHERE id_user = %(id_user)s)  
+GROUP BY o.status_id"""
+
+q_products_seller = """SELECT COUNT(*) AS 'quantity' FROM products WHERE user_id = (SELECT id FROM user WHERE id_user = %(id_user)s)"""
