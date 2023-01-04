@@ -53,6 +53,7 @@ def process_payment_pix(payment_method: str, iOrder: dict):
     return payment
 
 
+# https://www.mercadopago.com.br/developers/pt/docs/checkout-bricks/payment-brick/additional-customization/preferences
 def process_payment_card(payment_method: str, iOrder: dict):
     sdk = mercadopago.SDK(os.getenv("MP_ACCESS_TOKEN"))
     split = iOrder["name"].split()

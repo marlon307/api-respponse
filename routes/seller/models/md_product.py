@@ -136,6 +136,12 @@ class MinInfoProductList(BaseModel):
     color_list: list[ListProdColor]
 
 
+class CategoryPage(BaseModel):
+    detail: str
+    status: int
+    products_ctg: list[MinInfoProductList]
+
+
 class CategoryHome(BaseModel):
     id: int
     path: str
