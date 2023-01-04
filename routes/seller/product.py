@@ -42,3 +42,8 @@ def list_options():
 @router.get("/product/{id}", response_model=ProductId)
 def get_product_id(id: int):
     return c_product.get_product_id(id)
+
+
+@router.get("/seller/products", response_model=ProductId)
+def get_product_id(current_user: User = Depends(get_current_adm)):
+    return c_product.get_products_seller(current_user.id_user)

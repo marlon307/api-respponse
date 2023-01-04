@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from routes.user import user, address, bag, orders
-from routes.cms import category, color, gender, size, status, carrier
+from routes.user import user, address, bag, orders, category
+from routes.cms import color, gender, size, status, carrier, categorys
 from routes.seller import product, orders_seller, panel
 from routes.test import teste
 
@@ -19,7 +19,7 @@ def routers(app: FastAPI):
     app.include_router(panel.router)
 
     # ROUTERS CMS
-    app.include_router(category.router)
+    app.include_router(categorys.router)
     app.include_router(color.router)
     app.include_router(gender.router)
     app.include_router(size.router)
@@ -31,6 +31,9 @@ def routers(app: FastAPI):
     app.include_router(address.router)
     app.include_router(bag.router)
     app.include_router(orders.router)
+
+    # ROUTE OF PRODUCTS THAT DO NOT REQUIRE AUTHENTICATION
+    app.include_router(category.router)
 
     # TESTE
     app.include_router(teste.router)

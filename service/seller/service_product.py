@@ -148,6 +148,15 @@ def get_product_id(id):
     return list_product
 
 
+def s_list_products_seller(id):
+    execut_query = MySQLCnn()
+    list_products = execut_query.selectOne(
+        model_product.q_list_prod_seller, {"id_user": id}
+    )
+    execut_query.finishExecution()
+    return list_products
+
+
 def list_option():
     execut_query = MySQLCnn()
     object_lists = execut_query.selectOne(model_seller.q_list_options, {"info": None})
