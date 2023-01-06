@@ -3,7 +3,7 @@ import json
 from pydantic import ValidationError
 from controller.seller import c_product
 from middleware.m_auth import User, get_current_adm
-from ..seller.models.md_product import CreateProduct
+from ..seller.models.md_product import CreateProduct, ListProductSeller
 from .models import Default, ProductId, ListProduct, OptionProduct
 
 router = APIRouter(tags=["SELLER"])
@@ -44,6 +44,6 @@ def get_product_id(id: int):
     return c_product.get_product_id(id)
 
 
-@router.get("/seller/products", response_model=ProductId)
+@router.get("/seller/products", response_model=ListProductSeller)
 def get_product_id(current_user: User = Depends(get_current_adm)):
     return c_product.get_products_seller(current_user.id_user)

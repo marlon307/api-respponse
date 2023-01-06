@@ -49,7 +49,7 @@ def get_products_seller(id_user):
     try:
         list_products = service_product.s_list_products_seller(id_user)
         return {
-            "product": list_products,
+            "products": list_products,
             "detail": "Produto listado.",
             "status": 200,
         }

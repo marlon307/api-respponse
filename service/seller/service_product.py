@@ -150,11 +150,18 @@ def get_product_id(id):
 
 def s_list_products_seller(id):
     execut_query = MySQLCnn()
-    list_products = execut_query.selectOne(
+    list_products = execut_query.select(
         model_product.q_list_prod_seller, {"id_user": id}
     )
     execut_query.finishExecution()
-    return list_products
+
+    def fomart(product):
+        product["color_list"] = json.loads(product["color_list"])
+        return product
+
+    list_products = map(fomart, list_products)
+
+    return list(list_products)
 
 
 def list_option():
