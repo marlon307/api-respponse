@@ -213,3 +213,9 @@ class OptionProduct(BaseModel):
     option_list: OptionList
     detail: str
     status: int
+
+
+class ListProductSeller(BaseModel):
+    detail: str
+    status: int
+    products: list[MinInfoProductList]

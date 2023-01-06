@@ -17,7 +17,6 @@ INNER JOIN LATERAL (
 SELECT hs.options_product_id, JSON_ARRAYAGG(s.size) AS sizes FROM options_product_has_sizes AS hs 
 INNER JOIN sizes AS s ON s.id = hs.sizes_id 
 WHERE hs.options_product_id = op.id 
-AND hs.quantity > 0 
 GROUP BY hs.options_product_id
 ) AS s 
 INNER JOIN LATERAL 
