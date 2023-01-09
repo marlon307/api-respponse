@@ -1,8 +1,5 @@
-import json
-import os
-import requests
 from models.database import MySQLCnn
-from models import model_bag, model_carrier
+from models import model_bag
 from utility.process_payment import process_payment_card, process_payment_pix
 
 
@@ -34,52 +31,6 @@ def s_delete_item_bag(data):
     return True
 
 
-def s_calc_shipping(data):
-    execut_query = MySQLCnn()
-    list_products = execut_query.select(
-        model_bag.q_get_producs_carrier,
-        {
-            "user_id": data["user_id"],
-            "id_order": data["order_id"] if "order_id" in data else None,
-        },
-    )
-    execut_query.finishExecution()
-
-    url = os.getenv("MELHORENVIO_API") + "api/v2/me/shipment/calculate"
-    payload = json.dumps(
-        {
-            "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
-            "to": {"postal_code": data["zipcode"]},
-            "products": list_products,
-            "services": str(data["services"]) if "services" in data else "",
-        }
-    )
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer %s" % (os.getenv("MELHORENVIO_TOKEN")),
-        "User-Agent": os.getenv("MELHORENVIO_EMAIL_SUPORTE"),
-    }
-
-    response = requests.request("POST", url, headers=headers, data=payload)
-    data = response.json()
-
-    if type(data) is list:
-        new_list = list()
-        for carrier in data:
-            if "error" not in carrier:
-                new_list.append(
-                    {
-                        "id": carrier["id"],
-                        "name_carrier": carrier["company"]["name"],
-                        "toDate": carrier["custom_delivery_time"],
-                        "price": float(carrier["price"]),
-                    }
-                )
-        return new_list
-    return data
-
-
 def list_bag(user_id):
     execut_query = MySQLCnn()
     list_bag = execut_query.select(model_bag.q_list_bag, {"user_id": user_id})
@@ -91,27 +42,6 @@ def list_bag(user_id):
             "list_b": list_bag,
         }
     return False
-
-
-# def recalc_carrier(data, order):
-#     new_data = {
-#         "services": data["carrie"],
-#         "user_id": data["p_userid"],
-#         "zipcode": order["zipcode"],
-#         "order_id": order["number_order"],
-#     }
-#     value_shipping = s_calc_shipping(new_data)
-
-#     execut_query = MySQLCnn()
-#     execut_query.update(
-#         model_carrier.q_update_value_shipping,
-#         {
-#             "order_id": order["number_order"],
-#             "delivery_value": float(value_shipping["price"]),
-#             "p_userid": data["p_userid"],
-#         },
-#     )
-#     execut_query.finishExecution()
 
 
 def register_order(data_json, task):

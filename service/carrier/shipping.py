@@ -1,13 +1,55 @@
 import json
-from fastapi import APIRouter
-import mercadopago
 import os
+import requests
 from models import model_bag
 from models.database import MySQLCnn
 
-import requests
 
-router = APIRouter(tags=["TESTE"])
+def s_calc_shipping(data):
+    execut_query = MySQLCnn()
+    list_products = execut_query.select(
+        model_bag.q_get_producs_carrier,
+        {
+            "user_id": data["user_id"],
+            "id_order": data["order_id"] if "order_id" in data else None,
+        },
+    )
+    execut_query.finishExecution()
+
+    url = os.getenv("MELHORENVIO_API") + "api/v2/me/shipment/calculate"
+    payload = json.dumps(
+        {
+            "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
+            "to": {"postal_code": data["zipcode"]},
+            "products": list_products,
+            "services": str(data["services"]) if "services" in data else "",
+        }
+    )
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer %s" % (os.getenv("MELHORENVIO_TOKEN")),
+        "User-Agent": os.getenv("MELHORENVIO_EMAIL_SUPORTE"),
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    data = response.json()
+
+    if type(data) is list:
+        new_list = list()
+        for carrier in data:
+            if "error" not in carrier:
+                new_list.append(
+                    {
+                        "id": carrier["id"],
+                        "name_carrier": carrier["company"]["name"],
+                        "toDate": carrier["custom_delivery_time"],
+                        "price": float(carrier["price"]),
+                    }
+                )
+        return new_list
+    return data
+
 
 teste = {
     "number_order": 200,
@@ -30,17 +72,7 @@ teste = {
 }
 
 
-@router.post("/teste")
-def rota_para_teste_rapido(data: dict):
-    to_address = teste
-
-    execut_query = MySQLCnn()
-    list_products = execut_query.select(
-        model_bag.q_get_producs_carrier,
-        {"user_id": 1, "id_order": 180},
-    )
-    execut_query.finishExecution()
-
+def s_add_shipping(to_address=teste):
     url = os.getenv("MELHORENVIO_API") + "api/v2/me/cart"
     headers = {
         "Accept": "application/json",
@@ -49,20 +81,6 @@ def rota_para_teste_rapido(data: dict):
         "User-Agent": os.getenv("MELHORENVIO_EMAIL_SUPORTE"),
     }
 
-    new_list_products = list()
-    for product in list_products:
-        new_list_products.append(
-            {
-                "name": "%s %s" % (product["category_name"], product["title"]),
-                "quantity": product["quantity"],
-                "unitary_value": product["insurance_value"],
-                "weight": product["weight"],
-            }
-        )
-    new_list_calc_volumes = list()
-    for product in list_products:
-        new_list_calc_volumes.append({})
-    print(list_products)
     payload = json.dumps(
         {
             "service": 3,
@@ -100,7 +118,18 @@ def rota_para_teste_rapido(data: dict):
                 "postal_code": to_address["zipcode"],
                 "note": "Observação",
             },
-            "products": new_list_products,
+            "products": [
+                {
+                    "name": "Papel adesivo para etiquetas 1",
+                    "quantity": 3,
+                    "unitary_value": 100.00,
+                },
+                {
+                    "name": "Papel adesivo para etiquetas 2",
+                    "quantity": 1,
+                    "unitary_value": 700.00,
+                },
+            ],
             "volumes": [{"height": 15, "width": 20, "length": 10, "weight": 3.5}],
             "options": {
                 "insurance_value": to_address["price"],

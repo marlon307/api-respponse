@@ -160,7 +160,6 @@ def s_list_products_seller(id):
         return product
 
     list_products = map(fomart, list_products)
-
     return list(list_products)
 
 
