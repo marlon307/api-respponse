@@ -44,27 +44,6 @@ def list_bag(user_id):
     return False
 
 
-# def recalc_carrier(data, order):
-#     new_data = {
-#         "services": data["carrie"],
-#         "user_id": data["p_userid"],
-#         "zipcode": order["zipcode"],
-#         "order_id": order["number_order"],
-#     }
-#     value_shipping = s_calc_shipping(new_data)
-
-#     execut_query = MySQLCnn()
-#     execut_query.update(
-#         model_carrier.q_update_value_shipping,
-#         {
-#             "order_id": order["number_order"],
-#             "delivery_value": float(value_shipping["price"]),
-#             "p_userid": data["p_userid"],
-#         },
-#     )
-#     execut_query.finishExecution()
-
-
 def register_order(data_json, task):
     json_for_tuple = (
         data_json["p_userid"],

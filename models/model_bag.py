@@ -16,9 +16,11 @@ q_list_bag = """SELECT DISTINCT p.id, op.id AS opt_id, op.products_id, p.title, 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s LIMIT 1) 
     AND b.orders_id IS NULL"""
 
-q_get_producs_carrier = """SELECT op.price AS insurance_value, op.products_id AS id, op.width, op.height, op.length, op.weight, b.quantity 
+q_get_producs_carrier = """SELECT DISTINCT op.price AS insurance_value, ctg.category_name, p.title, op.products_id AS id, op.width, op.height, op.length, op.weight, b.quantity 
     FROM options_product AS op 
     INNER JOIN bag AS b ON b.option_product_id = op.id 
+    INNER JOIN products AS p ON p.id = op.products_id 
+    INNER JOIN categorys AS ctg ON ctg.id = p.categorys_id 
     WHERE b.user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND b.orders_id IS NULL OR b.orders_id = %(id_order)s"""
 
