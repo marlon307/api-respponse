@@ -10,6 +10,7 @@ class m_addAddress(BaseModel):
     zipcode: str
     street: str
     number_home: str
+    complement: str
 
     @classmethod
     def form_address(
@@ -21,6 +22,7 @@ class m_addAddress(BaseModel):
         zipcode: str = Form(),
         street: str = Form(),
         number_home: str = Form(),
+        complement: str = Form(),
     ):
         return cls(
             name_delivery=name_delivery,
@@ -30,4 +32,5 @@ class m_addAddress(BaseModel):
             zipcode=zipcode,
             street=street,
             number_home=number_home,
+            complement=complement,
         )

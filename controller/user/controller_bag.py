@@ -1,4 +1,5 @@
 from service.user import service_bag
+from service.carrier import shipping
 from utility.handleErr import handlerErr, JSONResponse, status
 
 
@@ -90,7 +91,7 @@ def c_bag_register_order(json, c_user, task):
 def c_bag_calc_shipping(json, c_user):
     try:
         json["user_id"] = c_user.id_user
-        carriers = service_bag.s_calc_shipping(json)
+        carriers = shipping.s_calc_shipping(json)
         return {
             "carriers": carriers,
             "detail": "Tranportadora disponíveis.",
