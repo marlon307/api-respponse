@@ -13,7 +13,7 @@ q_update_settings_seller = """UPDATE user
 
 q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, 
 JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 'city', a.city,
-'district', a.district, 'street', a.street, 'district', a.district,
+'district', a.district, 'street', a.street, 'district', a.district, 'complement', a.complement,
 'number_home', a.number_home, 'state', a.state
 ) AS address FROM user AS u 
 INNER JOIN user_address AS a ON a.id = u.collect_address_id 
