@@ -18,7 +18,7 @@ q_update_psw_user = """UPDATE user SET
     password=%(password)s, user_token=%(user_token)s 
     WHERE id_user=%(id_user)s AND email=%(email)s"""
 
-q_select_info_user = """SELECT name, email, birthday, cpf_cnpj, gender_id, tel, cel 
+q_select_info_user = """SELECT name, email, birthday, cpf, gender_id, tel, cel 
 FROM user WHERE id_user = %(user_id)s"""
 
-q_update_user = """UPDATE user SET name=%(name)s, birthday=%(date)s, cpf_cnpj=%(doc)s, gender_id=%(gender)s, tel=%(tel)s, cel=%(cel)s WHERE id_user=%(id_user)s"""
+q_update_user = """UPDATE user SET name=%(name)s, birthday=%(date)s, cpf=%(doc)s, gender_id=%(gender)s, tel=%(tel)s, cel=%(cel)s WHERE id_user=%(id_user)s"""

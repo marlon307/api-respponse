@@ -17,7 +17,7 @@ def m_cards(f):
                 or "c_number" not in data
                 or "c_exp" not in data
                 or "c_flag" not in data
-                or "c_cpf_cnpj" not in data
+                or "c_cpf" not in data
                 or "c_birthday" not in data
             ):
                 return msgErr

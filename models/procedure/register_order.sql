@@ -41,7 +41,7 @@ BEGIN
 			WHERE b.user_id = iduser AND b.orders_id IS NULL;
 		COMMIT;
         
-		SELECT idorder AS 'number_order', price + delivery_value AS 'price', u.email, u.cpf_cnpj AS 'cpf', u.name, ad.city, ad.* FROM user AS u
+		SELECT idorder AS 'number_order', price + delivery_value AS 'price', u.email, u.cpf, u.name, ad.city, ad.* FROM user AS u
         INNER JOIN user_address AS ad ON user_id = iduser AND ad.id = idaddres
         WHERE u.id = iduser;
         

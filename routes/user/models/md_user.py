@@ -6,7 +6,7 @@ from middleware.user.m_user import ModelEmail
 class props_user(ModelEmail):
     name: str
     birthday: date | None
-    cpf_cnpj: str | None
+    cpf: str | None
     gender_id: int | None
     tel: str | None
     cel: str | None
