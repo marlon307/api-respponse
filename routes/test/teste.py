@@ -63,6 +63,7 @@ def rota_para_teste_rapido(data: dict):
     for product in list_products:
         new_list_calc_volumes.append({})
     print(list_products)
+
     payload = json.dumps(
         {
             "service": 3,
@@ -72,7 +73,7 @@ def rota_para_teste_rapido(data: dict):
                 "phone": "53984470102",
                 "email": "contato@melhorenvio.com.br",
                 "document": "16571478358",
-                "company_document": "89794131000100",
+                # "company_document": "89794131000100",
                 "state_register": "123456",
                 "address": "Endereço do remetente",
                 "complement": "Complemento",
@@ -88,7 +89,7 @@ def rota_para_teste_rapido(data: dict):
                 "phone": "53984470102",
                 "email": to_address["email"],
                 "document": to_address["cpf"],
-                "company_document": "07595604000177",
+                # "company_document": "07595604000177",
                 "state_register": "123456",
                 "address": "Endereço do destinatário",
                 "complement": to_address["complement"],

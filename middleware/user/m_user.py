@@ -54,7 +54,14 @@ class ModelDOC(BaseModel):
     @validator("doc")
     def validator_doc(cls, v):
         if cpf_validate(v) is not True:
-            raise ValueError("Documento inválido.")
+            raise HTTPException(
+                detail={
+                    "detail": "CPF inválido.",
+                    "field": "doc",
+                    "status": 400,
+                },
+                status_code=400,
+            )
         return v
 
 
