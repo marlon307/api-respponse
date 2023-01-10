@@ -15,6 +15,19 @@ def seller_panel(c_user):
         raise handlerErr("seller -> c_panel_seller -> %s" % err)
 
 
+def get_seller_panel_settings(c_user):
+    try:
+        data = {"id_user": c_user.id_user}
+        settings = service_panel.service_get_panel_seller_settings(data)
+        return {
+            "detail": "Informações do vendedor atualizadas.",
+            "status": 200,
+            "settings": settings,
+        }
+    except Exception as err:
+        raise handlerErr("seller -> c_panel_seller_settings -> %s" % err)
+
+
 def seller_panel_settings(form, c_user):
     try:
         data = {"id_user": c_user.id_user, **form.dict()}
