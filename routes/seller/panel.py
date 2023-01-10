@@ -8,15 +8,13 @@ from .models.md_panel import SettingsPanelSeller
 router = APIRouter(tags=["SELLER"])
 
 
-@router.get("/panel/seller", response_model=SettingsPanelSeller)
+@router.get("/panel/seller")
 def panel_seller(current_user: User = Depends(get_current_adm)):
     return c_panel.seller_panel(current_user)
 
 
-@router.get("/panel/setings")
-def panel_seller_sttings(
-    current_user: User = Depends(get_current_adm),
-):
+@router.get("/panel/setings", response_model=SettingsPanelSeller)
+def panel_seller_sttings(current_user: User = Depends(get_current_adm)):
     return c_panel.get_seller_panel_settings(current_user)
 
 
