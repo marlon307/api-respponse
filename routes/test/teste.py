@@ -38,10 +38,10 @@ def rota_para_teste_rapido(data: dict):
     execut_query = MySQLCnn()
     list_products = execut_query.select(
         model_bag.q_get_producs_carrier,
-        {"user_id": 1, "id_order": 180},
+        {"user_id": 1, "iduser": 0, "id_order": 180},
     )
     info_seller = execut_query.selectOne(
-        model_seller.q_select_seller_settings, {"id_user": 1}
+        model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
     )
     execut_query.finishExecution()
 
@@ -66,6 +66,8 @@ def rota_para_teste_rapido(data: dict):
     new_list_calc_volumes = list()
     for product in list_products:
         new_list_calc_volumes.append({})
+
+    print(list_products)
 
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(

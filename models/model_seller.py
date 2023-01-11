@@ -17,4 +17,4 @@ JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 
 'number_home', a.number_home, 'state', a.state
 ) AS address FROM user AS u 
 INNER JOIN user_address AS a ON a.id = u.collect_address_id 
-WHERE id_user = %(id_user)s OR u.id = %(id_user)s"""
+WHERE id_user = %(id_user)s OR u.id = %(iduser)s"""
