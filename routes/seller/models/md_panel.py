@@ -6,6 +6,7 @@ class Settings(BaseModel):
     store_name: str
     cnpj: str
     ie: str
+    obs: str
     address: AddressProps
 
 

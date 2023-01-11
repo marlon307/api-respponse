@@ -6,6 +6,7 @@ class SettingsSeller(BaseModel):
     store_name: str
     address: int
     ie: int
+    obs: str
     cnpj: int
 
     @classmethod
@@ -15,5 +16,6 @@ class SettingsSeller(BaseModel):
         cnpj: str = Form(),
         ie: int = Form(),
         address: int = Form(),
+        obs: str = Form(),
     ):
-        return cls(store_name=store_name, cnpj=cnpj, ie=ie, address=address)
+        return cls(store_name=store_name, cnpj=cnpj, ie=ie, address=address, obs=obs)
