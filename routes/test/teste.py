@@ -2,7 +2,7 @@ import json
 from fastapi import APIRouter
 import mercadopago
 import os
-from models import model_bag
+from models import model_bag, model_seller
 from models.database import MySQLCnn
 
 import requests
@@ -27,6 +27,7 @@ teste = {
     "main": 1.0,
     "deleted": None,
     "complement": "Casa",
+    "obs": "Teste 64 caract",
 }
 
 
@@ -37,7 +38,10 @@ def rota_para_teste_rapido(data: dict):
     execut_query = MySQLCnn()
     list_products = execut_query.select(
         model_bag.q_get_producs_carrier,
-        {"user_id": 1, "id_order": 180},
+        {"user_id": 1, "iduser": 0, "id_order": 180},
+    )
+    info_seller = execut_query.selectOne(
+        model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
     )
     execut_query.finishExecution()
 
@@ -62,27 +66,29 @@ def rota_para_teste_rapido(data: dict):
     new_list_calc_volumes = list()
     for product in list_products:
         new_list_calc_volumes.append({})
+
     print(list_products)
 
+    seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
         {
             "service": 3,
-            "agency": 1,
+            "agency": 1166,
             "from": {
-                "name": "Nome do remetente",
+                "name": info_seller["store_name"],
                 "phone": "53984470102",
-                "email": "contato@melhorenvio.com.br",
-                "document": "16571478358",
-                # "company_document": "89794131000100",
+                "email": info_seller["email"],
+                # "document": "16571478358",
+                "company_document": info_seller["cnpj"],
                 "state_register": "123456",
                 "address": "Endereço do remetente",
-                "complement": "Complemento",
-                "number": "1",
-                "district": "Bairro",
-                "city": "São Paulo",
+                "complement": seller_address["complement"],
+                "number": seller_address["number_home"],
+                "district": seller_address["district"],
+                "city": seller_address["city"],
                 "country_id": "BR",
-                "postal_code": "01002001",
-                "note": "observação",
+                "postal_code": seller_address["zipcode"],
+                "note": info_seller["obs"],
             },
             "to": {
                 "name": to_address["name"],
@@ -99,7 +105,7 @@ def rota_para_teste_rapido(data: dict):
                 "state_abbr": to_address["state"],
                 "country_id": "BR",
                 "postal_code": to_address["zipcode"],
-                "note": "Observação",
+                "note": to_address["obs"],
             },
             "products": new_list_products,
             "volumes": [{"height": 15, "width": 20, "length": 10, "weight": 3.5}],

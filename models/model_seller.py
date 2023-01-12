@@ -7,14 +7,14 @@ list_gender.list_gender, list_sizes.list_sizes FROM
 
 
 q_update_settings_seller = """UPDATE user 
-    SET cnpj=%(cnpj)s, ie=%(ie)s, name_store=%(store_name)s, collect_address_id=%(address)s 
+    SET cnpj=%(cnpj)s, ie=%(ie)s, name_store=%(store_name)s, collect_address_id=%(address)s, obs=%(obs)s 
     WHERE id_user=%(id_user)s"""
 
 
-q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, 
+q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, u.email, u.obs, 
 JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 'city', a.city,
 'district', a.district, 'street', a.street, 'district', a.district, 'complement', a.complement,
 'number_home', a.number_home, 'state', a.state
 ) AS address FROM user AS u 
 INNER JOIN user_address AS a ON a.id = u.collect_address_id 
-WHERE id_user = %(id_user)s"""
+WHERE id_user = %(id_user)s OR u.id = %(iduser)s"""
