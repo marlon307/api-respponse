@@ -23,14 +23,19 @@ def service_get_panel_seller_settings(data):
     data = execut_query.selectOne(model_seller.q_select_seller_settings, data)
     execut_query.finishExecution()
     data["address"] = json.loads(data["address"])
+    data["boxes"] = json.loads(data["boxes"])
     return data
 
 
 def service_panel_seller_settings(json):
-    print(json["listboxes"])
+    list_box = list()
+    for box in json["listboxes"]:
+        box["user_id"] = json["id_user"]
+        list_box.append(box)
     del json["listboxes"]
-    execut_query = MySQLCnn()
 
+    execut_query = MySQLCnn()
+    execut_query.insertMany(model_seller.q_insert_boxes_seller, list_box)
     execut_query.update(model_seller.q_update_settings_seller, json)
     execut_query.finishExecution()
     return True

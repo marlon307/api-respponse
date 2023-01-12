@@ -6,6 +6,7 @@ example = [{"width": "0", "height": "0", "length": "0", "weight": "0"}]
 
 
 class Boxes(BaseModel):
+    id: int | None
     height: float
     length: float
     weight: float
