@@ -19,6 +19,7 @@ def service_panel_seller(json):
 
 def service_get_panel_seller_settings(data):
     execut_query = MySQLCnn()
+    data["iduser"] = None
     data = execut_query.selectOne(model_seller.q_select_seller_settings, data)
     execut_query.finishExecution()
     data["address"] = json.loads(data["address"])
@@ -26,7 +27,10 @@ def service_get_panel_seller_settings(data):
 
 
 def service_panel_seller_settings(json):
+    print(json["listboxes"])
+    del json["listboxes"]
     execut_query = MySQLCnn()
+
     execut_query.update(model_seller.q_update_settings_seller, json)
     execut_query.finishExecution()
     return True

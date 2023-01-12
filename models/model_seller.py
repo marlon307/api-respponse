@@ -10,6 +10,9 @@ q_update_settings_seller = """UPDATE user
     SET cnpj=%(cnpj)s, ie=%(ie)s, name_store=%(store_name)s, collect_address_id=%(address)s, obs=%(obs)s 
     WHERE id_user=%(id_user)s"""
 
+q_insert_boxes_seller = """INSERT INTO box_seller (id, user_id, width, height, length, weight) 
+VALUES (1, 1, 2, 3, 4, 5) ON DUPLICATE KEY UPDATE width=3, height=3, length=3, weight=3"""
+
 
 q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, u.email, u.obs, 
 JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 'city', a.city,

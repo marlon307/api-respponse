@@ -2,10 +2,12 @@ import json
 from fastapi import APIRouter
 import mercadopago
 import os
-from models import model_bag, model_seller
+from models import model_bag, model_seller, model_carrier
 from models.database import MySQLCnn
 
 import requests
+
+from service.carrier.shipping import s_calc_shipping
 
 router = APIRouter(tags=["TESTE"])
 
@@ -14,6 +16,7 @@ teste = {
     "price": 353.939998626709,
     "email": "marlon-ramosb@hotmail.com",
     "cpf": "02190634601",
+    "ie": "453534",
     "name": "Marlon Ramos",
     "city": "Coronel Fabriciano",
     "id": 2,
@@ -31,14 +34,46 @@ teste = {
 }
 
 
+def recalc_carrier(data, order):
+
+    new_data = {
+        "services": data["carrie"],
+        "user_id": data["p_userid"],
+        "zipcode": order["zipcode"],
+        "order_id": order["number_order"],
+    }
+    value_shipping = s_calc_shipping(new_data)
+    print(value_shipping)
+
+    return value_shipping["packages"]
+
+
 @router.post("/teste")
 def rota_para_teste_rapido(data: dict):
+    testeee = {
+        "carrie": 4,
+        "p_userid": "a017d798-e157-41e9-ac9f-d813d254df7a",
+        "zipcode": "35170522",
+        "number_order": 200,
+    }
+    result = recalc_carrier(testeee, testeee)
+    volumes = list()
+    for box in result:
+        volumes.append(
+            {
+                "height": box["dimensions"]["height"],
+                "width": box["dimensions"]["width"],
+                "length": box["dimensions"]["length"],
+                "weight": box["weight"],
+            }
+        )
+
     to_address = teste
 
     execut_query = MySQLCnn()
     list_products = execut_query.select(
         model_bag.q_get_producs_carrier,
-        {"user_id": 1, "iduser": 0, "id_order": 180},
+        {"user_id": 1, "iduser": 0, "id_order": 200},
     )
     info_seller = execut_query.selectOne(
         model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
@@ -67,8 +102,6 @@ def rota_para_teste_rapido(data: dict):
     for product in list_products:
         new_list_calc_volumes.append({})
 
-    print(list_products)
-
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
         {
@@ -80,7 +113,7 @@ def rota_para_teste_rapido(data: dict):
                 "email": info_seller["email"],
                 # "document": "16571478358",
                 "company_document": info_seller["cnpj"],
-                "state_register": "123456",
+                "state_register": info_seller["ie"],
                 "address": "Endereço do remetente",
                 "complement": seller_address["complement"],
                 "number": seller_address["number_home"],
@@ -96,7 +129,7 @@ def rota_para_teste_rapido(data: dict):
                 "email": to_address["email"],
                 "document": to_address["cpf"],
                 # "company_document": "07595604000177",
-                "state_register": "123456",
+                # "state_register": "123456",
                 "address": "Endereço do destinatário",
                 "complement": to_address["complement"],
                 "number": to_address["number_home"],
@@ -108,7 +141,7 @@ def rota_para_teste_rapido(data: dict):
                 "note": to_address["obs"],
             },
             "products": new_list_products,
-            "volumes": [{"height": 15, "width": 20, "length": 10, "weight": 3.5}],
+            "volumes": volumes,
             "options": {
                 "insurance_value": to_address["price"],
                 "receipt": False,
