@@ -1,7 +1,7 @@
 import json
 import os
 import requests
-from models import model_bag
+from models import model_bag, model_carrier
 from models.database import MySQLCnn
 
 
@@ -21,7 +21,8 @@ def s_calc_shipping(data):
         {
             "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
             "to": {"postal_code": data["zipcode"]},
-            "products": list_products,
+            "package": list_products,
+            "options": {"insurance_value": 1500},
             "services": str(data["services"]) if "services" in data else "",
         }
     )
@@ -34,6 +35,8 @@ def s_calc_shipping(data):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
+    print(list_products)
+    print(data)
 
     if type(data) is list:
         new_list = list()
@@ -70,6 +73,27 @@ teste = {
     "deleted": None,
     "complement": "Casa",
 }
+
+
+def recalc_carrier(data, order):
+    new_data = {
+        "services": data["carrie"],
+        "user_id": data["p_userid"],
+        "zipcode": order["zipcode"],
+        "order_id": order["number_order"],
+    }
+    value_shipping = s_calc_shipping(new_data)
+
+    execut_query = MySQLCnn()
+    execut_query.update(
+        model_carrier.q_update_value_shipping,
+        {
+            "order_id": order["number_order"],
+            "delivery_value": float(value_shipping["price"]),
+            "p_userid": data["p_userid"],
+        },
+    )
+    execut_query.finishExecution()
 
 
 def s_add_shipping(to_address=teste):

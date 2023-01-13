@@ -10,11 +10,18 @@ q_update_settings_seller = """UPDATE user
     SET cnpj=%(cnpj)s, ie=%(ie)s, name_store=%(store_name)s, collect_address_id=%(address)s, obs=%(obs)s 
     WHERE id_user=%(id_user)s"""
 
+q_insert_boxes_seller = """INSERT INTO box_seller (id, user_id, width, height, length, weight) 
+VALUES (%(id)s, (SELECT id FROM user WHERE id_user=%(user_id)s), %(width)s, %(height)s, %(length)s, %(weight)s) 
+ON DUPLICATE KEY UPDATE width=%(width)s, height=%(height)s, length=%(length)s, weight=%(weight)s"""
+
 
 q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, u.email, u.obs, 
 JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 'city', a.city,
 'district', a.district, 'street', a.street, 'district', a.district, 'complement', a.complement,
-'number_home', a.number_home, 'state', a.state
-) AS address FROM user AS u 
+'number_home', a.number_home, 'state', a.state) AS address,
+JSON_ARRAYAGG(JSON_OBJECT('id', bs.id, 'width', bs.width, 'height', bs.height,
+'length', bs.length, 'weight', bs.weight)) AS boxes
+FROM user AS u 
 INNER JOIN user_address AS a ON a.id = u.collect_address_id 
-WHERE id_user = %(id_user)s OR u.id = %(iduser)s"""
+INNER JOIN box_seller AS bs ON bs.user_id = u.id 
+WHERE id_user = %(id_user)s OR u.id = %(iduser)s GROUP BY u.id"""

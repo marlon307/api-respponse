@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+
+from middleware.seller.m_settings import Boxes
 from ...user.models.md_address import AddressProps
 
 
@@ -8,6 +10,7 @@ class Settings(BaseModel):
     ie: str
     obs: str
     address: AddressProps
+    boxes: list[Boxes]
 
 
 class SettingsPanelSeller(BaseModel):
