@@ -62,11 +62,20 @@ class MySQLCnn:
         # self.commit()
         # self.closeConnection()
 
+    def deleteMany(self, query: str, condition: dict) -> None:
+        self.executemany(query, condition)
+        # self.closeCursor()
+        # self.commit()
+        # self.closeConnection()
+
     def update(self, query: str, condition: dict) -> None:
         self.execute(query, condition)
         # self.closeCursor()
         # self.commit()
         # self.closeConnection()
+
+    def updateMany(self, query: str, condition: dict) -> None:
+        self.executemany(query, condition)
 
     def select(self, query: str, condition: dict = {}) -> list:
         self.execute(query, condition)

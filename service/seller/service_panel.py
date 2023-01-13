@@ -32,10 +32,17 @@ def service_panel_seller_settings(json):
     for box in json["listboxes"]:
         box["user_id"] = json["id_user"]
         list_box.append(box)
+
+    list_del = list()
+    for idbox in json["removeboxes"]:
+        list_del.append({"user_id": json["id_user"], "idbox": idbox})
+
     del json["listboxes"]
+    del json["removeboxes"]
 
     execut_query = MySQLCnn()
-    id_list_box = execut_query.insertMany(model_seller.q_insert_boxes_seller, list_box)
+    execut_query.insertMany(model_seller.q_insert_boxes_seller, list_box)
+    execut_query.deleteMany(model_seller.q_delete_boxes, list_del)
     execut_query.update(model_seller.q_update_settings_seller, json)
     execut_query.finishExecution()
     return True

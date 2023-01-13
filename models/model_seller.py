@@ -14,6 +14,8 @@ q_insert_boxes_seller = """INSERT INTO box_seller (id, user_id, width, height, l
 VALUES (%(id)s, (SELECT id FROM user WHERE id_user=%(user_id)s), %(width)s, %(height)s, %(length)s, %(weight)s) 
 ON DUPLICATE KEY UPDATE width=%(width)s, height=%(height)s, length=%(length)s, weight=%(weight)s"""
 
+q_delete_boxes = """DELETE FROM box_seller 
+WHERE user_id = (SELECT id FROM user WHERE id_user=%(user_id)s) AND id=%(idbox)s"""
 
 q_select_seller_settings = """SELECT u.name_store AS store_name, u.cnpj, u.ie, u.email, u.obs, 
 JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 'city', a.city,

@@ -17,6 +17,10 @@ class ListBoxes(BaseModel):
     boxes: list[Boxes]
 
 
+class RemoveBoxes(BaseModel):
+    boxes: list[int]
+
+
 class SettingsSeller(BaseModel):
     store_name: str
     address: int
@@ -24,11 +28,18 @@ class SettingsSeller(BaseModel):
     obs: str
     cnpj: int
     listboxes: str
+    removeboxes: str
 
     @validator("listboxes")
     def convert_json_boxes(cls, v):
         data = json.loads(v)
         ListBoxes(boxes=data)
+        return data
+
+    @validator("removeboxes")
+    def convert_json_rmboxes(cls, v):
+        data = json.loads(v)
+        RemoveBoxes(boxes=data)
         return data
 
     @classmethod
@@ -43,6 +54,10 @@ class SettingsSeller(BaseModel):
             default=str(example),
             description="* Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
         ),
+        removeboxes: str = Form(
+            default=str([0, ...]),
+            description="* Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
+        ),
     ):
         return cls(
             store_name=store_name,
@@ -51,4 +66,5 @@ class SettingsSeller(BaseModel):
             address=address,
             obs=obs,
             listboxes=listboxes,
+            removeboxes=removeboxes,
         )
