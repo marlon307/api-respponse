@@ -47,6 +47,8 @@ class MySQLCnn:
         # l_id last id
         # l_id = self.cursor.lastrowid or 0
         l_id = self.cursor.lastrowid + 1
+        # Por conta de inserir na tabela user_boxes
+        # l_id = self.cursor.lastrowid
         id_insert = [l_id - v for v in range(self.cursor.rowcount)]
         # self.closeCursor()
         # self.commit()
