@@ -30,6 +30,7 @@ q_main_add_bag = """SELECT DISTINCT ad.id, ad.name_delivery, ad.city, ad.distric
 
 q_carrie_bag = """SELECT id, name_carrier FROM carrier"""
 
+
 q_bag_update_quantity = """UPDATE bag SET quantity = %(quantity)s WHERE 
     user_id = (SELECT id FROM user WHERE id_user = %(user_id)s) 
     AND option_product_id = %(product_option)s 
