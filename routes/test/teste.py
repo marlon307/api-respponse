@@ -170,28 +170,33 @@ def rota_para_teste_rapido(data: dict):
 
 def find_min_boxes(total_volume, volumes):
     # sort the volumes in descending order
-    volumes.sort(reverse=True)
     boxes = []
+    volumes.sort(reverse=True)
     remaining_volume = total_volume
     # iterate through the volumes and add them to the boxes until the total volume is reached
     for volume in volumes:
         while remaining_volume >= volume:
             boxes.append(volume)
             remaining_volume -= volume
-    # Se sobrar algum valor do meu volume ele irá pega a utima caixa somar com restante e procurar uma caixa maior
-    if remaining_volume > 0:
-        remaining_volume += boxes[-1]
-        boxes.pop()
-        volumes.sort(reverse=False)
 
-        for b in volumes:
-            if b >= remaining_volume:
-                boxes.append(b)
-                break
+    # Se sobrar algum valor do meu volume ele irá pega a utima caixa somar com restante e procurar uma caixa maior
+
+    if remaining_volume > 0:
+        volumes.sort(reverse=False)
+        if len(boxes) > 0:
+            remaining_volume += boxes[-1]
+            boxes.pop()
+
+            for b in volumes:
+                if b >= remaining_volume:
+                    boxes.append(b)
+                    break
+        else:
+            boxes.append(volumes[0])
     return boxes
 
 
 # Example usage
-total_volume = 126
-volumes = [20, 30, 40, 50, 60, 70, 90]
+total_volume = 125
+volumes = [100, 20, 30, 40, 50, 60, 70, 90]
 print(find_min_boxes(total_volume, volumes))
