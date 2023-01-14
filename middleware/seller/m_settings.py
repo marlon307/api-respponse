@@ -55,7 +55,7 @@ class SettingsSeller(BaseModel):
             description="* Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
         ),
         removeboxes: str = Form(
-            default=str([0, ...]),
+            default=str([0]),
             description="* Copie as informaçoes do input e altere os valores mantendo o formato (STRING/JSON)",
         ),
     ):

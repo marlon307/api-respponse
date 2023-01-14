@@ -48,32 +48,31 @@ def recalc_carrier(data, order):
     return value_shipping["packages"]
 
 
+def generateVolumes(products, boxes):
+    box_mounted = list
+    big_product = max(
+        (p["width"] + p["height"] + p["length"]) * p["quantity"] for p in products
+    )
+    value = 3
+    target = 5
+    proximity = abs(value - target)
+    print(big_product)
+    return []
+
+
+# def generateVolumes(products, boxes):
+#     print("produtos", products)
+#     print("caixas", boxes)
+
+
 @router.post("/teste")
 def rota_para_teste_rapido(data: dict):
-    testeee = {
-        "carrie": 4,
-        "p_userid": "a017d798-e157-41e9-ac9f-d813d254df7a",
-        "zipcode": "35170522",
-        "number_order": 200,
-    }
-    result = recalc_carrier(testeee, testeee)
-    volumes = list()
-    for box in result:
-        volumes.append(
-            {
-                "height": box["dimensions"]["height"],
-                "width": box["dimensions"]["width"],
-                "length": box["dimensions"]["length"],
-                "weight": box["weight"],
-            }
-        )
-
     to_address = teste
 
     execut_query = MySQLCnn()
     list_products = execut_query.select(
         model_bag.q_get_producs_carrier,
-        {"user_id": 1, "iduser": 0, "id_order": 200},
+        {"user_id": 1, "iduser": 0, "id_order": 201},
     )
     info_seller = execut_query.selectOne(
         model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
@@ -98,9 +97,12 @@ def rota_para_teste_rapido(data: dict):
                 "weight": product["weight"],
             }
         )
+
     new_list_calc_volumes = list()
-    for product in list_products:
-        new_list_calc_volumes.append({})
+    for box in info_seller["boxes"]:
+        new_list_calc_volumes.append(box)
+
+    generateVolumes(list_products, json.loads(info_seller["boxes"]))
 
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
@@ -141,7 +143,7 @@ def rota_para_teste_rapido(data: dict):
                 "note": to_address["obs"],
             },
             "products": new_list_products,
-            "volumes": volumes,
+            "volumes": new_list_calc_volumes,
             "options": {
                 "insurance_value": to_address["price"],
                 "receipt": False,
@@ -164,3 +166,32 @@ def rota_para_teste_rapido(data: dict):
     data = response.json()
 
     return data
+
+
+def find_min_boxes(total_volume, volumes):
+    # sort the volumes in descending order
+    volumes.sort(reverse=True)
+    boxes = []
+    remaining_volume = total_volume
+    # iterate through the volumes and add them to the boxes until the total volume is reached
+    for volume in volumes:
+        while remaining_volume >= volume:
+            boxes.append(volume)
+            remaining_volume -= volume
+    # Se sobrar algum valor do meu volume ele irá pega a utima caixa somar com restante e procurar uma caixa maior
+    if remaining_volume > 0:
+        remaining_volume += boxes[-1]
+        boxes.pop()
+        volumes.sort(reverse=False)
+
+        for b in volumes:
+            if b >= remaining_volume:
+                boxes.append(b)
+                break
+    return boxes
+
+
+# Example usage
+total_volume = 126
+volumes = [20, 30, 40, 50, 60, 70, 90]
+print(find_min_boxes(total_volume, volumes))
