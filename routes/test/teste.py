@@ -171,38 +171,29 @@ def rota_para_teste_rapido(data: dict):
 def cube_volumes(total_volume, boxes):
     used_boxes = list()
     boxes.sort(reverse=True)
+
     maneger_volumes = total_volume
-    for box in boxes:
-        if total_volume <= box:
+    check_update_box: int = boxes[0]
+
+    for index, box in enumerate(boxes):
+        if check_update_box != box and boxes[-index] >= maneger_volumes > 0:
+            used_boxes.append(boxes[-index])
+            maneger_volumes -= boxes[-index]
             break
+
         while maneger_volumes >= box:
+            if check_update_box != box:
+                check_update_box = box
+                break
+
             used_boxes.append(box)
             maneger_volumes -= box
 
     if maneger_volumes > 0:
-        boxes.sort()
         for index, box in enumerate(boxes):
-
-            if len(used_boxes) and used_boxes[-1] == box:
-                used_boxes.pop()
-                used_boxes.append(boxes[index + 1])
-                break
-
-            if len(used_boxes) and used_boxes[-1] > box:
-                append = False
-                for b in boxes:
-                    if b > used_boxes[-1]:
-                        used_boxes.pop()
-                        used_boxes.append(b)
-                        append = True
-                        break
-                if append is False:
-                    used_boxes.append(box)
-                break
-
-            if box >= maneger_volumes:
-                used_boxes.append(box)
-                maneger_volumes -= box
+            if boxes[-index] >= maneger_volumes:
+                print(maneger_volumes)
+                used_boxes.append(boxes[-index])
                 break
 
     return used_boxes
