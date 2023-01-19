@@ -168,35 +168,52 @@ def rota_para_teste_rapido(data: dict):
     return data
 
 
-def find_min_boxes(total_volume, volumes):
-    # sort the volumes in descending order
-    boxes = []
-    volumes.sort(reverse=True)
-    remaining_volume = total_volume
-    # iterate through the volumes and add them to the boxes until the total volume is reached
-    for volume in volumes:
-        while remaining_volume >= volume:
-            boxes.append(volume)
-            remaining_volume -= volume
+def cube_volumes(total_volume, boxes):
+    used_boxes = list()
+    boxes.sort(reverse=True)
 
-    # Se sobrar algum valor do meu volume ele irá pega a utima caixa somar com restante e procurar uma caixa maior
+    maneger_volumes = total_volume
+    check_update_box: int = boxes[0]
 
-    if remaining_volume > 0:
-        volumes.sort(reverse=False)
-        if len(boxes) > 0:
-            remaining_volume += boxes[-1]
-            boxes.pop()
+    for index, box in enumerate(boxes):
+        if check_update_box != box and boxes[-index] >= maneger_volumes > 0:
+            used_boxes.append(boxes[-index])
+            maneger_volumes -= boxes[-index]
+            break
 
-            for b in volumes:
-                if b >= remaining_volume:
-                    boxes.append(b)
-                    break
-        else:
-            boxes.append(volumes[0])
-    return boxes
+        while maneger_volumes >= box:
+            if check_update_box != box:
+                check_update_box = box
+                break
+
+            used_boxes.append(box)
+            maneger_volumes -= box
+
+    if maneger_volumes > 0:
+        for index, box in enumerate(boxes):
+            if boxes[-index] >= maneger_volumes:
+                print(maneger_volumes)
+                used_boxes.append(boxes[-index])
+                break
+
+    return used_boxes
 
 
-# Example usage
-total_volume = 125
-volumes = [100, 20, 30, 40, 50, 60, 70, 90]
-print(find_min_boxes(total_volume, volumes))
+# boxes = [100, 10, 20, 30, 40, 50, 60, 70, 90]
+# total_volume = 186
+# print(cube_volumes(total_volume, boxes), 186)
+# total_volume = 121
+# print(cube_volumes(total_volume, boxes), 121)
+# total_volume = 116
+# print(cube_volumes(total_volume, boxes), 116)
+# total_volume = 326
+# print(cube_volumes(total_volume, boxes), 326)
+
+# total_volume = 86
+# print(cube_volumes(total_volume, boxes), 86)
+# total_volume = 56
+# print(cube_volumes(total_volume, boxes), 56)
+# total_volume = 12
+# print(cube_volumes(total_volume, boxes), 12)
+# total_volume = 1.2
+# print(cube_volumes(total_volume, boxes), 1.2)
