@@ -1,9 +1,9 @@
 def find_probabilities_box(
-    nums: list[int],
+    nums: list[dict],
     target: float,
     current_sum: float,
-    current_combo: list[int],
-    combos: list[list[int]],
+    current_combo: list[dict],
+    combos: list[list[dict]],
 ):
     if current_sum >= target:
         combos.append(current_combo)
@@ -16,40 +16,39 @@ def find_probabilities_box(
         find_probabilities_box(
             nums[i + 1 :],
             target,
-            current_sum + nums[i],
+            current_sum + nums[i]["vol"],
             current_combo + [nums[i]],
             combos,
         )
 
 
-def cube_volumes(total_volume: float, boxes: list[int]):
+def cube_volumes(total_volume: float, boxes: list[dict]):
     used_boxes = list()
-    boxes.sort(reverse=True)
+    boxes.sort(key=lambda x: x["vol"], reverse=True)
+    check_update_box: int = boxes[0]["vol"]
 
-    maneger_volumes = total_volume
-    check_update_box: int = boxes[0]
     for index, box in enumerate(boxes):
-        if check_update_box != box and boxes[-index] >= maneger_volumes > 0:
+        if check_update_box != box["vol"] and boxes[-index]["vol"] >= total_volume > 0:
             used_boxes.append(boxes[-index])
-            maneger_volumes -= boxes[-index]
+            total_volume -= boxes[-index]["vol"]
             break
 
-        while maneger_volumes >= box:
-            if check_update_box != box:
-                check_update_box = box
+        while total_volume >= box["vol"]:
+            if check_update_box != box["vol"]:
+                check_update_box = box["vol"]
                 break
-
             used_boxes.append(box)
-            maneger_volumes -= box
+            total_volume -= box["vol"]
 
-    if maneger_volumes > 0:
-        boxes.sort()
+    if total_volume > 0:
+        boxes.sort(key=lambda x: x["vol"])
         combos = []
-        find_probabilities_box(boxes, maneger_volumes, 0, [], combos)
+        find_probabilities_box(boxes, total_volume, 0, [], combos)
 
         combos.sort(key=lambda x: len(x))
-        closest_to_zero = min(combos, key=lambda x: abs(sum(x) - maneger_volumes))
-
+        closest_to_zero = min(
+            combos, key=lambda x: abs(sum(map(lambda b: b["vol"], x)) - total_volume)
+        )
         used_boxes.extend(closest_to_zero)
 
     return used_boxes

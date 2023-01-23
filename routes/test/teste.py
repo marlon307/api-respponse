@@ -35,24 +35,6 @@ teste = {
 }
 
 
-def generateVolumes(products, boxes):
-    box_mounted = list
-    big_product = max(
-        (p["width"] + p["height"] + p["length"]) * p["quantity"] for p in products
-    )
-    value = 3
-    target = 5
-    proximity = abs(value - target)
-    print(big_product)
-
-    return []
-
-
-# def generateVolumes(products, boxes):
-#     print("produtos", products)
-#     print("caixas", boxes)
-
-
 @router.post("/teste")
 def rota_para_teste_rapido(data: dict):
     to_address = teste
@@ -66,6 +48,8 @@ def rota_para_teste_rapido(data: dict):
         model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
     )
     execut_query.finishExecution()
+
+    seller_boxes = json.loads(info_seller["boxes"])
 
     url = os.getenv("MELHORENVIO_API") + "api/v2/me/cart"
     headers = {
@@ -93,8 +77,9 @@ def rota_para_teste_rapido(data: dict):
     total_volume = sum(
         map(lambda x: x["width"] + x["height"] + x["length"], list_products)
     )
-    print(list_products, total_volume)
-    cube_volumes(total_volume)
+
+    box_generate = cube_volumes(total_volume, seller_boxes)
+    print(total_volume, box_generate)
 
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
@@ -135,7 +120,7 @@ def rota_para_teste_rapido(data: dict):
                 "note": to_address["obs"],
             },
             "products": new_list_products,
-            "volumes": new_list_calc_volumes,
+            "volumes": box_generate,
             "options": {
                 "insurance_value": to_address["price"],
                 "receipt": False,
@@ -157,4 +142,4 @@ def rota_para_teste_rapido(data: dict):
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
 
-    return data
+    return "data"
