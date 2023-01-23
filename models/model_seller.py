@@ -22,7 +22,7 @@ JSON_OBJECT('id', a.id, 'name_delivery', a.name_delivery, 'zipcode', a.zipcode, 
 'district', a.district, 'street', a.street, 'district', a.district, 'complement', a.complement,
 'number_home', a.number_home, 'state', a.state) AS address,
 COALESCE((SELECT JSON_ARRAYAGG(JSON_OBJECT('id', bs.id, 'width', bs.width, 'height', bs.height,
-'length', bs.length, 'weight', bs.weight))
+'length', bs.length, 'weight', bs.weight, 'vol', bs.vol))
 FROM box_seller AS bs WHERE user_id = u.id)
 , '[]') AS boxes FROM user AS u 
 INNER JOIN user_address AS a ON a.id = u.collect_address_id 
