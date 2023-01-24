@@ -34,8 +34,10 @@ teste = {
 
 
 @router.post("/teste")
-def rota_para_teste_rapido(data: dict):
+def rota_para_teste_rapido(data_id: int, type: str, data: dict):
     to_address = teste
+
+    print(type, data_id, data)
 
     execut_query = MySQLCnn()
     list_products = execut_query.select(

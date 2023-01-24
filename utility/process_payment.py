@@ -1,5 +1,7 @@
 import os
 import mercadopago
+from models.database import MySQLCnn
+from models import model_orders
 
 # iOrder = info_order
 def process_payment_pix(payment_method: str, iOrder: dict):
@@ -14,13 +16,12 @@ def process_payment_pix(payment_method: str, iOrder: dict):
         city=iOrder["city"],
         federal_unit=iOrder["state"],
     )
-
     payment_data = {
         "transaction_amount": round(iOrder["price"], 2),
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "payment_method_id": payment_method,
         "payer": {
-            "email": "test@test.com",
+            "email": iOrder["email"],
             "first_name": split[0],
             "last_name": split[1],
             "identification": {
@@ -32,6 +33,12 @@ def process_payment_pix(payment_method: str, iOrder: dict):
     }
     payment_response = sdk.payment().create(payment_data)
     payment = payment_response["response"]
+
+    execut_query = MySQLCnn()
+    execut_query.update(
+        model_orders.q_update_payment_order, (payment["id"], iOrder["number_order"])
+    )
+    execut_query.finishExecution()
     return payment
 
 
@@ -39,7 +46,6 @@ def process_payment_pix(payment_method: str, iOrder: dict):
 def process_payment_card(payment_method: str, iOrder: dict):
     sdk = mercadopago.SDK(os.getenv("MP_ACCESS_TOKEN"))
     split = iOrder["name"].split()
-
     address = dict(
         zip_code=iOrder["zipcode"],
         street_name=iOrder["street"],
@@ -50,12 +56,11 @@ def process_payment_card(payment_method: str, iOrder: dict):
     )
 
     payment_data = {
-        "transaction_amount": 150,
+        "transaction_amount": round(iOrder["card"]["transaction_amount"], 2),
         "token": iOrder["card"]["token"],
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "installments": iOrder["card"]["installments"],
         "payment_method_id": payment_method,
-        "notification_url": "http://localhost:8000/teste",
         "payer": {
             "email": iOrder["card"]["payer"]["email"],
             "first_name": split[0],
@@ -70,4 +75,10 @@ def process_payment_card(payment_method: str, iOrder: dict):
 
     payment_response = sdk.payment().create(payment_data)
     payment = payment_response["response"]
-    return payment
+
+    execut_query = MySQLCnn()
+    execut_query.update(
+        model_orders.q_update_payment_order, (payment["id"], iOrder["number_order"])
+    )
+    execut_query.finishExecution()
+    # Não retorna nada pois é um processo de segundo plano e não vai para o front-end
