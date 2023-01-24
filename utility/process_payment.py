@@ -20,8 +20,12 @@ def process_payment_pix(payment_method: str, iOrder: dict):
         "transaction_amount": round(iOrder["price"], 2),
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "payment_method_id": payment_method,
+        # "notification_url": "https://respponse.marlon307.repl.co/notification",
         "payer": {
-            "email": iOrder["email"],
+            "email": "email@emaiil.com",
+            # "email": iOrder[
+            #     "email"
+            # ],  # o email do vendedor não pode ser o mesmo que o comprador
             "first_name": split[0],
             "last_name": split[1],
             "identification": {
@@ -60,6 +64,7 @@ def process_payment_card(payment_method: str, iOrder: dict):
         "token": iOrder["card"]["token"],
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "installments": iOrder["card"]["installments"],
+        # "notification_url": "https://respponse.marlon307.repl.co/notification",
         "payment_method_id": payment_method,
         "payer": {
             "email": iOrder["card"]["payer"]["email"],

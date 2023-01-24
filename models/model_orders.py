@@ -50,3 +50,7 @@ ORDER BY s.id ASC"""
 q_products_seller = """SELECT COUNT(*) AS 'quantity' FROM products WHERE user_id = (SELECT id FROM user WHERE id_user = %(id_user)s)"""
 
 q_update_payment_order = """UPDATE orders SET transation_id = %s WHERE id = %s"""
+
+q_update_payment_order_status = (
+    """UPDATE orders SET status_id = 2 WHERE transation_id = %s"""
+)
