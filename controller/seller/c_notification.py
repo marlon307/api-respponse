@@ -2,9 +2,9 @@ from service.seller import service_notification
 from utility.handleErr import handlerErr
 
 
-def seller_notification(topic, id, data):
+def seller_notification(topic, id):
     try:
-        nDict = {"topic": topic, "id": id, "data": data}
+        nDict = {"topic": topic, "id": id}
         service_notification.notification_seller(nDict)
         return {
             "detail": "Notificação.",

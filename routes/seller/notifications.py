@@ -8,5 +8,5 @@ router = APIRouter(tags=["SELLER"])
 
 
 @router.post("/notification")
-def seller_notification_paymnet(topic: str, id: int, body: dict):
-    return c_notification.seller_notification(topic, id, body)
+def seller_notification_paymnet(topic: str, id: int):
+    return c_notification.seller_notification(topic, id)
