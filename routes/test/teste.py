@@ -4,9 +4,7 @@ import mercadopago
 import os
 from models import model_bag, model_seller, model_carrier
 from models.database import MySQLCnn
-
 import requests
-
 from service.carrier.shipping import s_calc_shipping
 from utility.generate_volume import cube_volumes
 
@@ -36,8 +34,10 @@ teste = {
 
 
 @router.post("/teste")
-def rota_para_teste_rapido(data: dict):
+def rota_para_teste_rapido(data_id: int, type: str, data: dict):
     to_address = teste
+
+    print(type, data_id, data)
 
     execut_query = MySQLCnn()
     list_products = execut_query.select(
@@ -77,9 +77,8 @@ def rota_para_teste_rapido(data: dict):
     total_volume = sum(
         map(lambda x: x["width"] + x["height"] + x["length"], list_products)
     )
-
-    box_generate = cube_volumes(total_volume, seller_boxes)
-    print(total_volume, box_generate)
+    total_weight = sum(map(lambda x: x["quantity"] * x["weight"], list_products))
+    box_generate = cube_volumes(total_volume, seller_boxes, total_weight)
 
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
@@ -93,7 +92,14 @@ def rota_para_teste_rapido(data: dict):
                 # "document": "16571478358",
                 "company_document": info_seller["cnpj"],
                 "state_register": info_seller["ie"],
-                "address": "Endereço do remetente",
+                "address": "%s %s %s - %s/%s"
+                % (
+                    to_address["number_home"],
+                    to_address["complement"],
+                    to_address["district"],
+                    to_address["city"],
+                    to_address["state"],
+                ),
                 "complement": seller_address["complement"],
                 "number": seller_address["number_home"],
                 "district": seller_address["district"],
@@ -109,7 +115,14 @@ def rota_para_teste_rapido(data: dict):
                 "document": to_address["cpf"],
                 # "company_document": "07595604000177",
                 # "state_register": "123456",
-                "address": "Endereço do destinatário",
+                "address": "%s %s %s - %s/%s"
+                % (
+                    to_address["number_home"],
+                    to_address["complement"],
+                    to_address["district"],
+                    to_address["city"],
+                    to_address["state"],
+                ),
                 "complement": to_address["complement"],
                 "number": to_address["number_home"],
                 "district": to_address["district"],
@@ -142,4 +155,4 @@ def rota_para_teste_rapido(data: dict):
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
 
-    return "data"
+    return data
