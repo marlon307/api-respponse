@@ -28,7 +28,7 @@ def deleteitembag(data: del_bag, current_user: User = Depends(get_current_user))
     return controller_bag.c_bag_delete(data.dict(), current_user)
 
 
-@router.post("/register_order", response_model=RgOrder, status_code=201)
+@router.post("/register_order", status_code=201)
 def registerorder(
     data: r_order, task: BackgroundTasks, current_user: User = Depends(get_current_user)
 ):

@@ -70,6 +70,7 @@ def register_order(data_json, task):
             ],
         }
         return new_dict
+
     elif "number_order" in order[0]:
         task.add_task(
             process_payment_card, data_json["method_pay"], {**order[0], **data_json}

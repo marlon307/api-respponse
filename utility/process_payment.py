@@ -1,24 +1,6 @@
 import os
 import mercadopago
 
-teste = {
-    "number_order": 144,
-    "email": "marlon-ramosb@hotmail.com",
-    "cpf_cnpj": "02190634601",
-    "name": "Marlon Ramos",
-    "city": "Coronel Fabriciano",
-    "id": 3,
-    "user_id": 1,
-    "name_delivery": "Marlon Ramos Teste",
-    "district": "Córrego Alto",
-    "state": "MG",
-    "zipcode": "35170526",
-    "street": "Rua Seis",
-    "number_home": "128",
-    "main": 0.0,
-    "deleted": None,
-}
-
 # iOrder = info_order
 def process_payment_pix(payment_method: str, iOrder: dict):
     sdk = mercadopago.SDK(os.getenv("MP_ACCESS_TOKEN"))
@@ -73,6 +55,7 @@ def process_payment_card(payment_method: str, iOrder: dict):
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "installments": iOrder["card"]["installments"],
         "payment_method_id": payment_method,
+        "notification_url": "http://localhost:8000/teste",
         "payer": {
             "email": iOrder["card"]["payer"]["email"],
             "first_name": split[0],

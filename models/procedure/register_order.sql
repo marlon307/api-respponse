@@ -1,7 +1,7 @@
 CREATE DEFINER=`root`@`localhost` PROCEDURE `register_order`(p_userid CHAR(36), p_addressid INT, p_carriesid INT, method_pay VARCHAR(100), delivery_value FLOAT)
 BEGIN
-		DECLARE iduser INT;
-		DECLARE idaddres INT;
+	DECLARE iduser INT;
+	DECLARE idaddres INT;
     DECLARE price FLOAT;
     DECLARE quantityvols INT;
     DECLARE idorder INT;
@@ -11,10 +11,10 @@ BEGIN
     BEGIN
 		ROLLBACK;
         
-		GET DIAGNOSTICS CONDITION 1
+        GET DIAGNOSTICS CONDITION 1
 		@p1 = RETURNED_SQLSTATE, @p2 = MESSAGE_TEXT;
         
-			SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
+        SELECT op.products_id AS product_id, opsz.options_product_id, @p1 as RETURNED_SQLSTATE, @p2 as MESSAGE_TEXT FROM bag AS b 
 			INNER JOIN options_product_has_sizes AS opsz ON opsz.options_product_id = b.option_product_id AND opsz.sizes_id = b.sizes_id
             INNER JOIN options_product AS op ON op.id = opsz.options_product_id
 			WHERE b.user_id = iduser AND b.orders_id IS NULL LIMIT 1;
@@ -25,7 +25,7 @@ BEGIN
     SET price = (SELECT SUM(b.quantity * op.price) FROM bag AS b
 				 INNER JOIN options_product AS op ON op.id = b.option_product_id
 				 WHERE b.user_id = iduser AND b.orders_id IS NULL);
-		SET quantityvols = (SELECT SUM(quantity) FROM bag AS b WHERE b.user_id = iduser AND b.orders_id IS NULL); 
+	SET quantityvols = (SELECT SUM(quantity) FROM bag AS b WHERE b.user_id = iduser AND b.orders_id IS NULL); 
     SET paymentid = (SELECT id FROM payment WHERE type_id = method_pay LIMIT 1);
     
     IF price IS NOT NULL AND idaddres IS NOT NULL AND iduser IS NOT NULL THEN
