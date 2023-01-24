@@ -22,7 +22,7 @@ def find_probabilities_box(
         )
 
 
-def cube_volumes(total_volume: float, boxes: list[dict]):
+def cube_volumes(total_volume: float, boxes: list[dict], weight: float):
     used_boxes = list()
     boxes.sort(key=lambda x: x["vol"], reverse=True)
     check_update_box: int = boxes[0]["vol"]
@@ -42,7 +42,7 @@ def cube_volumes(total_volume: float, boxes: list[dict]):
 
     if total_volume > 0:
         boxes.sort(key=lambda x: x["vol"])
-        combos = []
+        combos = list()
         find_probabilities_box(boxes, total_volume, 0, [], combos)
 
         combos.sort(key=lambda x: len(x))
@@ -51,4 +51,7 @@ def cube_volumes(total_volume: float, boxes: list[dict]):
         )
         used_boxes.extend(closest_to_zero)
 
-    return used_boxes
+    weight_box = weight / len(used_boxes)
+    used_boxes = map(lambda b: {**b, "weight": weight_box}, used_boxes)
+
+    return list(used_boxes)

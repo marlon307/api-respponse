@@ -77,9 +77,8 @@ def rota_para_teste_rapido(data: dict):
     total_volume = sum(
         map(lambda x: x["width"] + x["height"] + x["length"], list_products)
     )
-
-    box_generate = cube_volumes(total_volume, seller_boxes)
-    print(total_volume, box_generate)
+    total_weight = sum(map(lambda x: x["quantity"] * x["weight"], list_products))
+    box_generate = cube_volumes(total_volume, seller_boxes, total_weight)
 
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
@@ -142,4 +141,4 @@ def rota_para_teste_rapido(data: dict):
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
 
-    return "data"
+    return data

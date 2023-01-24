@@ -3,6 +3,7 @@ import os
 import requests
 from models import model_bag, model_carrier
 from models.database import MySQLCnn
+from utility.generate_volume import cube_volumes
 
 
 def s_calc_shipping(data):
@@ -14,14 +15,21 @@ def s_calc_shipping(data):
             "id_order": data["order_id"] if "order_id" in data else None,
         },
     )
+    list_box = execut_query.select(model_carrier.q_select_box, {})
     execut_query.finishExecution()
+    total_volume = sum(
+        map(lambda x: x["width"] + x["height"] + x["length"], list_products)
+    )
+
+    total_weight = sum(map(lambda x: x["quantity"] * x["weight"], list_products))
+    box_generate = cube_volumes(total_volume, list_box, total_weight)
 
     url = os.getenv("MELHORENVIO_API") + "api/v2/me/shipment/calculate"
     payload = json.dumps(
         {
             "from": {"postal_code": os.getenv("MELHORENVIO_ZIPCODE")},
             "to": {"postal_code": data["zipcode"]},
-            "package": list_products,
+            "package": box_generate,
             "options": {"insurance_value": 1500},
             "services": str(data["services"]) if "services" in data else "",
         }
@@ -35,8 +43,6 @@ def s_calc_shipping(data):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
-    print(list_products)
-    print(data)
 
     if type(data) is list:
         new_list = list()
