@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 
 
 class DataNotification(BaseModel):
