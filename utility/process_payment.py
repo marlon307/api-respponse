@@ -20,7 +20,7 @@ def process_payment_pix(payment_method: str, iOrder: dict):
         "transaction_amount": round(iOrder["price"], 2),
         "description": "Pedido #%s" % (iOrder["number_order"]),
         "payment_method_id": payment_method,
-        "notification_url": "https://api-respponse.marlon307.repl.co/notification",
+        "notification_url": "https://api-respponse.marlon307.repl.co/notification?order_id=200",
         "payer": {
             "email": "email@emaiil.com",
             # "email": iOrder[
