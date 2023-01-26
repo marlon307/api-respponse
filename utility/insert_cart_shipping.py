@@ -8,7 +8,8 @@ from utility.generate_volume import cube_volumes
 
 def insert_cart(id_payment):
     execut_query = MySQLCnn()
-    # Falta atualizar o id status do pedido
+    execut_query.update(model_notify.q_update_status, {"id_payment": id_payment})
+
     to_address = execut_query.selectOne(
         model_notify.q_info_payment, {"id_payment": id_payment}
     )
@@ -55,8 +56,8 @@ def insert_cart(id_payment):
     seller_address = json.loads(info_seller["address"])
     payload = json.dumps(
         {
-            "service": 3,
-            "agency": 1166,
+            "service": to_address["carrier_id"],
+            # "agency": 1166,
             "from": {
                 "name": info_seller["store_name"],
                 "phone": "53984470102",
@@ -105,7 +106,7 @@ def insert_cart(id_payment):
                 "note": to_address["obs"],
             },
             "products": new_list_products,
-            "volumes": box_generate,
+            "package": box_generate,
             "options": {
                 "insurance_value": to_address["price"],
                 "receipt": False,

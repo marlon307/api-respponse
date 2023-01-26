@@ -32,7 +32,6 @@ def s_calc_shipping(data):
             "to": {"postal_code": data["zipcode"]},
             "package": box_generate,
             "options": {"insurance_value": insurance_value},
-            "services": str(data["services"]) if "services" in data else "",
         }
     )
     headers = {
@@ -45,17 +44,16 @@ def s_calc_shipping(data):
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
 
-    if type(data) is list:
-        new_list = list()
-        for carrier in data:
-            if "error" not in carrier:
-                new_list.append(
-                    {
-                        "id": carrier["id"],
-                        "name_carrier": carrier["company"]["name"],
-                        "toDate": carrier["custom_delivery_time"],
-                        "price": float(carrier["price"]),
-                    }
-                )
-        return new_list
-    return data
+    new_list = list()
+    for carrier in data:
+        if "error" not in carrier:
+            new_list.append(
+                {
+                    "id": carrier["id"],
+                    "name_carrier": carrier["company"]["name"],
+                    "toDate": carrier["custom_delivery_time"],
+                    "price": float(carrier["price"]),
+                }
+            )
+
+    return new_list
