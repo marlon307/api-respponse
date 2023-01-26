@@ -8,17 +8,17 @@ from ..user.models.md_notification import DataNotification
 router = APIRouter(tags=["SELLER"])
 
 
-@router.post("/notification/")
+@router.post("/notification")
 def seller_notification_paymnet(
     order_id: int,
-    # request: Request,
+    request: Request,
     type: str = Query(None),
     id: int = Query(None),
     topic: str = Query(None),
     data: int = Query(None, alias="data.id"),
 ):
-    # resp = request.json.__dict__
+    resp = request.json.__dict__
 
-    # print(resp)
+    print(resp)
     data_info = {order_id, type, id, data, topic}
     return c_notification.seller_notification(data_info)
