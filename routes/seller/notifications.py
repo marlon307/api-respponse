@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, Query, Request
 from controller.seller import c_notification
 from middleware.m_auth import User, get_current_adm
@@ -9,14 +10,14 @@ router = APIRouter(tags=["SELLER"])
 
 @router.post("/notification")
 def seller_notification_paymnet(
-    request: Request,
+    request: dict,
     type: str = Query(None),
     id: int = Query(None),
     topic: str = Query(None),
     data: int = Query(None, alias="data.id"),
 ):
-    resp = request.json.__dict__
+    # resp = request.json()
 
-    print(resp)
+    print(request)
     data_info = {type, id, data, topic}
     return c_notification.seller_notification(data_info)
