@@ -1,46 +1,19 @@
 import json
-from fastapi import APIRouter
-import mercadopago
 import os
-from models import model_bag, model_seller, model_carrier
-from models.database import MySQLCnn
 import requests
-from service.carrier.shipping import s_calc_shipping
+from models import model_bag, model_notify, model_seller
+from models.database import MySQLCnn
 from utility.generate_volume import cube_volumes
 
-router = APIRouter(tags=["TESTE"])
 
-teste = {
-    "number_order": 200,
-    "price": 353.939998626709,
-    "email": "marlon-ramosb@hotmail.com",
-    "cpf": "02190634601",
-    "ie": "453534",
-    "name": "Marlon Ramos",
-    "city": "Coronel Fabriciano",
-    "id": 2,
-    "user_id": 1,
-    "name_delivery": "Marlon Ramos",
-    "district": "Corrego Alto",
-    "state": "MG",
-    "zipcode": "24471340",
-    "street": "Rua Seis",
-    "number_home": "128",
-    "main": 1.0,
-    "deleted": None,
-    "complement": "Casa",
-    "obs": "Teste 64 caract",
-}
-
-
-@router.post("/teste")
-def rota_para_teste_rapido():
-    to_address = teste
-
+def insert_cart(id_payment):
     execut_query = MySQLCnn()
+    to_address = execut_query.selectOne(
+        model_notify.q_info_payment, {"id_payment": id_payment}
+    )
     list_products = execut_query.select(
         model_bag.q_get_producs_carrier,
-        {"id_order": 201},
+        {"user_id": to_address["id_user"], "id_order": to_address["number_order"]},
     )
     info_seller = execut_query.selectOne(
         model_seller.q_select_seller_settings, {"id_user": 0, "iduser": 1}
@@ -152,5 +125,3 @@ def rota_para_teste_rapido():
 
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
-
-    return data

@@ -16,8 +16,5 @@ def seller_notification_paymnet(
     topic: str = Query(None),
     data: int = Query(None, alias="data.id"),
 ):
-    # resp = request.json()
-
-    print(request)
     data_info = {type, id, data, topic}
-    return c_notification.seller_notification(data_info)
+    return c_notification.seller_notification(data_info, request)
