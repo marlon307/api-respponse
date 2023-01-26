@@ -35,9 +35,11 @@ def list_product():
 
 def get_product_id(id_product):
     try:
-        product_id = service_product.get_product_id(id_product)
+        product_id, products_list = service_product.get_product_id(id_product)
+
         return {
             "product": product_id,
+            "similar": products_list,
             "detail": "Produto listado.",
             "status": 200,
         }

@@ -108,16 +108,32 @@ def get_product_id(id):
     # ***************Favor montar uma query mais decente*****************
     # *******************************************************************
     execut_query = MySQLCnn()
-    list_product = execut_query.selectOne(model_product.q_get_product_id, {"id": id})
+    product = execut_query.selectOne(model_product.q_get_product_id, {"id": id})
+    list_products = execut_query.select(
+        model_product.q_get_similar_product,
+        {"category": product["category_name"], "id": id},
+    )
     execut_query.finishExecution()
 
-    list_product["list_options"] = unique(json.loads(list_product["list_options"]))
-    list_product["list_images"] = unique(json.loads(list_product["list_images"]))
-    list_product["list_sizes"] = unique(json.loads(list_product["list_sizes"]))
+    product["list_options"] = unique(json.loads(product["list_options"]))
+    product["list_images"] = unique(json.loads(product["list_images"]))
+    product["list_sizes"] = unique(json.loads(product["list_sizes"]))
+
+    products_list = list()
+
+    for list_obj in list_products:
+        list_color = json.loads(list_obj["color_list"])
+        list_color.sort(key=lambda color_list: color_list["discount"], reverse=True)
+        products_list.append(
+            {
+                **list_obj,
+                "color_list": list_color,
+            }
+        )
 
     def mount_obj_size(id_option):
         size_obj = dict()
-        for obj in list_product["list_sizes"]:
+        for obj in product["list_sizes"]:
             if id_option == obj["option_id"]:
                 size_obj = {**size_obj, **obj}
                 del size_obj["option_id"]
@@ -134,18 +150,18 @@ def get_product_id(id):
                     None,
                     [
                         obj if obj["option_id"] == object_option["option_id"] else None
-                        for obj in list_product["list_images"]
+                        for obj in product["list_images"]
                     ],
                 )
             ),
         }
 
-    new_list_option = map(fomat_option, list_product["list_options"])
+    new_list_option = map(fomat_option, product["list_options"])
 
-    list_product["list_options"] = list(new_list_option)
-    del list_product["list_sizes"]
-    del list_product["list_images"]
-    return list_product
+    product["list_options"] = list(new_list_option)
+    del product["list_sizes"]
+    del product["list_images"]
+    return product, products_list
 
 
 def s_list_products_seller(id):

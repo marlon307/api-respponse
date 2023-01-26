@@ -113,12 +113,6 @@ class Product(BaseModel):
     list_options: list[ListOption]
 
 
-class ProductId(BaseModel):
-    product: Product
-    detail: str
-    status: int
-
-
 # List
 class ListProdColor(BaseModel):
     id: int
@@ -158,6 +152,13 @@ class CategoryHome(BaseModel):
     category_name: str
     sub_title: str
     url_image: HttpUrl
+
+
+class ProductId(BaseModel):
+    product: Product
+    similar: list[MinInfoProductList]
+    detail: str
+    status: int
 
 
 class Slides(BaseModel):
