@@ -8,6 +8,7 @@ from utility.generate_volume import cube_volumes
 
 def insert_cart(id_payment):
     execut_query = MySQLCnn()
+    # Falta atualizar o id status do pedido
     to_address = execut_query.selectOne(
         model_notify.q_info_payment, {"id_payment": id_payment}
     )
@@ -36,7 +37,7 @@ def insert_cart(id_payment):
             {
                 "name": "%s %s" % (product["category_name"], product["title"]),
                 "quantity": product["quantity"],
-                "unitary_value": product["insurance_value"],
+                "unitary_value": product["price"],
                 "weight": product["weight"],
             }
         )

@@ -10,6 +10,7 @@ def notification_seller(json, request):
         sdk = mercadopago.SDK(os.getenv("MP_ACCESS_TOKEN"))
         response = sdk.payment().get(request["data"]["id"])["response"]
 
-        # insert_cart(request["data"]["id"])
+        insert_cart(request["data"]["id"])
         if response["status"] == "approved":
-            insert_cart(request["data"]["id"])
+            # insert_cart(request["data"]["id"])
+            pass
