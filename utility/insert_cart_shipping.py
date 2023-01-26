@@ -127,3 +127,9 @@ def insert_cart(id_payment):
 
     response = requests.request("POST", url, headers=headers, data=payload)
     data = response.json()
+
+    execut_query = MySQLCnn()
+    execut_query.update(
+        model_notify.q_update_tag, {"id_tag": data["id"], "id_payment": id_payment}
+    )
+    execut_query.finishExecution()

@@ -9,3 +9,8 @@ WHERE transaction_id = %(id_payment)s"""
 q_update_status = """UPDATE orders
 SET status_id = 2
 WHERE transaction_id = %(id_payment)s"""
+
+
+q_update_tag = """UPDATE orders
+SET tag = %(id_tag)s
+WHERE transaction_id = %(id_payment)s"""
