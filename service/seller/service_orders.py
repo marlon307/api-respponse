@@ -19,3 +19,9 @@ def id_order_seller(data):
     orderId["carrier"] = json.loads(orderId["carrier"])
     orderId["address"] = json.loads(orderId["address"])
     return orderId
+
+
+def id_order_seller_update_status(data):
+    execut_query = MySQLCnn()
+    execut_query.update(model_orders.q_update_status_order_id_seller, data)
+    execut_query.finishExecution()

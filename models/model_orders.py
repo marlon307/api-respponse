@@ -79,3 +79,7 @@ q_update_payment_order = """UPDATE orders SET transaction_id = %s WHERE id = %s"
 
 q_update_payment_order_status = """
 UPDATE orders SET status_id = 2 WHERE transaction_id = %s"""
+
+q_update_status_order_id_seller = (
+    """UPDATE orders SET status_id = %(status_id)s WHERE id = %(order_id)s"""
+)

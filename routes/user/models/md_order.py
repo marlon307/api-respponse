@@ -86,3 +86,12 @@ class RgOrder(BaseModel):
     detail: str
     status: int
     order: OrderPix | OrderCard | ErrOder
+
+
+class UpdateStatusOrderId(BaseModel):
+    status: int
+
+
+class DefaultOrder(BaseModel):
+    detail: str
+    status: int
