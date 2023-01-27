@@ -16,4 +16,21 @@ def seller_orders(sts, c_user):
             "status": 200,
         }
     except Exception as err:
-        raise handlerErr("seller -> c_list_options_seller_register_product -> %s" % err)
+        raise handlerErr("seller -> c_seller_orders -> %s" % err)
+
+
+def seller_order_id(id, c_user):
+    try:
+        list_orders = service_orders.id_order_seller(
+            {
+                "user_id": c_user.id_user,
+                "order_id": id,
+            }
+        )
+        return {
+            "detail": "Pedido.",
+            "order": list_orders,
+            "status": 200,
+        }
+    except Exception as err:
+        raise handlerErr("seller -> c_seller_order_id -> %s" % err)

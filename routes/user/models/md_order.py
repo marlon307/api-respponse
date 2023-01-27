@@ -59,6 +59,12 @@ class RListOrder(BaseModel):
     orders: list[Order]
 
 
+class OrderIdSeller(BaseModel):
+    detail: str
+    status: int
+    order: ClsOrder
+
+
 class ErrOder(BaseModel):
     product_id: int
     options_product: int
